@@ -36,7 +36,7 @@
               <div class=" col-lg-6 d-none d-lg-block text-left">
                 <div class="p-5">
                 <h4 class="h3 mb-4" style="font-size:50px;color:#75C5F0">
-                     THE-Register   
+                     The-School  
                 </h4>
             </div>
               </div>
@@ -67,7 +67,7 @@
                         {{session('errorMessage')}}
                      </div>
                   @endif                   
-                  <form class="user" action="/Dregister/signup" method="post" novalidate >
+                  <form class="user" action="/deschool/signup" method="post" novalidate >
                     <input name="_token" type="hidden" value="{{ csrf_token() }}">
                     <div class="form-group">
                       <input type="email" name="email" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address...">

@@ -66,7 +66,7 @@
             }
             $.ajax({
                type: "POST",
-               url: "/Dregister/privilege",
+               url: "/deschool/privilege",
                data: values,
             }).done(function(result){
               if (result.success=='success'){
@@ -115,7 +115,7 @@
                   
                   $.ajax({
                      type: "POST",
-                     url: "/Dregister/Enable/settings-information",
+                     url: "/deschool/Enable/settings-information",
                      data: values,
                   }).done(function(result){
                     if (result.success=='success'){
@@ -145,7 +145,7 @@
                   }
                   $.ajax({
                      type: "POST",
-                     url: "/Dregister/Enable/settings-information",
+                     url: "/deschool/Enable/settings-information",
                      data: values,
                   }).done(function(result){
                     if (result.success=='success'){
@@ -211,7 +211,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/Dregister/dashboard">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/deschool/dashboard">
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="fas fa-smile"></i>
         </div>
@@ -223,7 +223,7 @@
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item active">
-        <a class="nav-link" href="/Dregister/dashboard">
+        <a class="nav-link" href="/deschool/dashboard">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span></a>
       </li>
@@ -245,13 +245,13 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">School Settings:</h6>
               @if(Auth::user()->isAdmin())
-                <a class="collapse-item" href="/Dregister/info-settings">Information Update</a>
-                <a class="collapse-item" href="/Dregister/profile">Profile</a>                   
-                <a class="collapse-item" href="/Dregister/priv-settings">Privilege</a>            
+                <a class="collapse-item" href="/deschool/info-settings">Information Update</a>
+                <a class="collapse-item" href="/deschool/profile">Profile</a>                   
+                <a class="collapse-item" href="/deschool/priv-settings">Privilege</a>            
                 <a class="collapse-item" href="cards.html">Send Memo</a>
                 <a class="collapse-item" href="cards.html">View Memo Replys</a>
              @elseif(Auth::user()->isMember())
-              <a class="collapse-item" href="/Dregister/profile">Profile</a> 
+              <a class="collapse-item" href="/deschool/profile">Profile</a> 
              @endif                
           </div>
         </div>
@@ -273,9 +273,9 @@
         <div id="collapseStaff" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Staffs:</h6>
-            <a class="collapse-item" href="/Dregister/add-staff">Add New Staff</a>
-            <a class="collapse-item" href="/Dregister/view-staffs">View Staffs Table</a>
-            <a class="collapse-item" href="/Dregister/staff-register"> Staffs Register</a>       
+            <a class="collapse-item" href="/deschool/add-staff">Add New Staff</a>
+            <a class="collapse-item" href="/deschool/view-staffs">View Staffs Table</a>
+            <a class="collapse-item" href="/deschool/staff-register"> Staffs Register</a>       
           </div>
         </div>
       </li>
@@ -299,9 +299,9 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Teachers</h6>
             @if(Auth::user()->isMember())
-            <a class="collapse-item" href="/Dregister/teacher">Teacher Register</a>
+            <a class="collapse-item" href="/deschool/teacher">Teacher Register</a>
             @elseif(Auth::user()->isAdmin())
-            <a class="collapse-item" href="/Dregister/teacher"> Add Teacher</a>
+            <a class="collapse-item" href="/deschool/teacher"> Add Teacher</a>
             <div class="collapse-divider"></div>
             <h6 class="collapse-header">Others:</h6>
             @endif    
@@ -326,8 +326,8 @@
         <div id="collapseParents" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Parents</h6>
-            <a class="collapse-item" href="/Dregister/add-parent">Add New Parent</a>          
-            <a class="collapse-item" href="/Dregister/view-parents">View Parent Table</a>
+            <a class="collapse-item" href="/deschool/add-parent">Add New Parent</a>          
+            <a class="collapse-item" href="/deschool/view-parents">View Parent Table</a>
           </div>
         </div>
       </li>
@@ -348,10 +348,10 @@
         <div id="collpaseStudents" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Students:</h6>
-            <a class="collapse-item" href="/Dregister/add-student"> Add New Student</a>
-            <a class="collapse-item" href="/Dregister/view-students">View Students Table</a>
-            <a class="collapse-item" href="/Dregister/students-registers"> Students Register</a>                 
-            <a class="collapse-item" href="/Dregister/students-s"> Add Student Result</a>               
+            <a class="collapse-item" href="/deschool/add-student"> Add New Student</a>
+            <a class="collapse-item" href="/deschool/view-students">View Students Table</a>
+            <a class="collapse-item" href="/deschool/students-registers"> Students Register</a>                 
+            <a class="collapse-item" href="/deschool/students-s"> Add Student Result</a>               
             <div class="collapse-divider"></div>
             <h6 class="collapse-header">Others:</h6>
             <a class="collapse-item" href="register.html"> Old Student Archive</a>                  
@@ -423,8 +423,8 @@
         <div id="collapseSubject" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">General Settings:</h6>
-            <a class="collapse-item" href="/Dregister/general-settings">General Settings</a>
-            <a class="collapse-item" href="/Dregister/assign-subject">Assign Subject</a>            
+            <a class="collapse-item" href="/deschool/general-settings">General Settings</a>
+            <a class="collapse-item" href="/deschool/assign-subject">Assign Subject</a>            
           </div>
         </div>
       </li>
@@ -490,7 +490,7 @@
           <span>Tables</span></a>
       </li>-->
       <li class="nav-item">
-        <a class="nav-link" href="{{url('/Dregister/logout')}}" onclick="event.preventDefault();
+        <a class="nav-link" href="{{url('/deschool/logout')}}" onclick="event.preventDefault();
        document.getElementById('logout-form').submit()">
           <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
           <span>Logout</span></a>
@@ -664,16 +664,16 @@
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="/Dregister/profile">
+                <a class="dropdown-item" href="/deschool/profile">
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   Profile
                 </a>
-                <a class="dropdown-item" href="/Dregister/info-settings">
+                <a class="dropdown-item" href="/deschool/info-settings">
                   <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                   Settings
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{{url('/Dregister/logout')}}" onclick="event.preventDefault();
+                <a class="dropdown-item" href="{{url('/deschool/logout')}}" onclick="event.preventDefault();
                 document.getElementById('logout-form').submit()">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Logout
@@ -860,7 +860,7 @@
   <script src="{{asset('my-register/js/demo/chart-area-demo.js')}}"></script>
   <script src="{{asset('my-register/js/demo/chart-pie-demo.js')}}"></script>
   <script src="{{asset('my-register/vendor/jquery/jquery.min.js')}}"></script>     
-    <form id='logout-form' action="{{url('/Dregister/logout')}}"
+    <form id='logout-form' action="{{url('/deschool/logout')}}"
     method="POST" style='display:none'>
         {{csrf_field()}}
     </form>

@@ -46,7 +46,7 @@ class Handler extends ExceptionHandler
     {
         
            if($exception instanceof \Illuminate\Session\TokenMismatchException){
-               return redirect()->guest('/Dregister');
+               return redirect()->guest(route('login'));
            }
            //return redirect()->guest('/Dregister/');
           return parent::render($request, $exception);
@@ -65,6 +65,6 @@ class Handler extends ExceptionHandler
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
 
-        return redirect()->guest(route('/Dregister/'));
+        return redirect()->guest(route('login'));
     }
 }

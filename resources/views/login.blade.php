@@ -36,7 +36,7 @@
               <div class=" col-lg-6 d-none d-lg-block text-left">
                 <div class="p-5">
                 <h4 class="h3 mb-4" style="font-size:50px;color:#75C5F0">
-                     THE-Register   
+                     The-School  
                 </h4>
             </div>
               </div>
@@ -57,7 +57,7 @@
                         {{session('message')}}
                      </div>
                   @endif                                   
-                  <form class="user" action="/Dregister/login" method="post" novalidate >
+                  <form class="user" action="/deschool/login" method="post" novalidate >
                     <input name="_token" type="hidden" value="{{ csrf_token() }}">
                     <div class="form-group">
                       <input type="email" name="email" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address...">
@@ -98,7 +98,7 @@
                   </form>
                   <hr>
                   <div class="text-center">
-                    <a class="small" href="Dregister/signup">Create Account</a>
+                    <a class="small" href="/signup">Create Account</a>
                   </div>                  
                   <div class="text-center">
                     <a class="small" href="forgot-password.html">Forgot Password?</a>
