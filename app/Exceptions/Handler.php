@@ -48,8 +48,9 @@ class Handler extends ExceptionHandler
            if($exception instanceof \Illuminate\Session\TokenMismatchException){
                return redirect()->guest(route('login'));
            }
-           //return redirect()->guest('/Dregister/');
-          return parent::render($request, $exception);
+        
+          return redirect()->guest(route('404'));
+          //return parent::render($request, $exception);
     }
 
     /**

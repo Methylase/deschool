@@ -15,7 +15,7 @@
   <!-- Custom fonts for this template-->
   <link href="{{asset('my-register/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-  <link rel="icon" type="image/png" href="{{asset('my-register/img/The-Register.jpg')}}"  sizes ="25x25"> 
+  <link rel="icon" type="image/png" href="{{asset('my-register/img/icon.jpg')}}"  sizes ="25x25"> 
   <!-- Custom styles for this template-->
      <!--<link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">-->  
   <link href="{{asset('my-register/css/sb-admin-2.min.css')}}" rel="stylesheet">
@@ -649,7 +649,7 @@
                                           <td>{{ucfirst($staff->staff_marital_status)}}</td>
                                           <td>{{$staff->staff_phone}}</td>
                                           <td>
-                                             <a href="" class="btn btn-sm btn-success" title="View"><span class="fa fa-eye"></span></a>
+                                             <a href="/deschool/view-staff/{{$staff->id}}" class="btn btn-sm btn-success" title="View"><span class="fa fa-eye"></span></a>
                                              <a href="/deschool/edit-staff/{{$staff->id}}" class="btn btn-sm btn-info" title="Edit"><span class="fa fa-edit"></span></a>                                         
                                              <a href="" class="btn btn-sm btn-danger deleteStaff"  id='del {{$staff->id}}' data-title="Delete" data-toggle="modal" data-target="#confirm-delete"><span class="fa fa-trash" title="Delete"></span></a>
                                              

@@ -230,9 +230,11 @@ class CoroxController extends Controller
                               }else{
                                         $remember=false;
                               }
+                              
                               if(Auth::attempt($data,$remember)){
                                         return redirect()->route('dashboard');
                               }else{
+
                                         return  back()->with('message', 'Your login detail is wrong');
                               }
                     }
@@ -362,62 +364,118 @@ class CoroxController extends Controller
           }          
           //tracking page to post create staff details
           public function registerAddStaff(Request $request){
-                    if(Auth::user()->email){  
+                    if(Auth::user()->isMember()){
+                      $roleId =1;
+                      $roleInformation = Permit::where("role_id",$roleId)->first();
+                      $userId= $roleInformation->corox_model_id;
+                      $date = date('Y');
+                      $adminInformation = Corox_model::where("id",$userId)->first();
+                      $adminEmail=$adminInformation->email;
+                      //return redirect('/Dregister/dashboard');
+                    }elseif(Auth::user()->isAdmin()){  
                               $email= Auth::user()->email;
                               $date = date('Y');
-                    }
-                    if(RegisterStaffInformation::where("staff_email",protectData($request->email))->exists()){
+                              $userId=Auth::user()->id;
+                              $adminEmail=Auth::user()->email;
+                    } 
+                    $firstname=protectData($request->input('firstname'));
+                    $middlename=protectData($request->input('middlename'));
+                    $lastname=protectData($request->input('lastname'));
+                    $email=protectData($request->input('email'));
+                    $maritalStatus=protectData($request->input('maritalStatus'));
+                    $dob=protectData($request->input('dob'));
+                    $gender=protectData($request->input('gender'));
+                    $phone=protectData($request->input('phone'));
+                    $city=protectData($request->input('city'));
+                    $socialMedia=protectData($request->input('socialMedia'));
+                    $address=protectData($request->input('address'));
+                    $state=protectData($request->input('state'));
+                    $hobbies = protectData($request->input('hobbies'));
+                    $disabilityStatus=protectData($request->input('disablityStatus'));
+                    $listDisability=protectData($request->input('listDisablity'));
+                    $localG=protectData($request->input('localG'));
+
+                    if(Corox_model::where("email",protectData($email))->exists()){
                               $request->session()->flash('message', 'Please register this staff with another email, '.$request->email.' is not available');
                               return redirect()->route('add-staff');;
                     }
-                    $data = array();
-                    $image = $request->file('profileImage');
-                    if($image == NULL || $image =='' ){
-                             $data['staff_profile_image']  = $image; 
+                    if(($disabilityStatus =='no')  && $listDisability ==''){
+                      $request->session()->flash('listDisability', 'List your Disability'); 
+                      return redirect()->route('add-staff');                            
+                    }               
+                    $rules=array(
+                                  'firstname'=>'required',
+                                  'middlename'=>'required',
+                                  'lastname'=>'required',
+                                  'email'=>'required|email|unique:register_staff_informations,email',
+                                  'maritalStatus'=>'required',
+                                  'disablityStatus'=>'required',
+                                  'dob'=>'required',
+                                  'gender'=>'required',
+                                  'phone'=>'required',
+                                  'city'=>'required',
+                                  'socialMedia'=>'required',
+                                  'address'=>'required',
+                                  'hobbies'=>'required',
+                                  'state'=>'required',
+                                  'localG'=>'required',
+                                 );
+                    $validator= Validator::make($request->all(),$rules);
+                    if($validator->fails()){
+                              return redirect()->route('add-staff')->withErrors($validator);
                     }else{                    
-                              Storage::disk('public')->put($image->getFilename().'.'.$image->getClientOriginalExtension(), File::get($image));
-                              $data['staff_profile_image'] =$image->getFilename().'.'.$image->getClientOriginalExtension();
-                    }                                        
-                    $data['staff_firstname']= protectData($request->firstname);
-                    $data['staff_middlename']= protectData($request->middlename);
-                    $data['staff_lastname']= protectData($request->lastname);            
-                    $data['staff_email']= protectData($request->email);
-                    $data['staff_marital_status']= protectData($request->maritalStatus);
-                    $data['staff_gender']= protectData($request->gender);            
-                    $data['staff_phone']= protectData($request->phone);
-                    $data['staff_dob']= protectData($request->dob);
-                    $data['staff_disability']= protectData($request->disabilityStatus);
-                    $data['staff_list_disability']= protectData($request->listDisability);
-                    $data['staff_hobbies']= protectData($request->hobbies);
-                    $data['staff_address']= protectData($request->address);
-                    $data['staff_city']= protectData($request->city);
-                    $data['staff_social_media']= protectData($request->socialMedia);
-                    $data['staff_state']= protectData($request->state);
-                    $data['staff_localG']= protectData($request->localG);
-                    $data['user_corox_model_id'] = 0;
-                    $data['corox_model_id'] =protectData($request->userId);
-                    $schoolInformation= RegisterStaffInformation::create($data);    
-                    $request->session()->flash('messageSuccess', 'Staff with email, '.$request->email.' is successfully created');                              
-                    return redirect()->route('add-staff');;
+                      $data = array();
+                      $image = $request->file('profileImage');
+                      if($image == NULL || $image =='' ){
+                              $data['staff_profile_image']  = $image; 
+                      }else{                    
+                                Storage::disk('public')->put($image->getFilename().'.'.$image->getClientOriginalExtension(), File::get($image));
+                                $data['staff_profile_image'] =$image->getFilename().'.'.$image->getClientOriginalExtension();
+                      }                                        
+                      $data['staff_firstname']= protectData($firstname);
+                      $data['staff_middlename']= protectData($middlename);
+                      $data['staff_lastname']= protectData($lastname);            
+                      $data['staff_email']= protectData($email);
+                      $data['staff_marital_status']= protectData($maritalStatus);
+                      $data['staff_gender']= protectData($gender);            
+                      $data['staff_phone']= protectData($phone);
+                      $data['staff_dob']= protectData($dob);
+                      $data['staff_disability']= protectData($disabilityStatus);
+                      $data['staff_list_disability']= protectData($listDisability);
+                      $data['staff_hobbies']= protectData($hobbies);
+                      $data['staff_address']= protectData($address);
+                      $data['staff_city']= protectData($city);
+                      $data['staff_social_media']= protectData($socialMedia);
+                      $data['staff_state']= protectData($state);
+                      $data['staff_localG']= protectData($localG);
+                      $data['user_corox_model_id'] = 0;
+                      $data['corox_model_id'] =protectData($request->userId);
+                      $schoolInformation= RegisterStaffInformation::create($data);    
+                      $request->session()->flash('messageSuccess', 'Staff with email, '.$email.' is successfully created');                              
+                      return redirect()->route('add-staff');
+                   }
           }
           //tracking page to post update staff detail
           public function registerUpdateStaff(Request $request){
                     if(Auth::user()->isMember()){
-                              return redirect()->route('dashboard');
-                    }
-                   /* if(Auth::user()->email){  
+                      $roleId =1;
+                      $roleInformation = Permit::where("role_id",$roleId)->first();
+                      $userId= $roleInformation->corox_model_id;
+                      $date = date('Y');
+                      $adminInformation = Corox_model::where("id",$userId)->first();
+                      $adminEmail=$adminInformation->email;
+                      //return redirect('/Dregister/dashboard');
+                    }elseif(Auth::user()->isAdmin()){  
                               $email= Auth::user()->email;
                               $date = date('Y');
-                    }*/
-                   if(Corox_model::where("email",protectData($request->email))->exists()){
-                              $request->session()->flash('message', 'Please register this staff with another email, '.$request->email.' is not available');
-                             return back()->with($request->id); 
+                              $userId=Auth::user()->id;
+                              $adminEmail=Auth::user()->email;
                     }
+                    
                     if($request->id == null || $request->id == '' || !is_numeric($request->id)){
                               $request->session()->flash('message', 'You are not allowed to update this staff record');
                             return redirect()->route('404'); 
                     }
-          
                     if( RegisterStaffInformation::where(['id'=>protectData($request->id)])->exists()){
                               $image = $request->file('profileImage');
                               $staffInformation = RegisterStaffInformation::find(protectData($request->id));                              
@@ -446,29 +504,69 @@ class CoroxController extends Controller
                                         }
                                         Storage::disk('public')->put($image->getFilename().'.'.$image->getClientOriginalExtension(), File::get($image));
                                         $staffInformation->staff_profile_image=$image->getFilename().'.'.$image->getClientOriginalExtension();                              
-                              }                              
-                              $staffInformation->staff_firstname= protectData($request->firstname);
-                              $staffInformation->staff_middlename= protectData($request->middlename);
-                              $staffInformation->staff_lastname= protectData($request->lastname);            
-                              $staffInformation->staff_email= protectData($request->email);
-                              $staffInformation->staff_marital_status= protectData($request->maritalStatus);
-                              $staffInformation->staff_gender= protectData($request->gender);            
-                              $staffInformation->staff_phone= protectData($request->phone);
-                              $staffInformation->staff_dob= protectData($request->dob);
-                              $staffInformation->staff_disability= protectData($request->disabilityStatus);
-                              $staffInformation->staff_list_disability= protectData($request->listDisability);
-                              $staffInformation->staff_hobbies= protectData($request->hobbies);
-                              $staffInformation->staff_address= protectData($request->address);
-                              $staffInformation->staff_city= protectData($request->city);
-                              $staffInformation->staff_social_media= protectData($request->socialMedia);
-                              $staffInformation->staff_state= protectData($request->state);
-                              $staffInformation->staff_localG= protectData($request->localG);
+                              } 
+                              $firstname=protectData($request->input('firstname'));
+                              $middlename=protectData($request->input('middlename'));
+                              $lastname=protectData($request->input('lastname'));
+                              $maritalStatus=protectData($request->input('maritalStatus'));
+                              $dob=protectData($request->input('dob'));
+                              $gender=protectData($request->input('gender'));
+                              $phone=protectData($request->input('phone'));
+                              $city=protectData($request->input('city'));
+                              $socialMedia=protectData($request->input('socialMedia'));
+                              $address=protectData($request->input('address'));
+                              $state=protectData($request->input('state'));
+                              $hobbies = protectData($request->input('hobbies'));
+                              $disabilityStatus=protectData($request->input('disabilityStatus'));
+                              $listDisability=protectData($request->input('listDisability'));
+                              $localG=protectData($request->input('localG'));
+                              if($disabilityStatus =='yes'  && $listDisability ==''){
+                                $request->session()->flash('listDisability', 'List your Disability'); 
+                                return redirect()->route('edit-staff',['id' => $request->id]);                        
+                              }           
+                              $rules=array(
+                                            'firstname'=>'required',
+                                            'middlename'=>'required',
+                                            'lastname'=>'required',
+                                            'maritalStatus'=>'required',
+                                            'disabilityStatus'=>'required',
+                                            'dob'=>'required',
+                                            'gender'=>'required',
+                                            'phone'=>'required',
+                                            'city'=>'required',
+                                            'socialMedia'=>'required',
+                                            'address'=>'required',
+                                            'hobbies'=>'required',
+                                            'state'=>'required',
+                                            'localG'=>'required',
+                                           );
+                            $validator= Validator::make($request->all(),$rules);
+                            if($validator->fails()){ 
+                              //return redirect()->route('edit-staff', ['id' => $id])->withErrors($validator);
+                              return redirect()->route('edit-staff',['id' => $request->id])->withErrors($validator);     
+                            }else{                                                                       
+                              $staffInformation->staff_firstname= protectData($firstname);
+                              $staffInformation->staff_middlename= protectData($middlename);
+                              $staffInformation->staff_lastname= protectData($lastname);            
+                              $staffInformation->staff_marital_status= protectData($maritalStatus);
+                              $staffInformation->staff_gender= protectData($gender);            
+                              $staffInformation->staff_phone= protectData($phone);
+                              $staffInformation->staff_dob= protectData($dob);
+                              $staffInformation->staff_disability= protectData($disabilityStatus);
+                              $staffInformation->staff_list_disability= protectData($listDisability);
+                              $staffInformation->staff_hobbies= protectData($hobbies);
+                              $staffInformation->staff_address= protectData($address);
+                              $staffInformation->staff_city= protectData($city);
+                              $staffInformation->staff_social_media= protectData($socialMedia);
+                              $staffInformation->staff_state= protectData($state);
+                              $staffInformation->staff_localG= protectData($localG);
                               if($staffInformation->save()){
                                         $request->session()->flash('messageSuccess', 'Staff with email, '.$request->email.' is successfully updated');                                                           
                               }else{
                                         $request->session()->flash('message', 'Staff with email, '.$request->email.' is not successfully updated');                       
                               }
-                              return back()->with($request->id);                           
+                              return back()->with($request->id);  
+                            }                         
                     }else{
                               $request->session()->flash('message', 'You are not allowed to update this staff record');
                               return back()->with($request->id); 
@@ -757,6 +855,30 @@ class CoroxController extends Controller
                     }                    
                     return  view('view-staffs-table',['date'=>$date,'schoolInformation'=> $schoolInformation,  'staffInformation'=> $staffInformation, 'paginator'=> $staffInformation, 'userEmail'=>$adminEmail, 'userId'=>$userId]);
           }
+          public function registerViewStaff($id){
+            if(Auth::user()->isMember()){
+                      $roleId =1;
+                      $roleInformation = Permit::where("role_id",$roleId)->first();
+                      $userId= $roleInformation->corox_model_id;
+                      $date = date('Y');
+                      $adminInformation = Corox_model::where("id",$userId)->first();
+                      $adminEmail=$adminInformation->email;
+                      //return redirect('/Dregister/dashboard');
+            }elseif(Auth::user()->isAdmin()){  
+                      $email= Auth::user()->email;
+                      $date = date('Y');
+                      $userId=Auth::user()->id;
+                      $adminEmail=Auth::user()->email;
+            }
+            if(RegisterSchoolInformation::where("corox_model_id",$userId)->exists()){
+                      $schoolInformation = RegisterSchoolInformation::where("corox_model_id",$userId)->first();
+            }else{
+                      $schoolInformation= new RegisterSchoolInformation;     
+            }
+            $staffInformation = DB::table('register_staff_informations')->where('id', $id)->get();  
+                            
+            return  view('view-staffs-table',['date'=>$date,'schoolInformation'=> $schoolInformation,  'staffInformation'=> $staffInformation, 'paginator'=> $staffInformation, 'userEmail'=>$adminEmail, 'userId'=>$userId]);
+  }          
           //show general page here
           public function registerGeneralSettings(){
                     if(Auth::user()->isMember()){
@@ -796,6 +918,7 @@ class CoroxController extends Controller
                               $userId=Auth::user()->id;
                               $adminEmail=Auth::user()->email;
                     }
+
                     if(RegisterSchoolInformation::where("corox_model_id",$userId)->exists()){
                               $schoolInformation = RegisterSchoolInformation::where("corox_model_id",$userId)->first();
                     }else{
@@ -1045,9 +1168,6 @@ class CoroxController extends Controller
                     }elseif($request->classId =='' || $request->classId =='none'){
                               return response()->json(['success'=>'danger','message'=> 'Please select a class']);                                                                 
                     }
-                    
-                   echo  $request->teacherRole;
-                   exit;
                     
                     if(Auth::user()->isMember()){
                               $roleId =1;
@@ -1762,9 +1882,19 @@ class CoroxController extends Controller
           }          
           // create parent for register
           public function registerAddParent(Request $request){
-                    if(Auth::user()->email){  
+                    if(Auth::user()->isMember()){
+                      $roleId =1;
+                      $roleInformation = Permit::where("role_id",$roleId)->first();
+                      $userId= $roleInformation->corox_model_id;
+                      $date = date('Y');
+                      $adminInformation = Corox_model::where("id",$userId)->first();
+                      $adminEmail=$adminInformation->email;
+                      //return redirect('/Dregister/dashboard');
+                    }elseif(Auth::user()->isAdmin()){  
                               $email= Auth::user()->email;
                               $date = date('Y');
+                              $userId=Auth::user()->id;
+                              $adminEmail=Auth::user()->email;
                     }
                     if(RegisterParentInformation::where("parent_email",protectData($request->email))->exists()){
                               $request->session()->flash('message', 'Please register this parent with another email, '.$request->email.' is not available');
@@ -1948,27 +2078,8 @@ class CoroxController extends Controller
                     
           }          
           //error page here
-          public  function registerError404(){
-                    if(Auth::user()->isMember()){
-                              $roleId =1;
-                              $roleInformation = Permit::where("role_id",$roleId)->first();
-                              $userId= $roleInformation->corox_model_id;
-                              $date = date('Y');
-                              $adminInformation = Corox_model::where("id",$userId)->first();
-                              $adminEmail=$adminInformation->email;
-                              //return redirect('/Dregister/dashboard');
-                    }elseif(Auth::user()->isAdmin()){  
-                              $email= Auth::user()->email;
-                              $date = date('Y');
-                              $userId=Auth::user()->id;
-                              $adminEmail=Auth::user()->email;
-                    }
-                    if(RegisterSchoolInformation::where("corox_model_id",$userId)->exists()){
-                              $schoolInformation = RegisterSchoolInformation::where("corox_model_id",$userId)->first();
-                    }else{
-                              $schoolInformation= new RegisterSchoolInformation;     
-                    }                    
-                    return view('404',['date'=>$date,'schoolInformation'=> $schoolInformation, 'userEmail'=>$adminEmail,  'userId'=>$userId]);
+          public  function registerError404(){                  
+                    return view('404');
           }      
           //sending mail
           public  function mailOut($id){

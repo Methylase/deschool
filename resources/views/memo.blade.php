@@ -14,7 +14,7 @@
   <!-- Custom fonts for this template-->
   <link href="{{asset('my-register/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-  <link rel="icon" type="image/png" href="{{asset('my-register/img/The-Register.jpg')}}"  sizes ="25x25"> 
+  <link rel="icon" type="image/png" href="{{asset('my-register/img/icon.jpg')}}"  sizes ="25x25"> 
   <!-- Custom styles for this template-->
   <link href="{{asset('my-register/css/sb-admin-2.min.css')}}" rel="stylesheet">
   <script src="{{asset('my-register/vendor/jquery/jquery.min.js')}}"></script>  
@@ -22,7 +22,7 @@
       function dateTime(){
         var date = new Date();
         var h = date.getHours();
-        var m = date.getMinutes();
+        var m = date.getMinutes(); 
         if (h > 12) {
           h -= 12;
         }else if (h ===0){

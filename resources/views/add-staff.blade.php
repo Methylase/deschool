@@ -10,11 +10,11 @@
   <meta name="author" content="">
 
   <title>The Register - Add Staff</title>
-
+  
   <!-- Custom fonts for this template-->
   <link href="{{asset('my-register/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-  <link rel="icon" type="image/png" href="{{asset('my-register/img/The-Register.jpg')}}"  sizes ="25x25"> 
+  <link rel="icon" type="image/png" href="{{asset('my-register/img/icon.jpg')}}"  sizes ="25x25"> 
   <!-- Custom styles for this template-->
   <link href="{{asset('my-register/css/sb-admin-2.min.css')}}" rel="stylesheet">
   <script src="{{asset('my-register/vendor/jquery/jquery.min.js')}}"></script>  
@@ -622,12 +622,26 @@
                         <div class="form-group">
                           <label for="first-name" class="control-label text-info"> FirstName</label>
                            <input type="text" id="firstname" name="firstname" class="form-control" placeholder="Enter FirstName">
+                           <span class="text-danger">
+                            @if($errors->has('firstname'))
+                              {{ $firstname= $errors->first('firstname')}}
+                            @else
+                              {{$firstname=''}}                            
+                            @endif
+                          </span> 
                         </div>
                       </div>
                       <div class="col-md-6 col-sm-6">
                         <div class="form-group">
                            <label for="middle-name" class="control-label text-info"> MiddleName</label>
                            <input type="text" id="middlename" name="middlename" class="form-control" placeholder="Enter MiddleName" >
+                           <span class="text-danger">
+                            @if($errors->has('middlename'))
+                              {{ $middlename= $errors->first('middlename')}}
+                            @else
+                              {{$middlename=''}}                            
+                            @endif
+                          </span> 
                         </div>
                       </div>                        
                     </div>
@@ -636,12 +650,26 @@
                         <div class="form-group">
                            <label for="last-name" class="control-label text-info"> LastName</label>
                            <input type="text" id="lastname" name="lastname" class="form-control" placeholder="Enter MiddleName" value="">
+                           <span class="text-danger">
+                              @if($errors->has('lastname'))
+                                {{ $middlename= $errors->first('lastname')}}
+                              @else
+                                {{$lastname=''}}                            
+                              @endif
+                            </span>                             
                         </div>
                       </div>                      
                       <div class="col-md-6 col-sm-6">
                         <div class="form-group">
                            <label for="email" class="control-label text-info"> Email</label>
                              <input type="email" id="email" name="email" class="form-control" placeholder="Enter  Email" value="">
+                             <span class="text-danger">
+                              @if($errors->has('email'))
+                                {{ $email= $errors->first('email')}}
+                              @else
+                                {{$email=''}}                            
+                              @endif
+                            </span>                              
                         </div>
                       </div>                               
                      </div>
@@ -650,18 +678,34 @@
                         <div class="form-group">
                           <label for="marital-status"  class="control-label text-info"> Marital Status</label>
                              <select class="form-control" id="marital-status" name="maritalStatus">
-                                 <option value="none">Select-Marital-Status</option>
+                                 <option value="">Select-Marital-Status</option>
                                  <option value="single">Single</option>  
                                  <option value="married">Married</option>                     
                              </select>
+                             <span class="text-danger">
+                                @if($errors->has('maritalStatus'))
+                                  {{ $maritalStatus= $errors->first('maritalStatus')}}
+                                @else
+                                  {{$maritalStatus=''}}                            
+                                @endif
+                              </span>                              
                         </div>
                       </div>                                            
                       <div class="col-md-6 col-sm-6">
-                        <div class="form-group" style="margin-top:40px">                    
-                              <label for="gender" class="radio-inline text-info">Male</label>
-                              <input type="radio" id="gender-male" name="gender" value="male">
-                              <label for="gender" class="radio-inline text-info">Female</label>                                                                     
-                              <input type="radio" id="gender-female" name="gender"   value="female">
+                        <div class="form-group" style="margin-top:40px"> 
+                          <div class="radio">
+                            <label for="gender" class="text-info">Male  <input type="radio" id="gender-male" name="gender" value="male"></label>
+                           
+                            <label for="gender" class="text-info">Female <input type="radio" id="gender-female" name="gender"   value="female"> </label>                                                                     
+                           
+                          </div>                   
+                          <span class="text-danger">
+                            @if($errors->has('gender'))
+                              {{ $gender= $errors->first('gender')}}
+                            @else
+                              {{$gender=''}}                            
+                            @endif
+                          </span>           
                         </div>
                       </div>
                     </div>                        
@@ -670,12 +714,26 @@
                         <div class="form-group">
                           <label for="phone-number" class="control-label text-info"> Phone Number </label>
                             <input type="text" id="phone" name="phone" class="form-control" placeholder="Enter Staff Phone Number">
+                            <span class="text-danger">
+                              @if($errors->has('phone'))
+                                {{ $phone= $errors->first('phone')}}
+                              @else
+                                {{$phone=''}}                            
+                              @endif
+                            </span>    
                         </div>
                       </div>
                       <div class="col-md-6 col-sm-6">
                         <div class="form-group">
                           <label for="date-of-birth" class="control-label text-info">Date Of Birth</label>
                             <input type="date" id="dob" name="dob" class="form-control">
+                            <span class="text-danger">
+                              @if($errors->has('dob'))
+                                {{ $dob= $errors->first('dob')}}
+                              @else
+                                {{$dob=''}}                            
+                              @endif
+                            </span>    
                         </div>
                       </div>                        
                     </div>
@@ -684,16 +742,32 @@
                         <div class="form-group">
                           <label for="disability"  class="control-label text-info">Disability</label>
                              <select class="form-control" id="disabilityStatus" name="disabilityStatus">
-                                 <option value="none">Select-Disability</option>
+                                 <option value="">Select-Disability</option>
                                  <option value="yes">Yes</option>
                                  <option value="no">No</option>                   
                              </select>
+                             <span class="text-danger">
+                             @if($errors->has('disabilityStatus'))
+                                {{ $disabilityStatus= $errors->first('disabilityStatus')}}
+                              @elseif(session()->has('disabilityStatus'))
+                                {{session('disabilityStatus')}}
+                              @else
+                                {{$disabilityStatus=''}}                            
+                              @endif                              
+                            </span>       
                         </div>
                       </div>                                            
                       <div class="col-md-6 col-sm-6">
                         <div class="form-group">
                            <label for="list-type-of-disability" class="control-label text-info">List Disability Type</label>
                            <textarea  id="listDisability" name="listDisability" class="form-control" placeholder="Enter The List Of Disability" ></textarea>
+                           <span class="text-danger">
+                              @if($errors->has('listDisability'))
+                                {{ $listDisability= $errors->first('listDisability')}}
+                              @else
+                                {{$listDisability=''}}                            
+                              @endif
+                            </span>    
                         </div>
                       </div>
                     </div>
@@ -702,12 +776,26 @@
                         <div class="form-group">
                           <label for="hobbies" class="control-label text-info"> Hobbies</label>
                             <textarea  id="hobbies" name="hobbies" class="form-control" placeholder="Enter Staff Hobbies" ></textarea>
+                            <span class="text-danger">
+                              @if($errors->has('hobbies'))
+                                {{ $hobbies= $errors->first('hobbies')}}
+                              @else
+                                {{$hobbies=''}}                            
+                              @endif
+                            </span>    
                         </div>
                       </div>
                     <div class="col-md-6 col-sm-6">
                         <div class="form-group">
                           <label for="school-address" class="control-label text-info"> Address</label>
                             <textarea  id="address" name="address" class="form-control" placeholder="Enter Staff Address" ></textarea>
+                            <span class="text-danger">
+                              @if($errors->has('address'))
+                                {{ $address= $errors->first('address')}}
+                              @else
+                                {{$address=''}}                            
+                              @endif
+                            </span> 
                         </div>
                       </div>                         
                      </div>
@@ -716,12 +804,26 @@
                         <div class="form-group">
                           <label for="city" class="control-label text-info"> City</label>
                             <input type="text" id="city" name="city" class="form-control" placeholder="Enter City">
+                            <span class="text-danger">
+                              @if($errors->has('city'))
+                                {{ $city= $errors->first('city')}}
+                              @else
+                                {{$city=''}}                            
+                              @endif
+                            </span>                             
                         </div>
                       </div>
                       <div class="col-md-6 col-sm-6">
                         <div class="form-group">
                            <label for="social-media" class="control-label text-info" >Social Media Handle</label>
                              <input type="text" id="socialMedia" name="socialMedia" class="form-control" placeholder="Enter Social Medial Handle">
+                             <span class="text-danger">
+                                @if($errors->has('socialMedia'))
+                                  {{ $socialMedia= $errors->first('socialMedia')}}
+                                @else
+                                  {{$socialMedia=''}}                            
+                                @endif
+                              </span>                             
                         </div>
                       </div>                        
                     </div>                        
@@ -732,6 +834,13 @@
                             <select class="form-control" id="state" name="state">
                                  <option value="none">Select State</option>
                             </select>
+                            <span class="text-danger">
+                              @if($errors->has('state'))
+                                {{ $state= $errors->first('state')}}
+                              @else
+                                {{$state=''}}                            
+                              @endif
+                            </span>                            
                         </div>
                       </div>
                       <div class="col-md-6 col-sm-6">
@@ -740,6 +849,13 @@
                              <select class="form-control" id="localG" name="localG">
                               <option value="none">Select Local-Government</option>
                              </select>
+                              <span class="text-danger">
+                                @if($errors->has('localG'))
+                                  {{ $localG= $errors->first('localG')}}
+                                @else
+                                  {{$localG=''}}                            
+                                @endif
+                              </span>                              
                         </div>
                       </div>                        
                     </div>

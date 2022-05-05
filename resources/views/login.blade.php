@@ -17,7 +17,7 @@
 
   <!-- Custom styles for this template-->
   <link href="{{asset('my-register/css/sb-admin-2.min.css')}}" rel="stylesheet">
-  <link rel="icon" type="image/png" href="{{asset('my-register/img/The-Register.jpg')}}"  sizes ="25x25"> 
+  <link rel="icon" type="image/png" href="{{asset('my-register/img/icon.jpg')}}"  sizes ="25x25"> 
 </head>
 
 <body >
@@ -33,18 +33,35 @@
           <div class="card-body p-0">
             <!-- Nested Row within Card Body -->
             <div class="row">
-              <div class=" col-lg-6 d-none d-lg-block text-left">
-                <div class="p-5">
-                <h4 class="h3 mb-4" style="font-size:50px;color:#75C5F0">
-                     The-School  
-                </h4>
-            </div>
+              <div class="col-lg-6 d-none d-lg-block text-left" >
+                <div class="row" style="margin-top:20px">
+                  <div class="col-md-12">
+                    <div class="p-5">
+                      <h4 class="h2" style="color:#75C5F0">
+                        Why Use This?
+                      </h4>                        
+                      <ul style="font-size:16px;color:#2F2E41" >
+                        <li>Recording Of Daily School Activies Made Easy.</li>
+                        <li>Result Computing Made Easy.</li>
+                        <li>One Click, Sending Of Result To Parent through Email.</li>
+                        <li>And Many More.</li>
+                      </ul>                        
+
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <img src="{{asset('my-register/img/deschool-background.svg')}}" class="img-responsive" style="margin-left:50px" width="380" height="150">
+                  </div>                  
+                </div>
               </div>
               <div class="col-lg-6">
                 <div class="p-5" style="border-left:2px solid #75C5F0">
                   <div class="text-center">
+                      <h4 class="h2" style="color:#75C5F0">
+                          The-School  
+                      </h4>
                       <h4 class="h2 text-gray-900 mb-3">
-                          <img src="{{asset('my-register/img/The-Register.jpg')}}" width="180" height="150">
+                          <img src="{{asset('my-register/img/icon.jpg')}}" width="180" height="150">
                       </h4>
                   </div>
                   @if(session()->has('message'))
@@ -85,7 +102,7 @@
                         <label class="custom-control-label" for="customCheck">Remember Me</label>
                       </div>
                     </div>
-                    <button type="submit"  class="btn btn-primary btn-user btn-block">
+                    <button type="submit"  class="btn btn-info btn-user btn-block">
                       Login
                     </button>
                     <hr>

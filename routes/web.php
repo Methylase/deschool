@@ -14,7 +14,7 @@
 Route::get('/signup','CoroxController@registerShowSignUp')->name('signup');
 Route::post('/deschool/signup', 'CoroxController@registerSignUp');
 Route::post('/deschool/login', 'CoroxController@registerLogin');
-Route::post('/deschool/logout', 'CoroxController@logout' );
+Route::post('/deschool/logout', 'CoroxController@logout')->name('logout');
 Route::get('/deschool/404', 'CoroxController@registerError404')->name('404');
 Route::get('/', 'CoroxController@index')->name('login');
 Route::get('/login', 'CoroxController@index')->name('login');
@@ -31,11 +31,12 @@ Route::put('/deschool/update-info-settings', 'CoroxController@registerInfoSettin
 Route::get('/deschool/dashboard', 'CoroxController@registerDashboard')->name('dashboard');
 
 Route::post('/deschool/add-staff', 'CoroxController@registerAddStaff')->middleware('protectAdmin');
-Route::get('/deschool/edit-staff/{id}', 'CoroxController@registerEditStaff')->name('edit-staff')->middleware('protectMember');
-Route::delete('/deschool/delete-staff/{id}', 'CoroxController@registerDeleteStaff')->middleware('protectMember');
-Route::put('/deschool/update-staff', 'CoroxController@registerUpdateStaff')->middleware('protectMember');
+Route::get('/deschool/edit-staff/{id}', 'CoroxController@registerEditStaff')->name('edit-staff')->middleware('protectAdmin');
+Route::delete('/deschool/delete-staff/{id}', 'CoroxController@registerDeleteStaff')->middleware('protectAdmin');
+Route::put('/deschool/update-staff', 'CoroxController@registerUpdateStaff')->middleware('protectAdmin');
 Route::get('/deschool/view-staff-table', 'CoroxController@registerViewStaffTable')->name('view-staff')->middleware('protectMember');
 Route::get('/deschool/view-staffs', 'CoroxController@registerViewStaffs' )->name('view-staffs')->middleware('protectAdmin');
+Route::get('/deschool/view-staff/{id}', 'CoroxController@registerViewStaff')->name('view-staff')->middleware('protectAdmin');
 Route::get('/deschool/priv-settings', 'CoroxController@registerPrivilegeSettings' )->middleware('protectAdmin');
 Route::post('/deschool/privilege', 'CoroxController@registerPrivilege')->middleware('protectMember');
 Route::post('/deschool/Enable/settings-information', 'CoroxController@registerPrivilegeEnableSettings')->middleware('protectMember');
@@ -60,7 +61,7 @@ Route::get('/deschool/add-parent', 'CoroxController@registerParent')->name('add-
 Route::post('/deschool/add-parent', 'CoroxController@registerAddParent')->middleware('protectAdmin');
 Route::get('/deschool/edit-parent/{id}', 'CoroxController@registerEditParent')->name('edit-parent')->middleware('protectAdmin');
 Route::delete('/deschool/delete-parent/{id}', 'CoroxController@registerDeleteParent')->middleware('protectAdmin');
-Route::get('/deschool/view-parents', 'CoroxController@registerViewParents')->name('view-parents');
+Route::get('/deschool/view-parents', 'CoroxController@registerViewParents')->name('view-parents')->middleware('protectAdmin');
 Route::put('/deschool/update-parent', 'CoroxController@registerUpdateParent')->middleware('protectAdmin');
 //Route::get('/Dregister/staff-register', 'coroxController@registerStaffTimeRegister');
 Route::get('/deschool/mail/{id}', 'CoroxController@mailOut');
