@@ -30,6 +30,10 @@ Route::get('/deschool/staff-register', 'CoroxController@registerStaffRegister')-
 
 Route::post('/deschool/staff-register', 'CoroxController@registerStaffTimeRegister');
 
+Route::get('/deschool/student-register', 'CoroxController@registerStudentRegister')->name('student-register');
+
+Route::post('/deschool/student-register', 'CoroxController@registerStudentTimeRegister');
+
 Route::post('/deschool/send-memo', 'CoroxController@postSendMemo');
 
 Route::post('/deschool/add-info-settings', 'CoroxController@registerInfoSettingsAdd');

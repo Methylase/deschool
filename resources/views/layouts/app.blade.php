@@ -6,6 +6,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
   <meta name="description" content="">
   <meta name="csrf-token" content="{{csrf_token()}}">   
   <meta name="author" content="">
@@ -804,7 +805,20 @@
      }   
      .services{
          margin-left: 5px;
-      }            
+      }    
+      @media (max-width: 986px) {
+        .d-form {
+            text-align: center !important; 
+            width:70% !important; 
+            margin:auto !important; 
+            background-color:red !important; 
+        }
+    }
+ /* @media (min-width: 600px) and (max-width: 986px) {
+    .d-form  {
+      background-color:red !important;
+    }
+}*/
     </style>  
 </head>
 
@@ -955,8 +969,8 @@
             <h6 class="collapse-header">Students:</h6>
             <a class="collapse-item" href="/deschool/add-student"> Add New Student</a>
             <a class="collapse-item" href="/deschool/view-students">View Students Table</a>
-            <!--<a class="collapse-item" href="/deschool/students-registers"> Students Register</a>                 
-            <a class="collapse-item" href="/deschool/students-result"> Add Student Result</a>               
+            <a class="collapse-item" href="/deschool/students-registers"> Students Register</a>                 
+            <!--<a class="collapse-item" href="/deschool/students-result"> Add Student Result</a>               
             <div class="collapse-divider"></div>
             <h6 class="collapse-header">Others:</h6>
             <a class="collapse-item" href="register.html"> Old Student Archive</a>                  

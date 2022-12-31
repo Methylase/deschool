@@ -28,12 +28,11 @@
     <div class="row justify-content-center">
 
       <div class="col-xl-10 col-lg-12 col-md-12">
-
         <div class="card o-hidden border-0 shadow-lg my-5">
           <div class="card-body p-0">
             <!-- Nested Row within Card Body -->
             <div class="row">
-              <div class="col-lg-6 d-none d-lg-block text-left" >
+              <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 d-none d-lg-block text-left" >
                 <div class="row" style="margin-top:20px">
                   <div class="col-md-12">
                     <div class="p-5">
@@ -41,10 +40,10 @@
                         Why Use This?
                       </h4>                        
                       <ul style="font-size:16px;color:#2F2E41" >
-                        <li>Recording Of Daily School Activies Made Easy.</li>
-                        <li>Result Computing Made Easy.</li>
-                        <li>One Click, Sending Of Result To Parent through Email.</li>
-                        <li>And Many More.</li>
+                        <li><strong>Recording Of Daily School Activities Made Easy.</strong></li>
+                        <li><strong>Result Computing Made Easy.</strong></li>
+                        <li><strong>One Click, Sending Of Result To Parent through Email.</strong></li>
+                        <li><strong>And Many More.</strong></li>
                       </ul>                        
 
                     </div>
@@ -54,7 +53,7 @@
                   </div>                  
                 </div>
               </div>
-              <div class="col-lg-6">
+              <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                 <div class="p-5" style="border-left:2px solid #75C5F0">
                   <div class="text-center">
                       <h4 class="h1" style="color:#75C5F0">
@@ -74,7 +73,7 @@
                         {{session('message')}}
                      </div>
                   @endif                                   
-                  <form class="user" action="/deschool/login" method="post" novalidate >
+                  <form class="user d-form" action="/deschool/login" method="post" novalidate >
                     <input name="_token" type="hidden" value="{{ csrf_token() }}">
                     <div class="form-group">
                       <input type="email" name="email" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address...">
@@ -105,7 +104,6 @@
                     <button type="submit"  class="btn btn-info btn-user btn-block">
                       Login
                     </button>
-                    <hr>
                     <!--<a href="index.html" class="btn btn-google btn-user btn-block">
                       <i class="fab fa-google fa-fw"></i> Login with Google
                     </a>

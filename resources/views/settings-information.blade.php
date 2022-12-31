@@ -72,7 +72,7 @@
                       <div class="col-md-6 col-sm-6">
                         <div class="form-group">
                            <label for="school-email" class="control-label text-info"> Email</label>
-                             <input type="email" id="email" name="email" class="form-control" placeholder="Enter School Email" value="{{$schoolInformation->school_email !== null ? $schoolInformation->school_email :old('email',  $userEmail) }}" {{$readOnly}}>
+                             <input type="email" id="email" name="email" class="form-control" placeholder="Enter School Email" value="{{$schoolInformation->school_email !== null ? ucfirst($schoolInformation->school_email) :old('email',  $userEmail) }}" {{$readOnly}}>
                              <span class="text-danger">
                             @if($errors->has('email'))
                               {{ $email= $errors->first('email')}}
@@ -170,7 +170,7 @@
                       <div class="col-md-6 col-sm-6">
                         <div class="form-group">
                            <label for="social-media" class="control-label text-info" >Social Media Handle</label>
-                             <input type="text" id="social" name="social" class="form-control" placeholder="Enter Social Medial Handle" value="{{$schoolInformation->school_social_media !== null ? $schoolInformation->school_social_media :old('social', $schoolInformation->school_social_media) }}" {{$readOnly}}>
+                             <input type="text" id="social" name="social" class="form-control" placeholder="Enter Social Medial Handle" value="{{$schoolInformation->school_social_media !== null ? ucfirst($schoolInformation->school_social_media) :old('social', $schoolInformation->school_social_media) }}" {{$readOnly}}>
                              <span class="text-danger">
                               @if($errors->has('social'))
                                 {{ $social= $errors->first('social')}}
@@ -238,7 +238,7 @@
                       <div class="col-md-6 col-sm-6">
                         <div class="form-group">
                            <label for="school-email" class="control-label text-info" > Description Of The School</label>
-                             <textarea type="email" id="description" name="description" class="form-control" placeholder="Enter Short Description Of School" {{$readOnly}}>{{$schoolInformation->school_description !== null ? $schoolInformation->school_description :old('description', $schoolInformation->school_description) }}</textarea>
+                             <textarea type="email" id="description" name="description" class="form-control" placeholder="Enter Short Description Of School" {{$readOnly}}>{{$schoolInformation->school_description !== null ? ucfirst($schoolInformation->school_description) :old('description', $schoolInformation->school_description) }}</textarea>
                              <span class="text-danger">
                               @if($errors->has('description'))
                                 {{ $description= $errors->first('description')}}

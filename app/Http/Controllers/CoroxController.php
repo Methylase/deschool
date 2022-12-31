@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Deschool\Http\Controllers;
 
 //phpmailer
@@ -69,7 +70,7 @@ class CoroxController extends Controller
             
             if(RegisterSchoolInformation::where("corox_model_id",$userId)->exists()){
               if(RegisterStaffInformation::where("corox_model_id",$userId)->exists()){
-                        $numberOfStaffs = DB::table('register_staff_informations')->whereNotNull('staff_firstname')->whereNotNull('staff_lastname')->whereNotNull('staff_email')->whereNotNull('staff_gender')->whereNotNull('staff_marital_status')->whereNotNull('staff_phone')->count(); 
+                        $numberOfStaffs = DB::table('register_staff_informations')->whereNotNull('staff_firstname')->whereNotNull('staff_lastname')->whereNotNull('staff_email')->whereNotNull('staff_gender')->whereNotNull('staff_marital_status')->whereNotNull('staff_phone')->where("status", NULL)->count(); 
               }
               $schoolInformation = RegisterSchoolInformation::where("corox_model_id",$userId)->first();
               $services = array();
@@ -111,7 +112,7 @@ class CoroxController extends Controller
               $adminEmail=Auth::user()->email;
             }
             if(RegisterStaffInformation::where("corox_model_id",$userId)->exists()){
-              $staffInformation = DB::table('register_staff_informations')->whereNotNull('staff_firstname')->whereNotNull('staff_lastname')->whereNotNull('staff_email')->whereNotNull('staff_gender')->whereNotNull('staff_marital_status')->whereNotNull('staff_phone')->paginate(10);    
+              $staffInformation = DB::table('register_staff_informations')->whereNotNull('staff_firstname')->whereNotNull('staff_lastname')->whereNotNull('staff_email')->whereNotNull('staff_gender')->whereNotNull('staff_marital_status')->whereNotNull('staff_phone')->where("status", "delete")->paginate(10);    
             }else{
               $staffInformation= new RegisterStaffInformation;     
             }                    
@@ -751,12 +752,12 @@ class CoroxController extends Controller
               $adminEmail=Auth::user()->email;
             } 
             if(RegisterStaffInformation::where("corox_model_id",$userId)->exists()){
-              $staffInformation = DB::table('register_staff_informations')->whereNotNull('staff_firstname')->whereNotNull('staff_lastname')->whereNotNull('staff_email')->whereNotNull('staff_gender')->whereNotNull('staff_marital_status')->whereNotNull('staff_phone')->get();
+              $staffInformation = DB::table('register_staff_informations')->whereNotNull('staff_firstname')->whereNotNull('staff_lastname')->whereNotNull('staff_email')->whereNotNull('staff_gender')->whereNotNull('staff_marital_status')->whereNotNull('staff_phone')->where("status", NULL)->get();
             }else{
               $staffInformation= new RegisterStaffInformation;     
             }
             if(RegisterStaffInformation::where("corox_model_id",$userId)->exists()){
-              $staffPrivilegeInformation = DB::table('register_staff_informations')->whereNotNull('staff_firstname')->whereNotNull('staff_lastname')->whereNotNull('staff_email')->whereNotNull('staff_gender')->whereNotNull('staff_marital_status')->whereNotNull('staff_phone')->paginate(10);
+              $staffPrivilegeInformation = DB::table('register_staff_informations')->whereNotNull('staff_firstname')->whereNotNull('staff_lastname')->whereNotNull('staff_email')->whereNotNull('staff_gender')->whereNotNull('staff_marital_status')->whereNotNull('staff_phone')->where("status", NULL)->paginate(10);
               $roleIdSInformation = Permit::all();
             }else{
               $staffPrivilegeInformation= new RegisterStaffInformation;
@@ -937,8 +938,9 @@ class CoroxController extends Controller
                   return response()->json(['staff'=>'danger','message'=>'Please select a staff']);     
                 }else{
                   $reg_id=$result=DB::table('corox_models')->where('email',protectData($request->staffEmail))->first();
-                  if(Permit::where("corox_model_id",$reg_id->id)->exists()){
-                    $remove = Permit::where("corox_model_id",$reg_id->id)->delete();
+                  if(Permit::where("corox_model_id", $reg_id->id)->where("status", "!=", "delete")->exists()){
+                    //soft delete
+                    $remove = Permit::where("corox_model_id",$reg_id->id)->update('status', 'delete');
                     if($remove){
                       return response()->json(['success'=>'success','message'=>'The staff with an email '.$request->staffEmail.' privilege as been deleted']);                             
                     }else{
@@ -1121,17 +1123,19 @@ class CoroxController extends Controller
                       if(RegisterStaffInformation::where("id",protectData($id))->exists()){
                                 $staffInformation = RegisterStaffInformation::where("id",protectData($id))->first();
                                 if(Corox_model::where("id",$staffInformation->user_corox_model_id)->exists()){
-                                          if(Corox_model::where("id",$staffInformation->user_corox_model_id)->delete()){
+                                          if(Corox_model::where("id",$staffInformation->user_corox_model_id)->update("status", "delete")){
                                                       if(Permit::where("corox_model_id",$staffInformation->user_corox_model_id)->exists()){
-                                                              if(Permit::where("corox_model_id",$staffInformation->user_corox_model_id)->delete()){
+                                                              if(Permit::where("corox_model_id",$staffInformation->user_corox_model_id)->update("status", "delete")){
                                                                         if(RegisterStaffTeacher::where("staff_id",protectData($id))->exists()){
-                                                                                  if(RegisterStaffTeacher::where("staff_id",protectData($id))->delete()){
-                                                                                            if(RegisterStaffInformation::find(protectData($id))->delete()){
+                                                                                  if(RegisterStaffTeacher::where("staff_id",protectData($id))->update("status","delete" )){
+                                                                                            if(RegisterStaffInformation::where(protectData($id))->update("status", "delete")){
                                                                                                       return response()->json(['success'=>'success','message'=>'Staff with an '.$id.' has been deleted successfully']);
                                                                                             }
                                                                                   }                                
                                                                         }else{
-                                                                                  if(RegisterStaffInformation::find(protectData($id))->delete()){
+                                                                                 //soft delete
+                 
+                                                                                  if(RegisterStaffInformation::where(protectData($id))->update('status', 'delete')){
                                                                                             return response()->json(['success'=>'success','message'=>'Staff with an '.$id.' has been deleted successfully']);
                                                                                   }                                                                      
                                                                         }
@@ -1139,13 +1143,14 @@ class CoroxController extends Controller
                                                               }                                                               
                                                       }else{
                                                               if(RegisterStaffTeacher::where("staff_id",protectData($id))->exists()){
-                                                                        if(RegisterStaffTeacher::where("staff_id",protectData($id))->delete()){
-                                                                                  if(RegisterStaffInformation::find(protectData($id))->delete()){
+                                                                
+                                                                        if(RegisterStaffTeacher::where("staff_id",protectData($id))->update('status', 'delete')){
+                                                                                  if(RegisterStaffInformation::where(protectData($id))->update('status', 'delete')){
                                                                                             return response()->json(['success'=>'success','message'=>'Staff with an '.$id.' has been deleted successfully']);
                                                                                   }
                                                                         }                                
                                                               }else{
-                                                                        if(RegisterStaffInformation::find(protectData($id))->delete()){
+                                                                        if(RegisterStaffInformation::where(protectData($id))->update('status', 'delete')){
                                                                                   return response()->json(['success'=>'success','message'=>'Staff with an '.$id.' has been deleted successfully']);
                                                                         }                                                                      
                                                               }                                                            
@@ -1154,15 +1159,15 @@ class CoroxController extends Controller
                                           }                                                  
                                 }else{
                                           if(Permit::where("corox_model_id",$staffInformation->user_corox_model_id)->exists()){
-                                                    if(Permit::where("corox_model_id",$staffInformation->user_corox_model_id)->delete()){
+                                                    if(Permit::where("corox_model_id",$staffInformation->user_corox_model_id)->update("status", "delete")){
                                                               if(RegisterStaffTeacher::where("staff_id",protectData($id))->exists()){
-                                                                        if(RegisterStaffTeacher::where("staff_id",protectData($id))->delete()){
-                                                                                  if(RegisterStaffInformation::find(protectData($id))->delete()){
+                                                                        if(RegisterStaffTeacher::where("staff_id",protectData($id))->update("status", "delete")){
+                                                                                  if(RegisterStaffInformation::where(protectData($id))->update("status", "delete")){
                                                                                             return response()->json(['success'=>'success','message'=>'Staff with an '.$id.' has been deleted successfully']);
                                                                                   }
                                                                         }                                
                                                               }else{
-                                                                        if(RegisterStaffInformation::find(protectData($id))->delete()){
+                                                                        if(RegisterStaffInformation::where(protectData($id))->update("status", "delete")){
                                                                                   return response()->json(['success'=>'success','message'=>'Staff with an '.$id.' has been deleted successfully']);
                                                                         }                                                                      
                                                               }
@@ -1170,13 +1175,13 @@ class CoroxController extends Controller
                                                     }                                                               
                                           }else{
                                                     if(RegisterStaffTeacher::where("staff_id",protectData($id))->exists()){
-                                                              if(RegisterStaffTeacher::where("staff_id",protectData($id))->delete()){
-                                                                        if(RegisterStaffInformation::find(protectData($id))->delete()){
+                                                              if(RegisterStaffTeacher::where("staff_id",protectData($id))->update("status", "delete")){
+                                                                        if(RegisterStaffInformation::where(protectData($id))->update("status", "delete")){
                                                                                   return response()->json(['success'=>'success','message'=>'Staff with an '.$id.' has been deleted successfully']);
                                                                         }
                                                               }                                
                                                     }else{
-                                                              if(RegisterStaffInformation::find(protectData($id))->delete()){
+                                                              if(RegisterStaffInformation::where(protectData($id))->update("status", "delete")){
                                                                         return response()->json(['success'=>'success','message'=>'Staff with an '.$id.' has been deleted successfully']);
                                                               }                                                                      
                                                     }                                                            
@@ -1324,13 +1329,13 @@ class CoroxController extends Controller
               $classes= new RegisterClasses;     
             }
             if(RegisterStaffInformation::where("corox_model_id",$userId)->exists()){
-              $staffInformation = RegisterStaffInformation::where("corox_model_id",$userId)->get();
+              $staffInformation = RegisterStaffInformation::where("corox_model_id",$userId)->where("status", NULL)->get();
             }else{
               $staffInformation= new RegisterStaffInformation;     
             }
             if(RegisterStaffTeacher::where("corox_model_id",$userId)->exists()){
               $informations =RegisterStaffTeacher::where("corox_model_id",$userId)->paginate(10);
-              $staffs =RegisterStaffInformation::where("corox_model_id",$userId)->get();
+              $staffs =RegisterStaffInformation::where("corox_model_id",$userId)->where("status", NULL)->get();
               $classes =RegisterClasses::where("corox_model_id",$userId)->get();
               $teacherInformation = array();
               foreach($informations as $teacher){
@@ -1516,7 +1521,7 @@ class CoroxController extends Controller
           //delete teacher register ajax
           public function registerDeleteTeacher($id){
             if(RegisterStaffTeacher::where("staff_id",$id)->exists()){
-              RegisterStaffTeacher::where("staff_id",$id)->delete();
+              RegisterStaffTeacher::where("staff_id",$id)->update("status", "delete");
               return response()->json(['success'=>'success','message'=>'Teacher with an id '.$id.' has been deleted successfully']);
             
             }else{
@@ -1559,7 +1564,7 @@ class CoroxController extends Controller
               $schoolInformation= new RegisterSchoolInformation;     
             }
             if(RegisterStaffInformation::where("corox_model_id",$userId)->exists()){
-              $staffInformation = DB::table('register_staff_informations')->whereNotNull('staff_firstname')->whereNotNull('staff_lastname')->whereNotNull('staff_email')->whereNotNull('staff_gender')->whereNotNull('staff_marital_status')->whereNotNull('staff_phone')->paginate(10);    
+              $staffInformation = DB::table('register_staff_informations')->whereNotNull('staff_firstname')->whereNotNull('staff_lastname')->whereNotNull('staff_email')->whereNotNull('staff_gender')->whereNotNull('staff_marital_status')->whereNotNull('staff_phone')->where("status", "!=", "delete")->paginate(10);    
             }else{
               $staffInformation= new RegisterStaffInformation;     
             }                 
@@ -1646,6 +1651,117 @@ class CoroxController extends Controller
               return response()->json(['success'=>'danger','message'=> $staffName.' your clock in time '.$request->registerTime.' not recorded, please contact the administrator']);     
             }                    
           }
+
+           // show page show student register list for clock in
+           public function registerStudentRegister(){
+            if(Auth::user()->isMember()){
+              $roleId =1;
+              $roleInformation = Permit::where("role_id",$roleId)->first();
+              $userId= $roleInformation->corox_model_id;
+              $date = date('Y');
+              $adminInformation = Corox_model::where("id",$userId)->first();
+              $adminEmail=$adminInformation->email;
+              //return redirect('/Dregister/dashboard');
+            }elseif(Auth::user()->isAdmin()){  
+              $email= Auth::user()->email;
+              $date = date('Y');
+              $userId=Auth::user()->id;
+              $adminEmail=Auth::user()->email;
+            }
+            if(RegisterSchoolInformation::where("corox_model_id",$userId)->exists()){
+              $schoolInformation = RegisterSchoolInformation::where("corox_model_id",$userId)->first();
+            }else{
+              $schoolInformation= new RegisterSchoolInformation;     
+            }
+            if(RegisterStudentInformation::where("corox_model_id",$userId)->exists()){
+              $studentInformation = DB::table('register_student_informations')->whereNotNull('student_firstname')->whereNotNull('student_lastname')->whereNotNull('student_email')->whereNotNull('student_gender')->whereNotNull('student_marital_status')->whereNotNull('student_phone')->where("status", "!=", "delete")->paginate(10);    
+            }else{
+              $studentInformation= new RegisterStudentInformation;     
+            }                 
+            if(RegisterStaffRegister::where("corox_model_id",$userId)->orderBy("register_date",'DESC')->exists()){
+              $registerInformations =RegisterStudentRegister::where("corox_model_id",$userId)->paginate(10);
+                $registerStudentInformation = array();
+              foreach($registerInformations as $registerStudent){
+                $information =RegisterStudentInformation::where("id",$registerStudent->student_id)->first();
+                $registerStudentInformation[]=array('id'=>$information->id, 'studentName'=>ucfirst($information->student_firstname).' '.ucfirst($information->student_lastname), 'registerDate'=>$registerStudent->register_date, 'registerTime'=>$registerStudent->register_time, 'resumptionStatus'=>$registerStudent->register_resumption_status);
+                  
+              }
+                      
+            }else{
+              $registerStudentInformation= new RegisterStudentInformation;         
+            }
+            
+            return  view('student-register',['date'=>$date,'schoolInformation'=> $schoolInformation, 'userEmail'=>$adminEmail, 'studentInformation'=>$studentInformation, 'registerStudentInformation'=>$registerStudentInformation, 'paginator'=>$registerInformations,'userId'=>$userId, 'title'=>'Student Register']);
+          }  
+          
+           // show page to for student register list for clock in
+           public function registerStudentTimeRegister(Request $request){
+            if(Auth::user()->isMember()){
+              $roleId =1;
+              $roleInformation = Permit::where("role_id",$roleId)->first();
+              $userId= $roleInformation->corox_model_id;
+              $date = date('Y');
+              $adminInformation = Corox_model::where("id",$userId)->first();
+              $adminEmail=$adminInformation->email;
+              //return redirect('/Dregister/dashboard');
+            }elseif(Auth::user()->isAdmin()){  
+              $email= Auth::user()->email;
+              $date = date('Y');
+              $userId=Auth::user()->id;
+              $adminEmail=Auth::user()->email;
+            }   
+            //checking staff resumption time if is with resumption time
+            $time = explode(' ',$request->registerTime);
+            (int)$time_in =  $time[0];  
+            if($time_in <= 7){
+              $resumption_status ='on-time';
+            }else{
+              $resumption_status = 'late';
+            } 
+
+            if($request->studentName =='' || $request->studentName =='none' ){
+              return response()->json(['student'=>'danger','message'=> 'Please select student name']);                                   
+            }elseif($request->registerTime ==''){
+              return response()->json(['time'=>'danger','message'=> 'Please select register\'s time']);                                                                 
+            }elseif($request->registerDate ==''){
+              return response()->json(['date'=>'danger','message'=> 'Please select register date']);                                                                 
+            }
+            if(RegisterStudentRegister::where("corox_model_id",$userId)->exists()){
+              if(RegisterStudentRegister::where(["corox_model_id" => $userId, "register_date"=>$request->registerDate, "student_id"=>$request->studentName])->exists()){
+                $studentInformation = RegisterStudentInformation::where("id",$request->studentName)->first();
+                $studentName =ucfirst($studentInformation->student_firstname).' '.ucfirst($studentInformation->student_lastname);                              
+                return response()->json(['success'=>'true','message'=> $staffName.' you can\'t clock in twice']);
+              }
+            }                    
+            if(RegisterStudentInformation::where("id",protectData($request->studentName))->exists()){
+              if(RegisterStudentRegister::where(["student_id"=>protectData($request->studentName), "register_date"=>protectData($request->registerDate)])->exists()){
+                        
+                $studentRegister = RegisterStudentRegister::where(["student_id"=>protectData($request->studentName), "register_date"=>protectData($request->registerDate)])->first();
+                $studentInformation = RegisterStudentInformation::where("id",$studentRegister->student_id)->first();
+                $studentName =ucfirst($studentInformation->student_firstname).' '.ucfirst($studentInformation->student_lastname);
+                return response()->json(['success'=>'danger','message'=>$studentName.' you already clock in at '.$studentRegister->register_time.', today clocking in twice a day is not allowed']);      
+              
+              }                              
+            $studentInformation = RegisterStudentInformation::where("id",protectData($request->staffName))->first();
+            $studentame =ucfirst($studentInformation->student_firstname).' '.ucfirst($studentInformation->student_lastname);
+            $studentId = $studentInformation->id;
+            
+            }else{
+              return response()->json(['success'=>'danger','message'=> 'Please contact the administrator, student with an id' .$request->staffName.'  record can\'t be found']);                                                                                      
+            }
+
+            $studentRegister= new RegisterStudentRegister;
+            $studentRegister->staff_id=protectData($studentId);
+            $studentRegister->corox_model_id =  protectData($userId);
+            $studentRegister->register_date= protectData($request->registerDate);
+            $studentRegister->register_time= protectData($request->registerTime);
+            $studentRegister->register_resumption_status= $resumption_status;
+            if($studentRegister->save()){                            
+              return response()->json(['success'=>'success','message'=>$staffName.' you clock in at exactly '.$request->registerTime.' today, you can do better tomorrow, do have a nice day at work ']);      
+            }else{
+              return response()->json(['success'=>'danger','message'=> $staffName.' your clock in time '.$request->registerTime.' not recorded, please contact the administrator']);     
+            }                    
+          }          
           // show student page
           public function registerStudent(){
             if(Auth::user()->isMember()){
@@ -1673,7 +1789,7 @@ class CoroxController extends Controller
               $classes= new RegisterClasses;     
             }
             if(RegisterParentInformation::where("corox_model_id",$userId)->exists()){
-              $parents = RegisterParentInformation::where("corox_model_id",$userId)->get();
+              $parents = RegisterParentInformation::where("corox_model_id",$userId)->where("status", NULL)->get();
             }else{
               $parents= new RegisterParentInformation;     
             }                  
@@ -1791,14 +1907,14 @@ class CoroxController extends Controller
                 $classes= new RegisterClasses;     
               }
               if(RegisterParentInformation::where("corox_model_id",$userId)->exists()){
-                $parentInformation = RegisterParentInformation::where("corox_model_id",$userId)->get();
+                $parentInformation = RegisterParentInformation::where("corox_model_id",$userId)->where("status", NULL)->get();
               }else{
                 $parentInformation= new RegisterParentInformation;     
               }                               
               $information = array();
               $parent =RegisterParentInformation::where("id",$student->student_parent_id)->first();
               $class =RegisterClasses::where("id",$student->student_class_id)->first();
-              $information[]=array('id'=>$student->id, 'classId'=>$student->student_class_id, 'className'=>$class->class_name, 'parentId'=>$student->student_parent_id, 'parentName'=>$parent->parent_firstname.' '.$parent->parent_lastname, 'gender'=>$parent->parent_gender );
+              $information[]=array('id'=>$student->id, 'classId'=>$student->student_class_id, 'className'=>$class->class_name, 'parentId'=>$student->student_parent_id, 'parentName'=>$parent->parent_firstname.' '.$parent->parent_lastname, 'gender'=>$parent->parent_gender);
                                           
             }else{
               $request->session()->flash('message', 'You are not allowed to edit this student');                               
@@ -1935,7 +2051,7 @@ class CoroxController extends Controller
               $schoolInformation= new RegisterSchoolInformation;     
             }
             if(RegisterStudentInformation::where("corox_model_id",$userId)->exists()){
-                      $studentInformation = DB::table('register_student_informations')->whereNotNull('student_firstname')->whereNotNull('student_lastname')->whereNotNull('student_email')->whereNotNull('student_gender')->whereNotNull('student_phone')->whereNotNull('student_session')->paginate(10);
+                      $studentInformation = DB::table('register_student_informations')->whereNotNull('student_firstname')->whereNotNull('student_lastname')->whereNotNull('student_email')->whereNotNull('student_gender')->whereNotNull('student_phone')->whereNotNull('student_session')->where("status", "delete")->paginate(10);
             }else{
               $studentInformation= new RegisterStudentInformation;     
             }
@@ -1953,70 +2069,14 @@ class CoroxController extends Controller
           //delete student register ajax
           public function registerDeleteStudent($id){
             if(RegisterStudentInformation::where("id",$id)->exists()){
-              RegisterStudentInformation::where("id",$id)->delete();
+              //soft delete
+              RegisterStudentInformation::where("id",$id)->update('status', 'delete');
               return response()->json(['success'=>'success','message'=>'Student with an id '.$id.' has been deleted successfully']);
             }else{
               return response()->json(['success'=>'danger','message'=>'Contact the administrator the student with an '.$id.' is not found' ]);  
             }                    
           }
-          // show student mark registers page
-          public function registerStudentRegister(Request $request){
-            if(Auth::user()->isMember()){
-              $roleId =1;
-              $roleInformation = Permit::where("role_id",$roleId)->first();
-              $userId= $roleInformation->corox_model_id;
-              $date = date('Y');
-              $adminInformation = Corox_model::where("id",$userId)->first();
-              $adminEmail=$adminInformation->email;
-            }elseif(Auth::user()->isAdmin()){  
-              $email= Auth::user()->email;
-              $date = date('Y');
-              $userId=Auth::user()->id;
-              $adminEmail=Auth::user()->email;
-            } 
-            if(RegisterSchoolInformation::where("corox_model_id",$userId)->exists()){
-              $schoolInformation = RegisterSchoolInformation::where("corox_model_id",$userId)->first();
-            }else{
-              $schoolInformation= new RegisterSchoolInformation;     
-            }
-            if(RegisterClasses::where("corox_model_id",$userId)->exists()){
-              $classes = RegisterClasses::where("corox_model_id",$userId)->get();
-            }else{
-              $classes= new RegisterClasses;     
-            }
-            if(RegisterStaffInformation::where("corox_model_id",$userId)->exists()){
-              $staffs = DB::table('register_staff_informations')->whereNotNull('staff_firstname')->whereNotNull('staff_lastname')->whereNotNull('staff_email')->whereNotNull('staff_gender')->whereNotNull('staff_marital_status')->whereNotNull('staff_phone')->where('user_corox_model_id','!=', 0)->get();
-            }else{
-              $staffs= new RegisterStaffInformation;     
-            }
-            if(RegisterStaffInformation::where(["corox_model_id"=>$userId,"user_corox_model_id"=>Auth::user()->id])){
-              $staff = DB::table('register_staff_informations')->whereNotNull('staff_firstname')->whereNotNull('staff_lastname')->whereNotNull('staff_email')->whereNotNull('staff_gender')->whereNotNull('staff_marital_status')->whereNotNull('staff_phone')->where('user_corox_model_id',Auth::user()->id)->first();
 
-              if($staff != null){
-                $staffId =$staff->id;        
-              }else{
-                $staffId='';
-                return  view('students-registers',['date'=>$date,'schoolInformation'=> $schoolInformation,  'userEmail'=>$adminEmail, 'staffs'=>$staffs, 'staffId'=>$staffId, 'classes'=>$classes,  'userId'=>$userId]);                                                               
-              }
-              if(RegisterStaffTeacher::where(["corox_model_id"=>$userId,"staff_id"=>$staffId])->exists()){
-                $staffTeacher = RegisterStaffTeacher::where(["corox_model_id"=>$userId, "staff_id"=>$staffId, "teacher_role"=>"classteacher"])->first();
-                $classId =$staffTeacher->class_id;
-                if(RegisterStudentInformation::where(["corox_model_id"=>$userId,"student_class_id"=>$classId])->exists()){
-                  $studentInformation = DB::table('register_student_informations')->whereNotNull('student_firstname')->whereNotNull('student_lastname')->whereNotNull('student_email')->whereNotNull('student_gender')->whereNotNull('student_phone')->where('student_class_id',$classId)->paginate(10);    
-                }else{
-                  $studentInformation= new RegisterStudentInformation;      
-                }
-                return  view('students-registers',['date'=>$date,'schoolInformation'=> $schoolInformation, 'studentInformation'=> $studentInformation, 'paginator'=> $studentInformation, 'userEmail'=>$adminEmail, 'staffs'=>$staffs, 'staffId'=>$staffId, 'classes'=>$classes,  'userId'=>$userId, 'title'=>'Student Register']);                              
-              }else{
-                $request->session()->flash('message', 'Contact the administrator, you are not a class teacher');
-                return redirect()->route('404');                                      
-              }                               
-            }else{
-              $request->session()->flash('message', 'Contact the administrator, you don\'t have access');
-              return redirect()->route('404');
-            }
-                         
-          }
           //delete show table register register ajax
           public function registerStudentRegisterTable(Request $request){
             if($request->teacherName =='' || $request->teacherName =='none' ){
@@ -2030,7 +2090,7 @@ class CoroxController extends Controller
             if(RegisterStaffTeacher::where(["staff_id"=>protectData($request->teacherName),"class_id"=>protectData($request->className)])->exists()){
               $teacher = RegisterStaffTeacher::where(["staff_id"=>protectData($request->teacherName),"class_id"=>protectData($request->className)])->first();
               if($teacher->teacher_role == 'classteacher'){
-                $studentInformation =RegisterStudentInformation::where(["student_class_id"=>protectData($teacher->class_id)])->paginate(1);
+                $studentInformation =RegisterStudentInformation::where(["student_class_id"=>protectData($teacher->class_id)])->where("status", "delete")->paginate(1);
                 $students ='<table class=" table table-bordered  border-bottom-info" id="dataTable" width="100%" cellspacing="0">
                 <tr>
                 <th>S/N</th>
@@ -2263,7 +2323,7 @@ class CoroxController extends Controller
               $schoolInformation= new RegisterSchoolInformation;     
             }
             if(RegisterParentInformation::where("corox_model_id",$userId)->exists()){
-              $parentInformation = DB::table('register_parent_informations')->whereNotNull('parent_firstname')->whereNotNull('parent_lastname')->whereNotNull('parent_email')->whereNotNull('parent_gender')->whereNotNull('parent_marital_status')->whereNotNull('parent_phone')->paginate(10);    
+              $parentInformation = DB::table('register_parent_informations')->whereNotNull('parent_firstname')->whereNotNull('parent_lastname')->whereNotNull('parent_email')->whereNotNull('parent_gender')->whereNotNull('parent_marital_status')->whereNotNull('parent_phone')->where("status","delete")->paginate(10);    
             }else{
               $parentInformation= new RegisterParentInformation;     
             }                    
@@ -2272,7 +2332,8 @@ class CoroxController extends Controller
           //delete parent register ajax
           public function registerDeleteParent($id){
             if(RegisterParentInformation::where("id",$id)->exists()){
-              RegisterParentInformation::where("id",$id)->delete();
+              //soft delete
+              RegisterParentInformation::where("id",$id)->update('status', 'delete');
               return response()->json(['success'=>'success','message'=>'Parent with an id '.$id.' has been deleted successfully']);
             
             }else{

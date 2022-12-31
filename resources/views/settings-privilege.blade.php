@@ -21,7 +21,7 @@
                 </div>
                 <div class="card-body" id="settings-privilege-body">
                    <div class='offset-md-1 col-md-10 offset-sm-1 col-sm-10'>
-                     <h6 class="m-0 text-danger"> Setting privilege and access </h6>                     
+                      
                      <form class="form">
                      {{csrf_field()}}
                      @if(isset($schoolInformation->school_enable) && $schoolInformation->school_enable !='' || $schoolInformation->school_enable !=null)
