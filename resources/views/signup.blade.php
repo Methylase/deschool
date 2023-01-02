@@ -33,31 +33,28 @@
           <div class="card-body p-0">
             <!-- Nested Row within Card Body -->
             <div class="row">
-              <div class=" col-lg-6 d-none d-lg-block text-left">
-                <div class="row" style="margin-top:20px">
-                  <div class="col-md-12">
-                    <div class="p-5">
-                      <h4 class="h1" style="color:#75C5F0">
-                        Why Use This ?
-                      </h4>                        
-                      <ul style="font-size:16px;color:#2F2E41" >
-                        <li>Recording Of Daily School Activies Made Easy.</li>
-                        <li>Result Computing Made Easy.</li>
-                        <li>One Click, Sending Of Result To Parent through Email.</li>
-                        <li>And Many More.</li>
-                      </ul>                        
-
-                    </div>
+              <div class="col-lg-6 col-md-5 col-sm-4 col-xs-12 d-none d-lg-block text-left" style="border-right:2px solid #75C5F0"">
+                <div class="p-5">
+                  <h4 class="h3" style="color:#75C5F0">
+                    Register With Us Today
+                  </h4>                        
+                  <ul style="font-size:16px;color:#2F2E41" >
+                    <li><strong>Recording Of Daily School Activities Made Easy.</strong></li>
+                    <li><strong>Result Computing Made Easy.</strong></li>
+                    <li><strong>One Click, Sending Of Result To Parent through Email.</strong></li>
+                    <li><strong>And Many More.</strong></li>
+                  </ul>                        
+                     
                   </div>
-                  <div class="col-md-12">
-                    <img src="{{asset('my-register/img/deschool-background.svg')}}" class="img-responsive" style="margin-left:50px" width="380" height="150">
-                  </div>                  
-                </div>
+                  <img src="{{asset('my-register/img/deschool-background.svg')}}" class="img-responsive" style="margin-left:50px" width="380" height="150">
               </div>
-              <div class="col-lg-6">
-                <div class="p-5" style="border-left:2px solid #75C5F0">
+              <div class="col-lg-6 col-md-7 col-sm-8 col-xs-12">
+                <div class="p-5">
                   <div class="text-center">
-                      <h4 class="h2 text-gray-900 mb-1">
+                      <h4 class="h3" style="color:#75C5F0">
+                          The-School  
+                      </h4>
+                      <h4 class="h4 text-gray-900">
                           <img src="{{asset('my-register/img/icon.jpg')}}" width="180" height="150">
                       </h4>
                   </div>
@@ -109,12 +106,10 @@
                     <hr>
                   </form>
                   <hr>
-                  <div class="text-center">
-                    <a class="small" href="/login">Login</a>
-                  </div>                  
-                  <div class="text-center">
+                  <div class="text-center justify-content-around">
+                    <a class="small" style="color:grey" href="/login">Login</a>
                     <a class="small" href="forgot-password.html">Forgot Password?</a>
-                  </div>
+                  </div>  
                 </div>
               </div>
             </div>
