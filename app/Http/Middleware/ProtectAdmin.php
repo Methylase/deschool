@@ -17,7 +17,8 @@ class ProtectAdmin
     {
 
         if(auth()->check()){
-            if( Auth::user()->isAdmin()){return $next($request);
+            if( Auth::user()->isAdmin()){
+                return $next($request);
 
             }  
             return redirect()->route('dashboard');

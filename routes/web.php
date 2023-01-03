@@ -10,13 +10,14 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::group(['middleware'=>'guest'], function(){
 Route::get('/signup','CoroxController@registerShowSignUp')->name('signup');
 
 Route::post('/deschool/signup', 'CoroxController@registerSignUp');
 
 Route::post('/deschool/login', 'CoroxController@registerLogin');
 
-Route::post('/deschool/logout', 'CoroxController@logout')->name('logout');
+
 
 Route::get('/deschool/404', 'CoroxController@registerError404')->name('404');
 
@@ -25,7 +26,11 @@ Route::get('/', 'CoroxController@index')->name('login');
 Route::get('/deschool', 'CoroxController@index')->name('login');
 
 Route::get('/login', 'CoroxController@index')->name('login');
+}); 
 
+Route::post('/deschool/logout', 'CoroxController@logout')->name('logout');
+
+Route::group(['middleware'=>'auth'], function(){
 Route::get('/deschool/staff-register', 'CoroxController@registerStaffRegister')->name('staff-register');
 
 Route::post('/deschool/staff-register', 'CoroxController@registerStaffTimeRegister');
@@ -81,8 +86,9 @@ Route::put('/deschool/update-parent', 'CoroxController@registerUpdateParent');
 Route::get('/deschool/mail/{id}', 'CoroxController@mailOut');
 
 Route::get('/deschool/view-staff-table', 'CoroxController@registerViewStaffTable')->name('view-staff')->middleware('protectMember');
+});    
 
-Route::group(['middleware'=>'protectAdmin'], function(){
+Route::group(['middleware'=>['protectAdmin','auth']], function(){
 
     Route::get('/deschool/profile', 'CoroxController@registerProfile')->name('profile');
     
