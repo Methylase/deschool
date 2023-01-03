@@ -14,14 +14,14 @@
               <!-- Approach -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-danger"> View Staffs Table </h6>
-                  <div class="float-right text-danger " id="viewStaffsToggle"><i class="fas fa-plus" id="close"></i></div>
+                  <h6 class="m-0 font-weight-bold"> View Staffs Table </h6>
+                  <div class="float-right text-danger" id="viewStaffsToggle"><i class="fas fa-plus" id="close"></i></div>
                 </div>
                 <div class="card-body" id="view-staffs-body">
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                          <h6 class="m-0 font-weight-bold text-info">Staffs Table</h6>
-                           <a href="/deschool/add-staff" class="btn btn-sm btn-danger float-right">Add Staff</a>
+                          <h6 class="m-0 font-weight-bold">Staffs Table</h6>
+                           <a href="/deschool/add-staff" class="btn btn-sm btn-primary float-right">Add Staff</a>
                         </div>
                            
                         <div class="card-body">

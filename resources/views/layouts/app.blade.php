@@ -520,7 +520,7 @@
               $('.staff-group').addClass('text-danger');
               $('.staff-group').append("<div class='help-block'>" +result.message+"</div>");                              
           }else if(result.time=='danger'){
-              $('.staff-group').addClass('text-danger');
+              $('.time-group').addClass('text-danger');
               $(".time-group").append("<div class='help-block'>" +result.message+"</div>");                              
           }else if(result.date=='danger'){
               $('.date-group').addClass('text');
@@ -534,7 +534,57 @@
           }
         });
       });
-      
+
+       // student register toggle
+       $('#studentRegisterToggle').click(function(){
+         $('#student-register-body').toggle();
+       });     
+       //register student
+       $('#registerStudent').on('click', function(e){
+        $('.student-group').removeClass('text-danger');
+        $('.time-group').removeClass('text-danger');
+        $('.date-group').removeClass('text-danger');
+        $('.help-block').remove();
+        e.preventDefault();
+        var token =$("meta[name='csrf-token']").attr("content");
+        var studentName = $('#studentName').val();
+        var registerDate= $('#registerDate').val();
+        var registerTime= $('#registerTime').val();
+        var values = {
+          "studentName" : studentName,
+          "registerDate" : registerDate,
+          "registerTime" : registerTime,
+          "_token": token,
+        }
+        
+        $.ajax({
+            type: "POST",
+            url: "/deschool/student-register",
+            data: values,
+        }).done(function(result){
+          if (result.success=='success'){
+            $("#staff-register-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+            setTimeout(function(){
+            location.reload();
+            }, 6000);
+          }else if(result.student=='danger'){
+              $('.student-group').addClass('text-danger');
+              $('.student-group').append("<div class='help-block'>" +result.message+"</div>");                              
+          }else if(result.time=='danger'){
+              $('.time-group').addClass('text-danger');
+              $(".time-group").append("<div class='help-block'>" +result.message+"</div>");                              
+          }else if(result.date=='danger'){
+              $('.date-group').addClass('text');
+              $(".date-group").append("<div class='help-block'>" +result.message+"</div>");                              
+          }else if(result.success=='true'){
+              $("#registerStudent").attr("disable");
+              $("#student-register-body").prepend("<div class='status alert alert-danger text-center col-sm-12 '><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
+            setTimeout(function(){
+            location.reload();
+            }, 6000);                  
+          }
+        });
+      });      
         // toggle student
       $('#updateToggle').click(function(){
         $('#update-body').toggle();
@@ -969,7 +1019,7 @@
             <h6 class="collapse-header">Students:</h6>
             <a class="collapse-item" href="/deschool/add-student"> Add New Student</a>
             <a class="collapse-item" href="/deschool/view-students">View Students Table</a>
-            <a class="collapse-item" href="/deschool/students-registers"> Students Register</a>                 
+            <a class="collapse-item" href="/deschool/students-register"> Students Register</a>                 
             <!--<a class="collapse-item" href="/deschool/students-result"> Add Student Result</a>               
             <div class="collapse-divider"></div>
             <h6 class="collapse-header">Others:</h6>

@@ -35,6 +35,7 @@ use Deschool\Models\RegisterParentInformation;
 use Deschool\Models\RegisterSchoolInformation;
 use Deschool\Models\RegisterStaffInformation;
 use Deschool\Models\RegisterStaffRegister;
+use Deschool\Models\RegisterStudentRegister;
 use Deschool\Models\Role;
 use Deschool\Models\Permit;
 use Validator;
@@ -1564,7 +1565,7 @@ class CoroxController extends Controller
               $schoolInformation= new RegisterSchoolInformation;     
             }
             if(RegisterStaffInformation::where("corox_model_id",$userId)->exists()){
-              $staffInformation = DB::table('register_staff_informations')->whereNotNull('staff_firstname')->whereNotNull('staff_lastname')->whereNotNull('staff_email')->whereNotNull('staff_gender')->whereNotNull('staff_marital_status')->whereNotNull('staff_phone')->where("status", "!=", "delete")->paginate(10);    
+              $staffInformation = DB::table('register_staff_informations')->whereNotNull('staff_firstname')->whereNotNull('staff_lastname')->whereNotNull('staff_email')->whereNotNull('staff_gender')->whereNotNull('staff_marital_status')->whereNotNull('staff_phone')->where("status", NULL)->paginate(10);    
             }else{
               $staffInformation= new RegisterStaffInformation;     
             }                 
@@ -1611,9 +1612,9 @@ class CoroxController extends Controller
             if($request->staffName =='' || $request->staffName =='none' ){
               return response()->json(['staff'=>'danger','message'=> 'Please select staff name']);                                   
             }elseif($request->registerTime ==''){
-              return response()->json(['time'=>'danger','message'=> 'Please select register\'s time']);                                                                 
+              return response()->json(['time'=>'danger','message'=> 'Please select clockin time']);                                                                 
             }elseif($request->registerDate ==''){
-              return response()->json(['date'=>'danger','message'=> 'Please select register date']);                                                                 
+              return response()->json(['date'=>'danger','message'=> 'Please select clockin date']);                                                                 
             }
             if(RegisterStaffRegister::where("corox_model_id",$userId)->exists()){
               if(RegisterStaffRegister::where(["corox_model_id" => $userId, "register_date"=>$request->registerDate, "staff_id"=>$request->staffName])->exists()){
@@ -1674,7 +1675,7 @@ class CoroxController extends Controller
               $schoolInformation= new RegisterSchoolInformation;     
             }
             if(RegisterStudentInformation::where("corox_model_id",$userId)->exists()){
-              $studentInformation = DB::table('register_student_informations')->whereNotNull('student_firstname')->whereNotNull('student_lastname')->whereNotNull('student_email')->whereNotNull('student_gender')->whereNotNull('student_marital_status')->whereNotNull('student_phone')->where("status", "!=", "delete")->paginate(10);    
+              $studentInformation = DB::table('register_student_informations')->whereNotNull('student_firstname')->whereNotNull('student_lastname')->whereNotNull('student_email')->whereNotNull('student_gender')->whereNotNull('student_phone')->where("status", NULL)->paginate(10);    
             }else{
               $studentInformation= new RegisterStudentInformation;     
             }                 
@@ -1691,7 +1692,7 @@ class CoroxController extends Controller
               $registerStudentInformation= new RegisterStudentInformation;         
             }
             
-            return  view('student-register',['date'=>$date,'schoolInformation'=> $schoolInformation, 'userEmail'=>$adminEmail, 'studentInformation'=>$studentInformation, 'registerStudentInformation'=>$registerStudentInformation, 'paginator'=>$registerInformations,'userId'=>$userId, 'title'=>'Student Register']);
+            return  view('students-register',['date'=>$date,'schoolInformation'=> $schoolInformation, 'userEmail'=>$adminEmail, 'studentInformation'=>$studentInformation, 'registerStudentInformation'=>$registerStudentInformation, 'paginator'=>$registerInformations,'userId'=>$userId, 'title'=>'Student Register']);
           }  
           
            // show page to for student register list for clock in
@@ -1722,9 +1723,9 @@ class CoroxController extends Controller
             if($request->studentName =='' || $request->studentName =='none' ){
               return response()->json(['student'=>'danger','message'=> 'Please select student name']);                                   
             }elseif($request->registerTime ==''){
-              return response()->json(['time'=>'danger','message'=> 'Please select register\'s time']);                                                                 
+              return response()->json(['time'=>'danger','message'=> 'Please select clockin time']);                                                                 
             }elseif($request->registerDate ==''){
-              return response()->json(['date'=>'danger','message'=> 'Please select register date']);                                                                 
+              return response()->json(['date'=>'danger','message'=> 'Please select clockin date']);                                                                 
             }
             if(RegisterStudentRegister::where("corox_model_id",$userId)->exists()){
               if(RegisterStudentRegister::where(["corox_model_id" => $userId, "register_date"=>$request->registerDate, "student_id"=>$request->studentName])->exists()){
@@ -1751,13 +1752,13 @@ class CoroxController extends Controller
             }
 
             $studentRegister= new RegisterStudentRegister;
-            $studentRegister->staff_id=protectData($studentId);
+            $studentRegister->student_id=protectData($studentId);
             $studentRegister->corox_model_id =  protectData($userId);
             $studentRegister->register_date= protectData($request->registerDate);
             $studentRegister->register_time= protectData($request->registerTime);
             $studentRegister->register_resumption_status= $resumption_status;
             if($studentRegister->save()){                            
-              return response()->json(['success'=>'success','message'=>$staffName.' you clock in at exactly '.$request->registerTime.' today, you can do better tomorrow, do have a nice day at work ']);      
+              return response()->json(['success'=>'success','message'=>$staffName.' you clock in at exactly '.$request->registerTime.' today, you can do better tomorrow, do have a nice day at school']);      
             }else{
               return response()->json(['success'=>'danger','message'=> $staffName.' your clock in time '.$request->registerTime.' not recorded, please contact the administrator']);     
             }                    

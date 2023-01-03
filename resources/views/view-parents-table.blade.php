@@ -13,14 +13,14 @@
               <!-- Approach -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-danger"> View Parents Table </h6>
-                  <div class="float-right text-danger " id="viewParentsToggle"><i class="fas fa-plus" id="close"></i></div>
+                  <h6 class="m-0 font-weight-bold"> View Parents Table </h6>
+                  <div class="float-right text-danger" id="viewParentsToggle"><i class="fas fa-plus" id="close"></i></div>
                 </div>
                 <div class="card-body" id="view-parents-body">
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                           <h6 class="m-0 font-weight-bold text-info">Parents Table</h6>
-                           <a href="/deschool/add-parent" class="btn btn-sm btn-danger float-right">Add Parent</a>
+                           <a href="/deschool/add-parent" class="btn btn-sm btn-primary float-right">Add Parent</a>
                         </div>
                            
                         <div class="card-body">

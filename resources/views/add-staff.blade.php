@@ -16,7 +16,7 @@
               <!-- Approach -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-danger"> Add New Staff </h6>
+                  <h6 class="m-0 font-weight-bold"> Add New Staff </h6>
                   <div class="float-right text-danger " id="staffToggle"><i class="fas fa-plus" id="close"></i></div>
                 </div>
                 <div class="card-body" id="staff-body">

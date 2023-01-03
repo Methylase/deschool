@@ -15,7 +15,7 @@
               <!-- Approach -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-danger"> Send memo </h6>
+                  <h6 class="m-0 font-weight-bold"> Send memo </h6>
                   <div class="float-right text-danger " id="memoToggle"><i class="fas fa-plus" id="close"></i></div>
                 </div>
                 <div class="card-body" id="memo-body">

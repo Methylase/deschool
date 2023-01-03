@@ -13,12 +13,12 @@
               <!-- Approach -->
               <div class="card shadow mb-4">                
                 <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-danger"> General Settings </h6>
-                  <div class="float-right text-danger " id="settingsToggle"><i class="fas fa-plus" id="close"></i></div>
+                  <h6 class="m-0 font-weight-bold"> General Settings </h6>
+                  <div class="float-right text-danger" id="settingsToggle"><i class="fas fa-plus" id="close"></i></div>
                 </div>
                 <div class="card-body" id="settings-body">
                   <div class="col-lg-12 mb-4">                
-                     <h6 class="m-0  text-danger"> Create Subject For All Classes </h6>                
+                     <h6 class="m-0 font-weight-bold"> Create Subject For All Classes </h6>                
                      <form class="form" action="" method="">
                         {{csrf_field()}}
                         <div class="row">
@@ -46,7 +46,7 @@
                   </div>
                   <hr>
                   <div class="col-lg-12 mb-4">
-                     <h6 class="m-0  text-danger"> Create Classes For Students </h6>
+                     <h6 class="m-0 font-weight-bold"> Create Classes For Students </h6>
                      <form class="form" action="" method="">
                         {{csrf_field()}}
                         <div class="row">
@@ -74,7 +74,7 @@
                   </div>
                   <hr>
                   <div class="col-lg-12 mb-4">
-                     <h6 class="m-0  text-danger"> Create Period For Subject </h6>
+                     <h6 class="m-0  font-weight-bold"> Create Period For Subject </h6>
                      <form class="form" action="" method="">
                         {{csrf_field()}}
                         <div class="row">

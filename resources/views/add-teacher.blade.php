@@ -19,18 +19,18 @@
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
                 @if(Auth::user()->isMember())
-                  <h6 class="m-0 font-weight-bold text-danger">Teacher Register </h6>
+                  <h6 class="m-0 font-weight-bold">Teacher Register </h6>
                 @elseif(Auth::user()->isAdmin())
-                   <h6 class="m-0 font-weight-bold text-danger"> Add Teacher </h6>
+                   <h6 class="m-0 font-weight-bold"> Add Teacher </h6>
                 @endif                          
                   <div class="float-right text-danger " id="teacherToggle"><i class="fas fa-plus" id="close"></i></div>
                 </div>
                 <div class="card-body" id="teacher-body">
                   <div class="col-lg-12 mb-4">
                     @if(Auth::user()->isMember())
-                        <h6 class="m-0  text-danger"> Teacher Present For The Day should Clock In</h6>                          
+                        <h6 class="m-0  font-weight-bold"> Teacher Present For The Day should Clock In</h6>                          
                     @elseif(Auth::user()->isAdmin())    
-                        <h6 class="m-0  text-danger"> Assign A Staff To Teacher Role</h6>                
+                        <h6 class="m-0  font-weight-bold"> Assign A Staff To Teacher Role</h6>                
                         <form class="form" action="" method="">
                            {{csrf_field()}}
                            <div class="row">
@@ -79,7 +79,7 @@
                           <div class="table-responsive">
                                           
                            @if(isset($teacherInformation) && $teacherInformation !='')
-                              <h6 class="m-4  text-danger">Edit Table For Teacher</h6>        
+                              <h6 class="m-4  font-weight-bold">Edit Table For Teacher</h6>        
                             <table class="table table-bordered  border-bottom-info" id="dataTable" width="100%" cellspacing="0">
                               <thead>
                                 <tr>
