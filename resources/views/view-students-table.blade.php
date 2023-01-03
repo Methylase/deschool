@@ -26,7 +26,7 @@
                         <div class="card-body">
                           <div class="table-responsive">
                            @if(isset($studentInformation) && $studentInformation != null )
-                            <table class="table table-bordered  border-bottom-info" id="dataTable" width="100%" cellspacing="0">
+                            <table class="table table-bordered  border-bottom-info display" id="dataTableStudent" width="100%" cellspacing="0">
                               <thead>
                                 <tr>
                                 <th>S/N</th>
@@ -41,65 +41,40 @@
                               </thead>
                                 @php$i=1
                                 @endphp
+                                <tbody>
                                  @foreach($studentInformation as $student)
-                                    <tbody>
-                                       <tr>
-                                          <td>{{$i}}</td>
-                                          <td>{{ucfirst($student->student_firstname).' '.ucfirst($student->student_lastname)}}</td>
-                                          <td>{{ucfirst($student->student_email)}}</td>
-                                          <td>{{ucfirst($student->student_gender)}}</td>
-                                             @if($information['parentGender']=='male')
-                                                @php $parentFullname = 'Mr '.$information['parentNames'];
-                                                @endphp
-                                             @elseif($information['parentGender']=='female')
-                                                @php $parentFullname = 'Mrs '.$information['parentNames'];
-                                                @endphp
-                                             @else
-                                                @php $parentFullname = $information['parentNames'];
-                                                @endphp
-                                             @endif                                             
-                                          <td>{{$information['className']}}</td>
-                                          <td>{{$parentFullname}}</td>
-                                          <td>{{$student->student_phone}}</td>
-                                          <td>
-                                             <a href="/deschool/edit-student/{{$student->id}}" class="btn btn-sm btn-info" title="Edit"><span class="fa fa-edit"></span></a>                                         
-                                             <a href="" class="btn btn-sm btn-danger deleteStudent"  id='del {{$student->id}}' data-title="Delete" data-toggle="modal" data-target="#confirm-delete"><span class="fa fa-trash" title="Delete"></span></a>
-                                             
-                                          </td>  
-                                       </tr>
-                                    </tbody>
+                                   
+                                  <tr>
+                                    <td>{{$i}}</td>
+                                    <td>{{ucfirst($student->student_firstname).' '.ucfirst($student->student_lastname)}}</td>
+                                    <td>{{ucfirst($student->student_email)}}</td>
+                                    <td>{{ucfirst($student->student_gender)}}</td>
+                                        @if($information['parentGender']=='male')
+                                          @php $parentFullname = 'Mr '.$information['parentNames'];
+                                          @endphp
+                                        @elseif($information['parentGender']=='female')
+                                          @php $parentFullname = 'Mrs '.$information['parentNames'];
+                                          @endphp
+                                        @else
+                                          @php $parentFullname = $information['parentNames'];
+                                          @endphp
+                                        @endif                                             
+                                    <td>{{$information['className']}}</td>
+                                    <td>{{$parentFullname}}</td>
+                                    <td>{{$student->student_phone}}</td>
+                                    <td>
+                                        <a href="/deschool/edit-student/{{$student->id}}" class="btn btn-sm btn-info" title="Edit"><span class="fa fa-edit"></span></a>                                         
+                                        <a href="" class="btn btn-sm btn-danger deleteStudent"  id='del {{$student->id}}' data-title="Delete" data-toggle="modal" data-target="#confirm-delete"><span class="fa fa-trash" title="Delete"></span></a>
+                                        
+                                    </td>  
+                                  </tr>
+                                    
                                  @php$i++
                                  @endphp
                                  @endforeach
+                              </tbody>   
                             </table>
-                              <div class="row col-md-12">
-                                 @if( $paginator->hasPages())
-                                    <div class="col-md-6  col-sm-6">
-                                       <ul class="pagination">
-                                          <li>{{'Showing '.$paginator->currentPage().' to '.$paginator->perPage().' of '.$paginator->total().' entries'}}</li>
-                                       </ul>                          
-                                    </div>
-                                  @endif
-                                 @if( $paginator->hasPages())
-                                    <div class="offset-md-2 col-md-4 offset-sm-2 col-sm-4">
-                                       @if( $paginator->lastPage() > 1)
-                                       <ul class="pagination">
-                                         <li class="{{ ( $paginator->currentPage() ==1 ) ? 'disabled': ''}}">
-                                          <a href="{{ $paginator->url(1) }}" class="{{ ( $paginator->currentPage() ==1 ) ? 'disabled': ''}} btn btn-sm btn-info paginate-btn">Previous</a>
-                                         </li>
-                                          @for( $i = 1; $i <= $paginator->lastPage(); $i++ )
-                                             <li class="{{ ($paginator->currentPage() == $i) ? 'active' : ''}}">
-                                                <a href="{{ $paginator->url($i) }}" class="btn btn-sm btn-info paginate-btn">{{$i}}</a>
-                                             </li>
-                                          @endfor
-                                          <li class="{{ ( $paginator->currentPage() ==$paginator->lastPage() ) ? 'disabled' : '' }}">
-                                             <a href="{{ $paginator->url( $paginator->currentPage()+1) }}" class="{{ ( $paginator->currentPage() ==$paginator->lastPage() ) ? 'disabled' : '' }} btn btn-sm btn-info paginate-btn">Lastpage</a>
-                                          </li>
-                                       </ul>
-                                       @endif
-                                     </div>
-                                 @endif                                 
-                              </div>
+
                              @else
                                 <div class='offset-md-1 col-md-10 offset-sm-1 col-sm-10 text-center'>
                                     {{'No record for Student '}}

@@ -76,11 +76,12 @@
                             </div>
                           </div>  
                         </form>
+                        <hr>
                           <div class="table-responsive">
                                           
                            @if(isset($teacherInformation) && $teacherInformation !='')
                               <h6 class="m-4  font-weight-bold">Edit Table For Teacher</h6>        
-                            <table class="table table-bordered  border-bottom-info" id="dataTable" width="100%" cellspacing="0">
+                            <table class="table table-bordered  border-bottom-info display" id="dataTableTeacher" width="100%" cellspacing="0">
                               <thead>
                                 <tr>
                                 <th>S/N</th>
@@ -92,8 +93,9 @@
                               </thead>
                                 @php$i=1
                                 @endphp
+                                <tbody>
                                  @foreach($teacherInformation as $teacher)
-                                    <tbody>
+                                    
                                        <tr>
                                           <td>{{$i}}</td>
                                           <td id="staffId" val-id="{{$staff->id}}">
@@ -139,39 +141,12 @@
                                              <a href="" class="btn btn-sm btn-danger deleteTeacher"  id="del {{$teacher["id"]}}" data-title="Delete" data-toggle="modal" data-target="#confirm-delete" title="delete"><span class="fa fa-trash" ></span></a>
                                           </td>  
                                        </tr>
-                                    </tbody>
+                                   
                                  @php$i++
                                  @endphp
                                  @endforeach
+                                 </tbody>   
                             </table>
-                              <div class="row col-md-12">
-                                 @if( $paginator->hasPages())
-                                    <div class="col-md-6  col-sm-6">
-                                       <ul class="pagination">
-                                          <li>{{'Showing '.$paginator->currentPage().' to '.$paginator->perPage().' of '.$paginator->total().' entries'}}</li>
-                                       </ul>                          
-                                    </div>
-                                  @endif
-                                 @if( $paginator->hasPages())
-                                    <div class="offset-md-2 col-md-4 offset-sm-2 col-sm-4">
-                                       @if( $paginator->lastPage() > 1)
-                                       <ul class="pagination">
-                                         <li class="{{ ( $paginator->currentPage() ==1 ) ? 'disabled': ''}}">
-                                          <a href="{{ $paginator->url(1) }}" class="{{ ( $paginator->currentPage() ==1 ) ? 'disabled': ''}} btn btn-sm btn-info paginate-btn">Previous</a>
-                                         </li>
-                                          @for( $i = 1; $i <= $paginator->lastPage(); $i++ )
-                                             <li class="{{ ($paginator->currentPage() == $i) ? 'active' : ''}}">
-                                                <a href="{{ $paginator->url($i) }}" class="btn btn-sm btn-info paginate-btn">{{$i}}</a>
-                                             </li>
-                                          @endfor
-                                          <li class="{{ ( $paginator->currentPage() ==$paginator->lastPage() ) ? 'disabled' : '' }}">
-                                             <a href="{{ $paginator->url( $paginator->currentPage()+1) }}" class="{{ ( $paginator->currentPage() ==$paginator->lastPage() ) ? 'disabled' : '' }} btn btn-sm btn-info paginate-btn">Lastpage</a>
-                                          </li>
-                                       </ul>
-                                       @endif
-                                     </div>
-                                 @endif                                 
-                              </div>
                              @endif
                           </div>                          
                     @endif      

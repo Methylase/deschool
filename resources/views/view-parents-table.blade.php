@@ -26,7 +26,7 @@
                         <div class="card-body">
                           <div class="table-responsive">
                            @if(isset($parentInformation) && $parentInformation !=null)
-                            <table class="table table-bordered  border-bottom-info" id="dataTable" width="100%" cellspacing="0">
+                            <table class="table table-bordered  border-bottom-info display" id="dataTableParent" width="100%" cellspacing="0">
                               <thead>
                                 <tr>
                                 <th>S/N</th>
@@ -40,25 +40,26 @@
                               </thead>
                                 @php$i=1
                                 @endphp
-                                 @foreach($parentInformation as $parent)
-                                    <tbody>
-                                       <tr>
-                                          <td>{{$i}}</td>
-                                          <td>{{ucfirst($parent->parent_firstname).' '.ucfirst($parent->parent_lastname)}}</td>
-                                          <td>{{ucfirst($parent->parent_email)}}</td>
-                                          <td>{{ucfirst($parent->parent_gender)}}</td>
-                                          <td>{{ucfirst($parent->parent_marital_status)}}</td>
-                                          <td>{{$parent->parent_phone}}</td>
-                                          <td> 
-                                             <a href="/deschool/edit-parent/{{$parent->id}}" class="btn btn-sm btn-info" title="Edit"><span class="fa fa-edit"></span></a>                                         
-                                             <a href="" class="btn btn-sm btn-danger deleteParent"  id='del {{$parent->id}}' data-title="Delete" data-toggle="modal" data-target="#confirm-delete"><span class="fa fa-trash" title="Delete"></span></a>
-                                             
-                                          </td>  
-                                       </tr>
-                                    </tbody>
+                                <tbody>
+                                 @foreach($parentInformation as $parent) 
+                                  <tr>
+                                    <td>{{$i}}</td>
+                                    <td>{{ucfirst($parent->parent_firstname).' '.ucfirst($parent->parent_lastname)}}</td>
+                                    <td>{{ucfirst($parent->parent_email)}}</td>
+                                    <td>{{ucfirst($parent->parent_gender)}}</td>
+                                    <td>{{ucfirst($parent->parent_marital_status)}}</td>
+                                    <td>{{$parent->parent_phone}}</td>
+                                    <td> 
+                                        <a href="/deschool/edit-parent/{{$parent->id}}" class="btn btn-sm btn-info" title="Edit"><span class="fa fa-edit"></span></a>                                         
+                                        <a href="" class="btn btn-sm btn-danger deleteParent"  id='del {{$parent->id}}' data-title="Delete" data-toggle="modal" data-target="#confirm-delete"><span class="fa fa-trash" title="Delete"></span></a>
+                                        
+                                    </td>  
+                                  </tr>
+                                    
                                  @php$i++
                                  @endphp
                                  @endforeach
+                              </tbody>  
                             </table>
                               <div class="row col-md-12">
                                  @if( $paginator->hasPages())

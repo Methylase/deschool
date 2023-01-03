@@ -18,8 +18,10 @@
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   <link rel="icon" type="image/png" href="{{asset('my-register/img/icon.jpg')}}"  sizes ="25x25"> 
   <!-- Custom styles for this template-->
+  <link href="{{asset('my-register/css/jquery.dataTables.min.css')}}" rel="stylesheet"> 
   <link href="{{asset('my-register/css/sb-admin-2.min.css')}}" rel="stylesheet">
-  <script src="{{asset('my-register/vendor/jquery/jquery.min.js')}}"></script>  
+  <script src="{{asset('my-register/vendor/jquery/jquery.min.js')}}"></script> 
+
   <script>
       function dateTime(){
         var date = new Date();
@@ -559,11 +561,11 @@
         
         $.ajax({
             type: "POST",
-            url: "/deschool/student-register",
+            url: "/deschool/students-register",
             data: values,
         }).done(function(result){
           if (result.success=='success'){
-            $("#staff-register-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+            $("#student-register-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
             setTimeout(function(){
             location.reload();
             }, 6000);
@@ -807,9 +809,22 @@
           }
         });
         });
-      });         
-  
-   });            
+      });  
+    
+      $('#dataTableStaff').DataTable(); 
+
+      $('#dataTableTeacher').DataTable();
+      
+      $('#dataTableParent').DataTable(); 
+
+      $('#dataTableStaffRegister').DataTable();
+      
+      $('#dataTableStudent').DataTable();
+
+      $('#dataTableStudentRegister').DataTable();
+   }); 
+     
+   
   </script>
     <style>
      i#close, #time{
@@ -1311,6 +1326,7 @@
   <!-- Page level custom scripts -->
   <script src="{{asset('my-register/js/demo/chart-area-demo.js')}}"></script>
   <script src="{{asset('my-register/js/demo/chart-pie-demo.js')}}"></script>
+  <script src="{{asset('my-register/js/jquery.dataTables.min.js')}}"></script> 
     <form id='logout-form' action="{{url('/deschool/logout')}}"
     method="POST" style='display:none'>
         {{csrf_field()}}

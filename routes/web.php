@@ -30,9 +30,9 @@ Route::get('/deschool/staff-register', 'CoroxController@registerStaffRegister')-
 
 Route::post('/deschool/staff-register', 'CoroxController@registerStaffTimeRegister');
 
-Route::get('/deschool/student-register', 'CoroxController@registerStudentRegister')->name('student-register');
+Route::get('/deschool/students-register', 'CoroxController@registerStudentRegister')->name('students-register');
 
-Route::post('/deschool/student-register', 'CoroxController@registerStudentTimeRegister');
+Route::post('/deschool/students-register', 'CoroxController@registerStudentTimeRegister');
 
 Route::post('/deschool/send-memo', 'CoroxController@postSendMemo');
 
@@ -70,9 +70,7 @@ Route::get('/deschool/view-students', 'CoroxController@registerViewStudents')->n
 
 Route::delete('/deschool/delete-student/{id}', 'CoroxController@registerDeleteStudent');
 
-Route::get('/deschool/students-register', 'CoroxController@registerStudentRegister')->name('student-register');
-
-Route::post('/deschool/students-register', 'CoroxController@registerStudentRegisterTable');
+Route::post('/deschool/students-registers', 'CoroxController@registerStudentRegisterTable');
 
 Route::post('/deschool/add-parent', 'CoroxController@registerAddParent');
 

@@ -55,11 +55,12 @@
                       </div>
                     </div>  
                   </form>
+                  <hr>
                      <div class="card-body">
                         <div class="table-responsive">   
                          @if(isset($registerStudentInformation) && $registerStudentInformation !='')
                             <h6 class="m-4 font-weight-bold">Table showing the list of students that clock in</h6>        
-                          <table class="table table-bordered  border-bottom-info" id="dataTable" width="100%" cellspacing="0">
+                          <table class="table table-bordered  border-bottom-info display" id="dataTableStudentRegister" width="100%" cellspacing="0">
                             <thead>
                               <tr>
                               <th>S/N</th>
@@ -73,61 +74,36 @@
                             </thead>
                               @php$i=1
                               @endphp
+                              <tbody>
                                @foreach($registerStudentInformation as $registerStudent)
-                                  <tbody>
-                                     <tr>
-                                        <td>{{$i}}</td>
-                                        <td>
-                                          {{$registerStudent['studentName']}}
-                                        </td>
-                                        <td>
-                                         {{$registerStudent['registerTime']}}                   
-                                        </td>
-                                        <td>
-                                          {{date('D d F  Y',strtotime($registerStudent['registerDate']))}}
-                                        </td>
+                                 
+                                <tr>
+                                  <td>{{$i}}</td>
+                                  <td>
+                                    {{$registerStudent['studentName']}}
+                                  </td>
+                                  <td>
+                                    {{$registerStudent['registerTime']}}                   
+                                  </td>
+                                  <td>
+                                    {{date('D d F  Y',strtotime($registerStudent['registerDate']))}}
+                                  </td>
 
-                                          <td>
-                                          @if(isset($registerStudent['resumptionStatus']) && $registerStudent['resumptionStatus'] == 'on-time')
-                                             <span class="btn btn-success btn-sm col-sm-8 col-xs-12">{{ucfirst($registerStaff['resumptionStatus'])}}</span>
-                                          @elseif(isset($registerStudent['resumptionStatus']) && $registerStudent['resumptionStatus'] == 'late')
-                                          <span class="btn btn-danger btn-sm col-sm-8 col-xs-12">{{ucfirst($registerStudent['resumptionStatus'])}}</span>
-                                          @endif
-                                          </td>
-                                     </tr>
-                                  </tbody>
+                                    <td>
+                                    @if(isset($registerStudent['resumptionStatus']) && $registerStudent['resumptionStatus'] == 'on-time')
+                                        <span class="btn btn-success btn-sm col-sm-8 col-xs-12">{{ucfirst($registerStudent['resumptionStatus'])}}</span>
+                                    @elseif(isset($registerStudent['resumptionStatus']) && $registerStudent['resumptionStatus'] == 'late')
+                                    <span class="btn btn-danger btn-sm col-sm-8 col-xs-12">{{ucfirst($registerStudent['resumptionStatus'])}}</span>
+                                    @endif
+                                    </td>
+                                </tr>
+                            
                                @php$i++
                                @endphp
                                @endforeach
+                            </tbody>  
                           </table>
-                            <div class="row col-md-12">
-                               @if( $paginator->hasPages())
-                                  <div class="col-md-6  col-sm-6">
-                                     <ul class="pagination">
-                                        <li>{{'Showing '.$paginator->currentPage().' to '.$paginator->perPage().' of '.$paginator->total().' entries'}}</li>
-                                     </ul>                          
-                                  </div>
-                                @endif
-                               @if( $paginator->hasPages())
-                                  <div class="offset-md-2 col-md-4 offset-sm-2 col-sm-4">
-                                     @if( $paginator->lastPage() > 1)
-                                     <ul class="pagination">
-                                       <li class="{{ ( $paginator->currentPage() ==1 ) ? 'disabled': ''}}">
-                                        <a href="{{ $paginator->url(1) }}" class="{{ ( $paginator->currentPage() ==1 ) ? 'disabled': ''}} btn btn-sm btn-info paginate-btn">Previous</a>
-                                       </li>
-                                        @for( $i = 1; $i <= $paginator->lastPage(); $i++ )
-                                           <li class="{{ ($paginator->currentPage() == $i) ? 'active' : ''}}">
-                                              <a href="{{ $paginator->url($i) }}" class="btn btn-sm btn-info paginate-btn">{{$i}}</a>
-                                           </li>
-                                        @endfor
-                                        <li class="{{ ( $paginator->currentPage() ==$paginator->lastPage() ) ? 'disabled' : '' }}">
-                                           <a href="{{ $paginator->url( $paginator->currentPage()+1) }}" class="{{ ( $paginator->currentPage() ==$paginator->lastPage() ) ? 'disabled' : '' }} btn btn-sm btn-info paginate-btn">Lastpage</a>
-                                        </li>
-                                     </ul>
-                                     @endif
-                                   </div>
-                               @endif                                 
-                            </div>
+
                            @endif
                         </div>
                      </div>
