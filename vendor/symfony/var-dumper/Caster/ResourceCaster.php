@@ -20,6 +20,11 @@ use Symfony\Component\VarDumper\Cloner\Stub;
  */
 class ResourceCaster
 {
+    /**
+     * @param \CurlHandle|resource $h
+     *
+     * @return array
+     */
     public static function castCurl($h, array $a, Stub $stub, $isNested)
     {
         return curl_getinfo($h);
@@ -50,7 +55,7 @@ class ResourceCaster
 
     public static function castStreamContext($stream, array $a, Stub $stub, $isNested)
     {
-        return stream_context_get_params($stream);
+        return @stream_context_get_params($stream) ?: $a;
     }
 
     public static function castGd($gd, array $a, Stub $stub, $isNested)
