@@ -28,6 +28,7 @@ Route::get('/deschool', 'CoroxController@index')->name('login');
 Route::get('/login', 'CoroxController@index')->name('login');
 }); 
 
+//logout
 Route::post('/deschool/logout', 'CoroxController@logout')->name('logout');
 
 Route::group(['middleware'=>'auth'], function(){

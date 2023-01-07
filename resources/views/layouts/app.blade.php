@@ -20,6 +20,7 @@
   <!-- Custom styles for this template-->
   <link href="{{asset('my-register/css/jquery.dataTables.min.css')}}" rel="stylesheet"> 
   <link href="{{asset('my-register/css/sb-admin-2.min.css')}}" rel="stylesheet">
+  <link href="{{asset('my-register/css/bootstrap-multiselect.min.css')}}" rel="stylesheet">
   <script src="{{asset('my-register/vendor/jquery/jquery.min.js')}}"></script> 
 
   <script>
@@ -822,6 +823,10 @@
       $('#dataTableStudent').DataTable();
 
       $('#dataTableStudentRegister').DataTable();
+
+      $('#staffEmail').multiselect({
+        enableHTML: true
+      });
    }); 
      
    
@@ -1327,6 +1332,7 @@
   <script src="{{asset('my-register/js/demo/chart-area-demo.js')}}"></script>
   <script src="{{asset('my-register/js/demo/chart-pie-demo.js')}}"></script>
   <script src="{{asset('my-register/js/jquery.dataTables.min.js')}}"></script> 
+  <script src="{{asset('my-register/js/bootstrap-multiselect.min.js')}}"></script> 
     <form id='logout-form' action="{{url('/deschool/logout')}}"
     method="POST" style='display:none'>
         {{csrf_field()}}

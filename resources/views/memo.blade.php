@@ -42,8 +42,8 @@
                    <div class="form-group row">
                      <label for="staticEmail" class="col-sm-2 col-form-label">Select Receiver(s):</label>
                       <div class="col-sm-8">
-                            <select class="form-control" id="staffEmail" name="staffEmail" multiple>
-                              <option value="none">Select-Staff</option>
+                            <select class="form-control" id="staffEmail" name="staffEmail" multiple="multiple">
+                              <option value="none" selected>Select-Staff</option>
                               @foreach($staffInformation as $staff)
                                   <option value="{{$staff->staff_email}}">{{ucfirst($staff->staff_firstname).' '.ucfirst($staff->staff_lastname)}}</option>
                               @endforeach                                    

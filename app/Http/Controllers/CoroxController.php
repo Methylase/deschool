@@ -113,7 +113,7 @@ class CoroxController extends Controller
               $adminEmail=Auth::user()->email;
             }
             if(RegisterStaffInformation::where("corox_model_id",$userId)->exists()){
-              $staffInformation = DB::table('register_staff_informations')->whereNotNull('staff_firstname')->whereNotNull('staff_lastname')->whereNotNull('staff_email')->whereNotNull('staff_gender')->whereNotNull('staff_marital_status')->whereNotNull('staff_phone')->where("status", "delete")->paginate(10);    
+              $staffInformation = DB::table('register_staff_informations')->whereNotNull('staff_firstname')->whereNotNull('staff_lastname')->whereNotNull('staff_email')->whereNotNull('staff_gender')->whereNotNull('staff_marital_status')->whereNotNull('staff_phone')->where("status", NULL)->paginate(10);    
             }else{
               $staffInformation= new RegisterStaffInformation;     
             }                    
