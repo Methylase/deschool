@@ -1039,39 +1039,96 @@
             <h6 class="collapse-header">Students:</h6>
             <a class="collapse-item" href="/deschool/add-student"> Add New Student</a>
             <a class="collapse-item" href="/deschool/view-students">View Students Table</a>
-            <a class="collapse-item" href="/deschool/students-register"> Students Register</a>                 
-            <!--<a class="collapse-item" href="/deschool/students-result"> Add Student Result</a>               
-            <div class="collapse-divider"></div>
-            <h6 class="collapse-header">Others:</h6>
-            <a class="collapse-item" href="register.html"> Old Student Archive</a>                  
-            <a class="collapse-item" href="404.html">Assign Book</a>
-            <a class="collapse-item" href="blank.html">Book Assign To Students</a>-->
+            <a class="collapse-item" href="/deschool/students-register"> Students Register</a>                                          
+          </div>
+        </div>
+      </li> 
+      <!-- Divider -->  
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Addons
+      </div>      
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collpaseSubject" aria-expanded="true" aria-controls="collapsePages">
+          <i class="fas fa-fw fa-users text-gray-400"></i>
+          <span>Subject</span>
+        </a>
+        <div id="collpaseSubject" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Subject:</h6>
+            <a class="collapse-item" href="/deschool/add-subject"> Add Subject</a>
+            <a class="collapse-item" href="/deschool/select-subject">Select Subject</a> 
+          </div>
+        </div>
+      </li>
+      <!-- Divider -->  
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Addons
+      </div>      
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collpaseResult" aria-expanded="true" aria-controls="collapsePages">
+          <i class="fas fa-fw fa-users text-gray-400"></i>
+          <span>Result Aggregator</span>
+        </a>
+        <div id="collpaseResult" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Result Aggregator:</h6>
+            <a class="collapse-item" href="/deschool/add-student"> Aggregate Result</a>
+            <a class="collapse-item" href="/deschool/view-students">Result Table</a>  
+            <a class="collapse-item" href="/deschool/view-students">Check Result</a>                       
           </div>
         </div>
       </li> 
       <!-- Divider -->
       
-      <!--<hr class="sidebar-divider">-->
+     <hr class="sidebar-divider">
 
       <!-- Heading -->
-     <!-- <div class="sidebar-heading">
+     <div class="sidebar-heading">
         Addons
-      </div>-->
+      </div>
       <!-- Nav Item - Pages Collapse Menu -->
-     <!-- <li class="nav-item">
+      <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFinances" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-credit-card text-gray-400"></i>
-          <span>Revenue</span>
+          <span>Payment</span>
         </a>
         <div id="collapseFinances" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Revenue:</h6>
-            <a class="collapse-item" href="buttons.html">Daily Revenue</a>
-            <a class="collapse-item" href="cards.html">Monthly Revenue</a>
-            <a class="collapse-item" href="cards.html">Other Finances</a>            
+            <h6 class="collapse-header">Payment:</h6>
+            <a class="collapse-item" href="buttons.html">Payment</a>           
           </div>
         </div>
-      </li>-->
+      </li>
+      <!-- Divider -->  
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Addons
+      </div>      
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collpaseLibrary" aria-expanded="true" aria-controls="collapsePages">
+          <i class="fas fa-fw fa-users text-gray-400"></i>
+          <span>Library</span>
+        </a>
+        <div id="collpaseLibrary" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Library:</h6>
+            <a class="collapse-item" href="404.html">Books</a>            
+            <a class="collapse-item" href="404.html">Assign Book</a>
+            <a class="collapse-item" href="blank.html">Book Assign To Students</a>              
+          </div>
+        </div>
+      </li>       
       <!-- Divider -->
       <!--<hr class="sidebar-divider">-->
 

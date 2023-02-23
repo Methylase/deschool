@@ -60,7 +60,7 @@
                         <div class="table-responsive">   
                          @if(isset($registerStudentInformation) && $registerStudentInformation !='')
                             <h6 class="m-4 font-weight-bold">Table showing the list of students that clock in</h6>        
-                          <table class="table table-bordered  border-bottom-info display" id="dataTableStudentRegister" width="100%" cellspacing="0">
+                          <table class="table table-bordered  border-bottom-info table-striped" id="dataTableStudentRegister" width="100%" cellspacing="0">
                             <thead>
                               <tr>
                               <th>S/N</th>

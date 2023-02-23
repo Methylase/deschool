@@ -27,10 +27,10 @@
                         <div class="card-body">
                           <div class="table-responsive">
                            @if(isset($staffInformation) && $staffInformation != null)
-                            <table class="table table-bordered border-bottom-info display" id="dataTableStaff"  style="width:100%" cellspacing="0">
+                            <table class="table table-bordered border-bottom-info table-striped" id="dataTableStaff"  style="width:100%" cellspacing="0">
                               <thead>
                                 <tr>
-                                <th>S/N</th>
+                                  <th>S/N</th>
                                   <th>Name</th>
                                   <th>Email</th>
                                   <th>Gender</th>

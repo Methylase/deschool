@@ -26,7 +26,7 @@
                         <div class="card-body">
                           <div class="table-responsive">
                            @if(isset($parentInformation) && $parentInformation !=null)
-                            <table class="table table-bordered  border-bottom-info display" id="dataTableParent" width="100%" cellspacing="0">
+                            <table class="table table-bordered  border-bottom-info table-striped" id="dataTableParent" width="100%" cellspacing="0">
                               <thead>
                                 <tr>
                                 <th>S/N</th>
@@ -61,37 +61,15 @@
                                  @endforeach
                               </tbody>  
                             </table>
-                              <div class="row col-md-12">
-                                 @if( $paginator->hasPages())
-                                    <div class="col-md-6  col-sm-6">
-                                       <ul class="pagination">
-                                          <li>{{'Showing '.$paginator->currentPage().' to '.$paginator->perPage().' of '.$paginator->total().' entries'}}</li>
-                                       </ul>                          
-                                    </div>
-                                  @endif
-                                 @if( $paginator->hasPages())
-                                    <div class="offset-md-2 col-md-4 offset-sm-2 col-sm-4">
-                                       @if( $paginator->lastPage() > 1)
-                                       <ul class="pagination">
-                                         <li class="{{ ( $paginator->currentPage() ==1 ) ? 'disabled': ''}}">
-                                          <a href="{{ $paginator->url(1) }}" class="{{ ( $paginator->currentPage() ==1 ) ? 'disabled': ''}} btn btn-sm btn-info paginate-btn">Previous</a>
-                                         </li>
-                                          @for( $i = 1; $i <= $paginator->lastPage(); $i++ )
-                                             <li class="{{ ($paginator->currentPage() == $i) ? 'active' : ''}}">
-                                                <a href="{{ $paginator->url($i) }}" class="btn btn-sm btn-info paginate-btn">{{$i}}</a>
-                                             </li>
-                                          @endfor
-                                          <li class="{{ ( $paginator->currentPage() ==$paginator->lastPage() ) ? 'disabled' : '' }}">
-                                             <a href="{{ $paginator->url( $paginator->currentPage()+1) }}" class="{{ ( $paginator->currentPage() ==$paginator->lastPage() ) ? 'disabled' : '' }} btn btn-sm btn-info paginate-btn">Lastpage</a>
-                                          </li>
-                                       </ul>
-                                       @endif
-                                     </div>
-                                 @endif                                 
-                              </div>
-                             @else
+                            @else
                                 <div class='offset-md-1 col-md-10 offset-sm-1 col-sm-10 text-center'>
-                                    {{'No record for Parent '}}
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
                                 </div>
                              @endif
                              <!-- modal for delete staff -->

@@ -26,7 +26,7 @@
                         <div class="card-body">
                           <div class="table-responsive">
                            @if(isset($studentInformation) && $studentInformation != null )
-                            <table class="table table-bordered  border-bottom-info display" id="dataTableStudent" width="100%" cellspacing="0">
+                            <table class="table table-bordered  border-bottom-info table-striped" id="dataTableStudent" width="100%" cellspacing="0">
                               <thead>
                                 <tr>
                                 <th>S/N</th>
@@ -74,10 +74,15 @@
                                  @endforeach
                               </tbody>   
                             </table>
-
-                             @else
+                            @else
                                 <div class='offset-md-1 col-md-10 offset-sm-1 col-sm-10 text-center'>
-                                    {{'No record for Student '}}
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
                                 </div>
                              @endif
                              <!-- modal for delete staff -->
