@@ -23,11 +23,11 @@
                           <h6 class="m-0 font-weight-bold">Staffs Table</h6>
                            <a href="/deschool/add-staff" class="btn btn-sm btn-primary float-right">Add Staff</a>
                         </div>
-                           
                         <div class="card-body">
                           <div class="table-responsive">
+                          <table class="table table-bordered border-bottom-info table-striped" id="dataTableStaff"  style="width:100%" cellspacing="0">
                            @if(isset($staffInformation) && $staffInformation != null)
-                            <table class="table table-bordered border-bottom-info table-striped" id="dataTableStaff"  style="width:100%" cellspacing="0">
+                            
                               <thead>
                                 <tr>
                                   <th>S/N</th>
@@ -60,11 +60,8 @@
                                  @php$i++
                                  @endphp
                                  @endforeach
-                                 </tbody>
-                            </table>
-
                              @else
-                                <div class='offset-md-1 col-md-10 offset-sm-1 col-sm-10 text-center'>
+                                <tr>
                                   <td></td>
                                   <td></td>
                                   <td></td>
@@ -72,8 +69,10 @@
                                   <td></td>
                                   <td></td>
                                   <td></td>
-                                </div>
+                                </tr>
                              @endif
+                             </tbody>
+                             </table>
                              <!-- modal for delete staff -->
                               <div class="modal col-md-10 offset-md-2  col-sm-10 offset-sm-2 " id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">                  
                                 <div class="modal-dialog">

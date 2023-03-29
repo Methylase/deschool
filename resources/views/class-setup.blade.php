@@ -4,7 +4,7 @@
         <div class="container-fluid">
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800"> General Settings </h1>
+            <h1 class="h3 mb-0 text-gray-800"> Class Setup </h1>
           </div>
             <marquee class="mb-0 text-center text-info" style="font-size:small;font-weight:300;font-style:italic">The school is a platform that help in providing solutions to school activities.....</marquee>
         </div>
@@ -13,7 +13,7 @@
               <!-- Approach -->
               <div class="card shadow mb-4">                
                 <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold"> General Settings </h6>
+                  <h6 class="m-0 font-weight-bold"> Class Setup </h6>
                   <div class="float-right text-danger" id="settingsToggle"><i class="fas fa-plus" id="close"></i></div>
                 </div>
                 <div class="card-body" id="settings-body">

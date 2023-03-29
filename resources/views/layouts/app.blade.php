@@ -18,9 +18,11 @@
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   <link rel="icon" type="image/png" href="{{asset('my-register/img/icon.jpg')}}"  sizes ="25x25"> 
   <!-- Custom styles for this template-->
+  <link href="{{asset('jqueryTimePicker/jquery.timepicker.min.css')}}" rel="stylesheet"> 
   <link href="{{asset('my-register/css/jquery.dataTables.min.css')}}" rel="stylesheet"> 
   <link href="{{asset('my-register/css/sb-admin-2.min.css')}}" rel="stylesheet">
   <link href="{{asset('my-register/css/bootstrap-multiselect.min.css')}}" rel="stylesheet">
+  <script src="{{asset('jqueryTimePicker/jquery.timepicker.min.js')}}"></script> 
   <script src="{{asset('my-register/vendor/jquery/jquery.min.js')}}"></script> 
 
   <script>
@@ -47,10 +49,16 @@
         return i;
       }
       $(document).ready(function(){
+        $('#registerTime').timepicker({
+          interval:1,
+          dropdown: true,
+          defaultTime: '12',
+          scrollbar: true
+        });
        //updateToggle
-       $('#parentToggle').click(function(){
-         $('#parent-body').toggle();
-       });       
+        $('#parentToggle').click(function(){
+          $('#parent-body').toggle();
+        });       
         // json to get state and local government to fill state and local goverment dropdown
         $.getJSON("{{asset('states-localgovts/states-localgovts.json')}}",function(states){
           $.each(states.states, function(key, value){
@@ -70,156 +78,166 @@
         // staff toggle
         $('#staffToggle').click(function(){
          $('#staff-body').toggle();
-       });
+        });
        // student toggle
-       $('#studentToggle').click(function(){
-         $('#student-body').toggle();
-       });
+        $('#studentToggle').click(function(){
+          $('#student-body').toggle();
+        });
         //teacher toggle
-       $('#teacherToggle').click(function(){
-           $('#teacher-body').toggle();
-         });
+        $('#teacherToggle').click(function(){
+            $('#teacher-body').toggle();
+        });
           
-         //adding teacher
-          $('#assignTeacher').on('click', function(){
-            var token =$("meta[name='csrf-token']").attr("content");
-            var staffId = $('#staffName').val();
-            var staffName = $('#staffName option:selected').text();
-            var classId = $('#className').val();
-            var teacherRole= $('#teacherRole').val();
-            var value = {
-             "staffId" : staffId,
-             "classId": classId,
-             "staffName": staffName,
-             "teacherRole": teacherRole,
-             "_token": token,
+        //adding teacher
+        $('#assignTeacher').on('click', function(){
+          var token =$("meta[name='csrf-token']").attr("content");
+          var staffId = $('#staffName').val();
+          var staffName = $('#staffName option:selected').text();
+          var classId = $('#className').val();
+          var teacherRole= $('#teacherRole').val();
+          var value = {
+            "staffId" : staffId,
+            "classId": classId,
+            "staffName": staffName,
+            "teacherRole": teacherRole,
+            "_token": token,
+          }
+          $.ajax({
+              type: "POST",
+              url: "/deschool/add-teacher",
+              data: value,
+          }).done(function(result){
+            if (result.success=='success'){
+              $("#teacher-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+              setTimeout(function(){
+              location.reload();
+              }, 6000);
+            }else if(result.success=='danger'){
+              $("#teacher-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
+              setTimeout(function(){
+              location.reload();
+              }, 6000);               
             }
-            $.ajax({
-               type: "POST",
-               url: "/deschool/add-teacher",
-               data: value,
-            }).done(function(result){
-              if (result.success=='success'){
-                $("#teacher-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
-               setTimeout(function(){
-                location.reload();
-               }, 6000);
-              }else if(result.success=='danger'){
-                $("#teacher-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
-               setTimeout(function(){
-                location.reload();
-               }, 6000);               
-              }
-            });
           });
+        });
           
-          //updating teacher
-          $('.updateTeacher').on('click', function(){
-          var updatTeacher = $(this).attr('id');
-            updatTeacher = updatTeacher.split(' ');
-           $('.updat_teacher').attr('id', 'updat_teacher'+updatTeacher[1])
-           $('#updat_teacher'+updatTeacher[1]).on('click', function(){
-            var token =$("meta[name='csrf-token']").attr("content");
-            var staffId = $('#staffId').text();
-            var classA = $('.classNameA').val();
-            var teacherRole= $('.teacherRole').val();
-            alert(classA);
-            var values = {
-             "staffId" : staffId,
-             "classId": classA,
-             "teacherRole": teacherRole,
-             "_token": token,
+        //updating teacher
+        $('.updateTeacher').on('click', function(){
+        var updatTeacher = $(this).attr('id');
+          updatTeacher = updatTeacher.split(' ');
+          $('.updat_teacher').attr('id', 'updat_teacher'+updatTeacher[1])
+          $('#updat_teacher'+updatTeacher[1]).on('click', function(){
+          var token =$("meta[name='csrf-token']").attr('content');
+          var staffId = $('#staffId').attr('val-id');
+          var staffName = $('#staffId').text();
+          var classA = $('.classNameA').val();
+          var teacherRole= $('.teacherRole').val();
+          var values = {
+            "staffId" : staffId,
+            "staffName" : staffName,
+            "classId": classA,
+            "teacherRole": teacherRole,
+            "_token": token,
+          }
+          $.ajax({
+              type: "POST",
+              url: "/deschool/update-teacher",
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
+              $('#confirm-update').modal('hide');
+              $(".teacher-update").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+              setTimeout(function(){
+              location.reload();
+              }, 6000);
+            }else if(result.failure=='danger'){
+                $(".teacher-update").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
+              setTimeout(function(){
+              location.reload();
+              }, 6000);                  
             }
-            $.ajax({
-               type: "POST",
-               url: "/deschool/update-teacher",
-               data: values,
-            }).done(function(result){
-              if (result.success=='success'){
-                $('#confirm-delete').modal('hide');
-                $("#teacher-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
-               setTimeout(function(){
-                location.reload();
-               }, 6000);
-              }else if(result.success=='fail'){
-                  $("#teacher-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
-               setTimeout(function(){
-                location.reload();
-               }, 6000);                  
-              }
-            });
-           });
           });
+          });
+        });
           
-          //deleting teacher
-          $('.deleteTeacher').on('click', function(){
-          var delTeacher = $(this).attr('id');
-            delTeacher = delTeacher.split(' ');
-           $('.del_teacher').attr('id', 'del_teacher'+delTeacher[1])
-           $('#del_teacher'+delTeacher[1]).on('click', function(){
-            var token =$("meta[name='csrf-token']").attr("content");
-            value= {
-             "teacherId": delTeacher[1],
-             "_token": token,
+        //deleting teacher
+        $('.deleteTeacher').on('click', function(){
+        var delTeacher = $(this).attr('id');
+          delTeacher = delTeacher.split(' ');
+          $('.del_teacher').attr('id', 'del_teacher'+delTeacher[1])
+          $('#del_teacher'+delTeacher[1]).on('click', function(){
+          var token =$("meta[name='csrf-token']").attr("content");
+          value= {
+            "teacherId": delTeacher[1],
+            "_token": token,
+          }
+          $.ajax({
+              type: "DELETE",
+              url: "/deschool/delete-teacher/"+delTeacher[1],
+              data: value,
+          }).done(function(result){
+            if (result.success=='success'){
+              $('#confirm-delete').modal('hide');
+              $("#teacher-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+              setTimeout(function(){
+              location.reload();
+              }, 6000);
+            }else if(result.success=='fail'){
+                $("#teacher-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
+              setTimeout(function(){
+              location.reload();
+              }, 6000);                  
             }
-            $.ajax({
-               type: "DELETE",
-               url: "/deschool/delete-teacher/"+delTeacher[1],
-               data: value,
-            }).done(function(result){
-              if (result.success=='success'){
-                $('#confirm-delete').modal('hide');
-                $("#teacher-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
-               setTimeout(function(){
-                location.reload();
-               }, 6000);
-              }else if(result.success=='fail'){
-                  $("#teacher-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
-               setTimeout(function(){
-                location.reload();
-               }, 6000);                  
-              }
-            });
-           });
-          }); 
+          });
+          });
+        }); 
 
-          //subject toggle
-          $('#subjectToggle').click(function(){
-           $('#subject-body').toggle();
-         });      
-          $('#createSubject').on('click', function(){
-            var token =$("meta[name='csrf-token']").attr("content");
-            var subject = $('#subject').val();
-            var date= $('#date').val();
-            var values = {
-             "subject" : subject,
-             "date": date,
-             "_token": token,
-            }
+        //subject toggle
+        $('#subjectToggle').click(function(){
+          $('#subject-body').toggle();
+        });      
+        $('#createSubject').on('click', function(){
+          $('.help-block').remove(); 
+          $('.class-subject-group').removeClass('text-danger');
+          $('.date-group').removeClass('text-danger');            
+          var token =$("meta[name='csrf-token']").attr("content");
+          var subject = $('#subject').val();
+          var date= $('#date').val();
+          var values = {
+            "subject" : subject,
+            "date": date,
+            "_token": token,
+          }
+          
+          $.ajax({
+              type: "POST",
+              url: "/deschool/add-subject",
+              data: values,
+          }).done(function(result){
             
-            $.ajax({
-               type: "POST",
-               url: "/deschool/add-subject",
-               data: values,
-            }).done(function(result){
               if (result.success=='success'){
                 $("#subject-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
-               setTimeout(function(){
+              setTimeout(function(){
                 location.reload();
-               }, 6000);
-              }else if(result.success=='danger'){
+              }, 6000);
+              }else if(result.subject=='danger'){
+                
+              }else if(result.date=='danger'){
+                $(".date-group").addClass('text-danger');
+                $('.date-group').append("<div class='help-block'>" +result.message+"</div>");
+              }else if(result.failure=='danger'){
                 $("#subject-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
-               setTimeout(function(){
+              setTimeout(function(){
                 location.reload();
-               }, 6000);               
+              }, 6000);               
               }
-            });
           });
+        });
 
-          // edit parent toggle
-          $('#editParentToggle').click(function(){
-            $('#edit-parent-body').toggle();
-          }); 
+        // edit parent toggle
+        $('#editParentToggle').click(function(){
+          $('#edit-parent-body').toggle();
+        }); 
        
         // edit staff toggle
         $('#editStaffToggle').click(function(){
@@ -229,149 +247,148 @@
         //edit student toggle
         $('#editStudentToggle').click(function(){
          $('#edit-student-body').toggle();
-       }); 
+        }); 
        
        // toggle general settings
 
-       $('#settingsToggle').click(function(){
-           $('#settings-body').toggle();
-         }); 
-         // Create subject
-          $('.help-block').remove(); 
-          $('.class-subject-group').removeClass('text-danger');
-          $('.date-group').removeClass('text-danger');
-          $('#createSubject').on('click', function(){
-            var token =$("meta[name='csrf-token']").attr("content");
-            var subject = $('#subject').val();
-            var date= $('#date').val();
-            var value = {
-             "subject" : subject,
-             "date": date,
-             "_token": token,
+        $('#settingsToggle').click(function(){
+          $('#settings-body').toggle();
+        }); 
+        // Create subject
+        $('.help-block').remove(); 
+        $('.class-subject-group').removeClass('text-danger');
+        $('.date-group').removeClass('text-danger');
+        $('#createSubject').on('click', function(){
+          var token =$("meta[name='csrf-token']").attr("content");
+          var subject = $('#subject').val();
+          var date= $('#date').val();
+          var value = {
+            "subject" : subject,
+            "date": date,
+            "_token": token,
+          }
+          
+          $.ajax({
+              type: "POST",
+              url: "/deschool/add-subject",
+              data: value,
+          }).done(function(result){
+            if (result.success=='success'){
+              $("#settings-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+              setTimeout(function(){
+              location.reload();
+              }, 6000);
+            }else if(result.subject=='danger'){
+              $(".class-subject-group").addClass('text-danger');
+              $('.class-subject-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.date=='danger'){
+                $(".date-group").addClass('text-danger');
+                $('.date-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.failure=='danger'){
+              $("#settings-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
+              setTimeout(function(){
+              location.reload();
+              }, 6000);               
             }
-            
-            $.ajax({
-               type: "POST",
-               url: "/deschool/add-subject",
-               data: value,
-            }).done(function(result){
-              if (result.success=='success'){
-                $("#settings-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
-               setTimeout(function(){
-                location.reload();
-               }, 6000);
-              }else if(result.subject=='danger'){
-               $(".class-subject-group").addClass('text-danger');
-               $('.class-subject-group').append("<div class='help-block'>" +result.message+"</div>");
-              }else if(result.date=='danger'){
-                  $(".date-group").addClass('text-danger');
-                  $('.date-group').append("<div class='help-block'>" +result.message+"</div>");
-              }else if(result.failure=='danger'){
-                $("#settings-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
-               setTimeout(function(){
-                location.reload();
-               }, 6000);               
-              }
-            });
-          })
+          });
+        })
 
-          //create class
+        //create class
+        
+        $('#createClass').on('click', function(){
           $('.help-block').remove(); 
           $('.class-group').removeClass('text-danger');
-          $('.class-date-group').removeClass('text-danger');          
-          $('#createClass').on('click', function(){
-            var token =$("meta[name='csrf-token']").attr("content");
-            var classes = $('#class').val();
-            var date= $('#classDate').val();
-            var value = {
-             "class" : classes,
-             "date": date,
-             "_token": token,
+          $('.class-date-group').removeClass('text-danger');            
+          var token =$("meta[name='csrf-token']").attr("content");
+          var classes = $('#class').val();
+          var date= $('#classDate').val();
+          var value = {
+            "class" : classes,
+            "date": date,
+            "_token": token,
+          }
+          $.ajax({
+              type: "POST",
+              url: "/deschool/add-class",
+              data: value,
+          }).done(function(result){
+            if (result.success=='success'){
+              $("#settings-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+              setTimeout(function(){
+              location.reload();
+              }, 6000);
+            }else if(result.class=='danger'){
+              $(".class-group").addClass('text-danger');
+              $('.class-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.date=='danger'){
+                $(".class-date-group").addClass('text-danger');
+                $('.class-date-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.failure=='danger'){
+              $("#settings-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
+              setTimeout(function(){
+              location.reload();
+              }, 6000);               
             }
-            $.ajax({
-               type: "POST",
-               url: "/deschool/add-class",
-               data: value,
-            }).done(function(result){
-              if (result.success=='success'){
-                $("#settings-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
-               setTimeout(function(){
-                location.reload();
-               }, 6000);
-              }else if(result.class=='danger'){
-               $(".class-group").addClass('text-danger');
-               $('.class-group').append("<div class='help-block'>" +result.message+"</div>");
-              }else if(result.date=='danger'){
-                  $(".class-date-group").addClass('text-danger');
-                  $('.class-date-group').append("<div class='help-block'>" +result.message+"</div>");
-              }else if(result.failure=='danger'){
-                $("#settings-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
-               setTimeout(function(){
-                location.reload();
-               }, 6000);               
-              }
-            });
-          })
+          });
+        })
 
-          // number of periods
+        // number of periods
+        $('#createPeriod').on('click', function(){
           $('.help-block').remove(); 
           $('.period-group').removeClass('text-danger');
-          $('.period-date-group').removeClass('text-danger');          
-          $('#createPeriod').on('click', function(){
-            var token =$("meta[name='csrf-token']").attr("content");
-            var period = $('#period').val();
-            var date= $('#periodDate').val();
-            var values = {
-             "period" : period,
-             "date": date,
-             "_token": token,
+          $('.period-date-group').removeClass('text-danger');             
+          var token =$("meta[name='csrf-token']").attr("content");
+          var period = $('#period').val();
+          var date= $('#periodDate').val();
+          var values = {
+            "period" : period,
+            "date": date,
+            "_token": token,
+          }
+          
+          $.ajax({
+              type: "POST",
+              url: "/deschool/add-period",
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
+              $("#settings-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+              setTimeout(function(){
+              location.reload();
+              }, 6000);
+            }else if(result.period=='danger'){
+              $(".period-group").addClass('text-danger');
+              $('.period-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.date=='danger'){
+                $(".period-date-group").addClass('text-danger');
+                $('.period-date-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.failure=='danger'){
+              $("#settings-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
+              setTimeout(function(){
+              location.reload();
+              }, 6000);               
             }
-            
-            $.ajax({
-               type: "POST",
-               url: "/deschool/add-period",
-               data: values,
-            }).done(function(result){
-              if (result.success=='success'){
-                $("#settings-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
-               setTimeout(function(){
-                location.reload();
-               }, 6000);
-              }else if(result.period=='danger'){
-               $(".period-group").addClass('text-danger');
-               $('.period-group').append("<div class='help-block'>" +result.message+"</div>");
-              }else if(result.date=='danger'){
-                  $(".period-date-group").addClass('text-danger');
-                  $('.period-date-group').append("<div class='help-block'>" +result.message+"</div>");
-              }else if(result.failure=='danger'){
-                $("#settings-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
-               setTimeout(function(){
-                location.reload();
-               }, 6000);               
-              }
-            });
-          });   
-           
-          //memo toggle
-          $('#memoToggle').click(function(){
-            $('#memo-body').toggle();
           });
-          $('#settingsInformationToggle').click(function(){
-            $('#settings-information-body').toggle();
-          }); 
+        });   
+           
+        //memo toggle
+        $('#memoToggle').click(function(){
+          $('#memo-body').toggle();
+        });
+        $('#settingsInformationToggle').click(function(){
+          $('#settings-information-body').toggle();
+        }); 
 
-       // setting privilege toggle
-       $('#settingsPrivilegeToggle').click(function(){
-         $('#settings-privilege-body').toggle();
-       });
+        // setting privilege toggle
+        $('#settingsPrivilegeToggle').click(function(){
+          $('#settings-privilege-body').toggle();
+        });
          
         //setting of privilege
-        $('.help-block').remove(); 
-        $('.privilege-group').removeClass('text-danger');
-        $('.staff-group').removeClass('text-danger');
-           
         $('#privilege').on('click', function(){
-         
+          $('.help-block').remove(); 
+          $('.privilege-group').removeClass('text-danger');
+          $('.staff-group').removeClass('text-danger');          
           $('.yesPrivilege').on('click', function(){
           $('.privilege-group').removeClass('text-danger');
           $('.staff-group').removeClass('text-danger');
@@ -389,43 +406,99 @@
               url: "/deschool/privilege",
               data: values,
           }).done(function(result){
-            if (result.success=='success'){
-              $('#privilegeRegister').hide('fast');
-              $("#settings-privilege-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
-              setTimeout(function(){
-              location.reload();
-              }, 6000);
-            }else if(result.staff=='danger'){
-                $('.staff-group').addClass('text-danger');
-                $('.staff-group').append("<div class='help-block'>" +result.message+"</div>");
+              if (result.success=='success'){
+                $('#privilegeRegister').hide('fast');
+                $("#settings-privilege-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
                 setTimeout(function(){
-                    location.reload();
-                }, 3000);
-            }else if(result.privilege=='danger'){
-                $('.privilege-group').addClass('text-danger');
-                $(".privilege-group").append("<div class='help-block'>" +result.message+"</div>");
+                location.reload();
+                }, 6000);
+              }else if(result.staff=='danger'){
+                  $('.staff-group').addClass('text-danger');
+                  $('.staff-group').append("<div class='help-block'>" +result.message+"</div>");
+                  setTimeout(function(){
+                      location.reload();
+                  }, 3000);
+              }else if(result.privilege=='danger'){
+                  $('.privilege-group').addClass('text-danger');
+                  $(".privilege-group").append("<div class='help-block'>" +result.message+"</div>");
+                  setTimeout(function(){
+                      location.reload();
+                    }, 3000);   
+              }else if(result.success=='danger'){
+                $('#privilegeRegister').hide('fast');
+                $("#settings-privilege-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
                 setTimeout(function(){
-                    location.reload();
-                  }, 3000);   
-            }else if(result.success=='danger'){
-              $('#privilegeRegister').hide('fast');
-              $("#settings-privilege-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
-              setTimeout(function(){
-              location.reload();
-              }, 3000);               
-            }
-          });
-        });      
-      });       
-      $('.setRead').on('change', function(){
-        var token =$("meta[name='csrf-token']").attr("content");
-        var read;
-        if ($(this).prop("checked")== true) {
-              read = $(this).val();
+                location.reload();
+                }, 3000);               
+              }
+            });
+          });      
+        });
+
+
+
+        //creating of academic calender terms
+        $('#createTerm').on('click', function(){
+          $('.help-block').remove(); 
+          $('.term-group').removeClass('text-danger');
+          $('.session-group').removeClass('text-danger');          
+          $('.yesTerm').on('click', function(){
+          $('.term-group').removeClass('text-danger');
+          $('.session-group').removeClass('text-danger');
+          $('.help-block').remove();            
+          var token =$("meta[name='csrf-token']").attr("content");
+          var term = $('#term option:selected').val();
+          var term_name = $('#term option:selected').text();
+          var session= $('#session').val();
+          var values = {
+            "term" : term,
+            "term_name" : term_name,
+            "session": session,
+            "_token": token,
+          }
+          $.ajax({
+              type: "POST",
+              url: "/deschool/academic_session",
+              data: values,
+          }).done(function(result){
+              if (result.success=='success'){
+                $('#academic_session').hide('fast');
+                $("#academic-session").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+                setTimeout(function(){
+                location.reload();
+                }, 6000);
+              }else if(result.term=='danger'){
+                  $('.term-group').addClass('text-danger');
+                  $('.term-group').append("<div class='help-block'>" +result.message+"</div>");
+                  setTimeout(function(){
+                      location.reload();
+                  }, 3000);
+              }else if(result.session=='danger'){
+                  $('.session-group').addClass('text-danger');
+                  $(".session-group").append("<div class='help-block'>" +result.message+"</div>");
+                  setTimeout(function(){
+                      location.reload();
+                    }, 3000);   
+              }else if(result.failure=='danger'){
+                $('#academic_session').hide('fast');
+                $("#academic-session").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
+                setTimeout(function(){
+                location.reload();
+                }, 3000);               
+              }
+            });
+          });      
+        });
+
+        $('.setRead').on('change', function(){
+          var token =$("meta[name='csrf-token']").attr("content");
+          var read;
+          if ($(this).prop("checked")== true) {
+            read = $(this).val();
             if ( $('.setRead').attr('data-target') =="#enable") {
               $('.setRead').attr('data-target','#disable');
             }
-            
+              
             $('.disable').on('click', function(){
               
               var values = {
@@ -453,7 +526,7 @@
                 }
               });
             });
-        }else if($(this).prop("checked")== false){
+          }else if($(this).prop("checked")== false){
             if ( $('.setRead').attr('data-target') =="#disable") {
               $('.setRead').attr('data-target','#enable');
             }
@@ -483,172 +556,173 @@
                 }
               });
             });
-        }
-      });
-
-      // staff register toggle
-      $('#staffRegisterToggle').click(function(){
-         $('#staff-register-body').toggle();
-       });
-
-       //register staff
-      $('#registerStaff').on('click', function(e){
-        $('.staff-group').removeClass('text-danger');
-        $('.time-group').removeClass('text-danger');
-        $('.date-group').removeClass('text-danger');
-        $('.help-block').remove();
-        e.preventDefault();
-        var token =$("meta[name='csrf-token']").attr("content");
-        var staffName = $('#staffName').val();
-        var registerDate= $('#registerDate').val();
-        var registerTime= $('#registerTime').val();
-        var values = {
-          "staffName" : staffName,
-          "registerDate" : registerDate,
-          "registerTime" : registerTime,
-          "_token": token,
-        }
-        
-        $.ajax({
-            type: "POST",
-            url: "/deschool/staff-register",
-            data: values,
-        }).done(function(result){
-          if (result.success=='success'){
-            $("#staff-register-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
-            setTimeout(function(){
-            location.reload();
-            }, 6000);
-          }else if(result.staff=='danger'){
-              $('.staff-group').addClass('text-danger');
-              $('.staff-group').append("<div class='help-block'>" +result.message+"</div>");                              
-          }else if(result.time=='danger'){
-              $('.time-group').addClass('text-danger');
-              $(".time-group").append("<div class='help-block'>" +result.message+"</div>");                              
-          }else if(result.date=='danger'){
-              $('.date-group').addClass('text');
-              $(".date-group").append("<div class='help-block'>" +result.message+"</div>");                              
-          }else if(result.success=='true'){
-              $("#registerStaff").attr("disable");
-              $("#staff-register-body").prepend("<div class='status alert alert-danger text-center col-sm-12 '><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
-            setTimeout(function(){
-            location.reload();
-            }, 6000);                  
           }
         });
-      });
 
-       // student register toggle
-       $('#studentRegisterToggle').click(function(){
-         $('#student-register-body').toggle();
-       });     
-       //register student
-       $('#registerStudent').on('click', function(e){
-        $('.student-group').removeClass('text-danger');
-        $('.time-group').removeClass('text-danger');
-        $('.date-group').removeClass('text-danger');
-        $('.help-block').remove();
-        e.preventDefault();
-        var token =$("meta[name='csrf-token']").attr("content");
-        var studentName = $('#studentName').val();
-        var registerDate= $('#registerDate').val();
-        var registerTime= $('#registerTime').val();
-        var values = {
-          "studentName" : studentName,
-          "registerDate" : registerDate,
-          "registerTime" : registerTime,
-          "_token": token,
-        }
-        
-        $.ajax({
-            type: "POST",
-            url: "/deschool/students-register",
-            data: values,
-        }).done(function(result){
-          if (result.success=='success'){
-            $("#student-register-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
-            setTimeout(function(){
-            location.reload();
-            }, 6000);
-          }else if(result.student=='danger'){
-              $('.student-group').addClass('text-danger');
-              $('.student-group').append("<div class='help-block'>" +result.message+"</div>");                              
-          }else if(result.time=='danger'){
-              $('.time-group').addClass('text-danger');
-              $(".time-group").append("<div class='help-block'>" +result.message+"</div>");                              
-          }else if(result.date=='danger'){
-              $('.date-group').addClass('text');
-              $(".date-group").append("<div class='help-block'>" +result.message+"</div>");                              
-          }else if(result.success=='true'){
-              $("#registerStudent").attr("disable");
-              $("#student-register-body").prepend("<div class='status alert alert-danger text-center col-sm-12 '><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
-            setTimeout(function(){
-            location.reload();
-            }, 6000);                  
-          }
+        // staff register toggle
+        $('#staffRegisterToggle').click(function(){
+          $('#staff-register-body').toggle();
         });
-      });      
-        // toggle student
-      $('#updateToggle').click(function(){
-        $('#update-body').toggle();
-      });
-      $('.register').on('click', function(e){
-        // e.preventDefault();
-        var token =$("meta[name='csrf-token']").attr("content");
-        var read;
-        var id =$(this).attr('id');
-        //alert(id);
-        //document.getElementById(id).checked ='checked';            
-        $('input.register:checkbox:checked').each(function(){
-          //alert($(this).attr('id'));
-          var id =$(this).attr('id');
-          alert(id);
-          alert($(this).val());
-          //$('#'+id).attr('checked', 'checked')
-        });
-        //read = $('.register').attr('id');
-        //alert( read);
-        $('.disable').on('click', function(){
+
+        //register staff
+        $('#registerStaff').on('click', function(e){
+          $('.staff-group').removeClass('text-danger');
+          $('.time-group').removeClass('text-danger');
+          $('.date-group').removeClass('text-danger');
+          $('.help-block').remove();
+          e.preventDefault();
+          var token =$("meta[name='csrf-token']").attr("content");
+          var staffName = $('#staffName').val();
+          var registerDate= $('#registerDate').val();
+          var registerTime= $('#registerTime').val();
           var values = {
-            "read" : read,
+            "staffName" : staffName,
+            "registerDate" : registerDate,
+            "registerTime" : registerTime,
             "_token": token,
           }
           
           $.ajax({
               type: "POST",
-              url: "/deschool/students-registers",
+              url: "/deschool/staff-register",
               data: values,
           }).done(function(result){
             if (result.success=='success'){
-              $('#disable').hide('fast')
-              $("#update-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+              $("#staff-register-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
               setTimeout(function(){
               location.reload();
               }, 6000);
-            }else if(result.success=='danger'){
-              $('#disable').hide('fast')
-              $("#update-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
+            }else if(result.staff=='danger'){
+                $('.staff-group').addClass('text-danger');
+                $('.staff-group').append("<div class='help-block'>" +result.message+"</div>");                              
+            }else if(result.time=='danger'){
+                $('.time-group').addClass('text-danger');
+                $(".time-group").append("<div class='help-block'>" +result.message+"</div>");                              
+            }else if(result.date=='danger'){
+                $('.date-group').addClass('text');
+                $(".date-group").append("<div class='help-block'>" +result.message+"</div>");                              
+            }else if(result.success=='true'){
+                $("#registerStaff").attr("disable");
+                $("#staff-register-body").prepend("<div class='status alert alert-danger text-center col-sm-12 '><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
               setTimeout(function(){
               location.reload();
-              }, 6000);               
+              }, 6000);                  
             }
           });
+        });
 
-         
-        }); 
-      });
+       // student register toggle
+        $('#studentRegisterToggle').click(function(){
+         $('#student-register-body').toggle();
+        });     
+       //register student
+        $('#registerStudent').on('click', function(e){
+          $('.student-group').removeClass('text-danger');
+          $('.time-group').removeClass('text-danger');
+          $('.date-group').removeClass('text-danger');
+          $('.help-block').remove();
+          e.preventDefault();
+          var token =$("meta[name='csrf-token']").attr("content");
+          var studentName = $('#studentName').val();
+          var registerDate= $('#registerDate').val();
+          var registerTime= $('#registerTime').val();
+          var values = {
+            "studentName" : studentName,
+            "registerDate" : registerDate,
+            "registerTime" : registerTime,
+            "_token": token,
+          }
+          
+          $.ajax({
+              type: "POST",
+              url: "/deschool/students-register",
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
+              $("#student-register-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+              setTimeout(function(){
+              location.reload();
+              }, 6000);
+            }else if(result.student=='danger'){
+                $('.student-group').addClass('text-danger');
+                $('.student-group').append("<div class='help-block'>" +result.message+"</div>");                              
+            }else if(result.time=='danger'){
+                $('.time-group').addClass('text-danger');
+                $(".time-group").append("<div class='help-block'>" +result.message+"</div>");                              
+            }else if(result.date=='danger'){
+                $('.date-group').addClass('text');
+                $(".date-group").append("<div class='help-block'>" +result.message+"</div>");                              
+            }else if(result.success=='true'){
+                $("#registerStudent").attr("disable");
+                $("#student-register-body").prepend("<div class='status alert alert-danger text-center col-sm-12 '><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
+              setTimeout(function(){
+              location.reload();
+              }, 6000);                  
+            }
+          });
+        });  
+
+        // toggle student
+        $('#updateToggle').click(function(){
+          $('#update-body').toggle();
+        });
+        $('.register').on('click', function(e){
+          // e.preventDefault();
+          var token =$("meta[name='csrf-token']").attr("content");
+          var read;
+          var id =$(this).attr('id');
+          //alert(id);
+          //document.getElementById(id).checked ='checked';            
+          $('input.register:checkbox:checked').each(function(){
+            //alert($(this).attr('id'));
+            var id =$(this).attr('id');
+            alert(id);
+            alert($(this).val());
+            //$('#'+id).attr('checked', 'checked')
+          });
+          //read = $('.register').attr('id');
+          //alert( read);
+          $('.disable').on('click', function(){
+            var values = {
+              "read" : read,
+              "_token": token,
+            }
+            
+            $.ajax({
+                type: "POST",
+                url: "/deschool/students-registers",
+                data: values,
+            }).done(function(result){
+              if (result.success=='success'){
+                $('#disable').hide('fast')
+                $("#update-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+                setTimeout(function(){
+                location.reload();
+                }, 6000);
+              }else if(result.success=='danger'){
+                $('#disable').hide('fast')
+                $("#update-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
+                setTimeout(function(){
+                location.reload();
+                }, 6000);               
+              }
+            });
+
+          
+          }); 
+        });
 
         //send memo;
-          $('.memo-message').hide('fast');
-          $('.sender-group').hide('fast');
-          $('.subject-group').hide('fast');
-          $('.email-group').hide('fast');
-          $('.message-group').hide('fast');
-          $('.memo-message').empty();
-          $('.sender-group').empty();
-          $('.subject-group').empty();
-          $('.email-group').empty();
-          $('.message-group').empty();          
+        $('.memo-message').hide('fast');
+        $('.sender-group').hide('fast');
+        $('.subject-group').hide('fast');
+        $('.email-group').hide('fast');
+        $('.message-group').hide('fast');
+        $('.memo-message').empty();
+        $('.sender-group').empty();
+        $('.subject-group').empty();
+        $('.email-group').empty();
+        $('.message-group').empty();          
         $('#send-memo').on('click', function(){
         
           var token =$("meta[name='csrf-token']").attr("content");
@@ -698,136 +772,694 @@
               }, 6000); 
             }
           });
-
-         
         });      
-      // toggle for parent table
-      $('#viewParentsToggle').click(function(){
-           $('#view-parents-body').toggle();
-      });
-      // delete of parent
-      $('.deleteParent').on('click', function(){
-      var delParent = $(this).attr('id');
-        delParent = delParent.split(' ');
-        $('.del_parent').attr('id', 'del_parent'+delParent[1])
-        $('#del_parent'+delParent[1]).on('click', function(){
-        var token =$("meta[name='csrf-token']").attr("content");
-        values= {
-          "parentId": delParent[1],
-          "_token": token,
-        }
-        $.ajax({
-            type: "DELETE",
-            url: "/deschool/delete-parent/"+delParent[1],
-            data: values,
-        }).done(function(result){
-          if (result.success=='success'){
-            $('#confirm-delete').modal('hide');
-            $("#view-parents-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
-            setTimeout(function(){
-            location.reload();
-            }, 6000);
-          }else if(result.success=='fail'){
-              $("#view-parents-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
-            setTimeout(function(){
-            location.reload();
-            }, 6000);                  
+        // toggle for parent table
+        $('#viewParentsToggle').click(function(){
+            $('#view-parents-body').toggle();
+        });
+        // delete of parent
+        $('.deleteParent').on('click', function(){
+          var delParent = $(this).attr('id');
+          delParent = delParent.split(' ');
+          $('.del_parent').attr('id', 'del_parent'+delParent[1])
+          $('#del_parent'+delParent[1]).on('click', function(){
+          var token =$("meta[name='csrf-token']").attr("content");
+          values= {
+            "parentId": delParent[1],
+            "_token": token,
           }
-        });
-        });
-      });
-      
-      // toggle staff view table
-      $('#viewStaffsToggle').click(function(){
-           $('#view-staffs-body').toggle();
-      });      
-      $('.deleteStaff').on('click', function(){
-      var delStaff = $(this).attr('id');
-        delStaff = delStaff.split(' ');
-        $('.del_staff').attr('id', 'del_staff'+delStaff[1])
-        $('#del_staff'+delStaff[1]).on('click', function(){
-        var token =$("meta[name='csrf-token']").attr("content");
-        values= {
-          "staffId": delStaff[1],
-          "_token": token,
-        }
-
-        // delete staff
-        $.ajax({
-            type: "DELETE",
-            url: "/deschool/delete-staff/"+delStaff[1],
-            data: values,
-        }).done(function(result){
-          if (result.success=='success'){
-            $('#confirm-delete').modal('hide');
-            $("#view-staffs-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
-            setTimeout(function(){
-            location.reload();
-            }, 6000);
-          }else if(result.success=='fail'){
-              $("#view-staffs-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
-            setTimeout(function(){
-            location.reload();
-            }, 6000);                  
-          }
-        });
-        });
-      });
-      
-      //toggle student view table
-      $('#viewStudentsToggle').click(function(){
-           $('#view-students-body').toggle();
-      });    
-      
-      //delete student 
-      $('.deleteStudent').on('click', function(){
-      var delStudent = $(this).attr('id');
-        delStudent = delStudent.split(' ');
-        $('.del_student').attr('id', 'del_student'+delStudent[1]);
-        $('#del_student'+delStudent[1]).on('click', function(){
-        var token =$("meta[name='csrf-token']").attr("content");
-        values= {
-          "studentId": delStudent[1],
-          "_token": token
-        }
-        $.ajax({
-            type: "DELETE",
-            url: "/deschool/delete-student/"+delStudent[1],
-            data: values,
-        }).done(function(result){
-          if (result.success=='success'){
-            $('#confirm-delete').modal('hide');
-            $("#view-students-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
-            setTimeout(function(){
-            location.reload();
-            }, 6000);
-          }else if(result.success=='fail'){
+          $.ajax({
+              type: "DELETE",
+              url: "/deschool/delete-parent/"+delParent[1],
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
               $('#confirm-delete').modal('hide');
-              $("#view-students-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
-            setTimeout(function(){
-            location.reload();
-            }, 6000);                  
+              $("#view-parents-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+              setTimeout(function(){
+              location.reload();
+              }, 6000);
+            }else if(result.success=='fail'){
+                $("#view-parents-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
+              setTimeout(function(){
+              location.reload();
+              }, 6000);                  
+            }
+          });
+          });
+        });
+      
+        // toggle staff view table
+        $('#viewStaffsToggle').click(function(){
+            $('#view-staffs-body').toggle();
+        });      
+        $('.deleteStaff').on('click', function(){
+          var delStaff = $(this).attr('id');
+          delStaff = delStaff.split(' ');
+          $('.del_staff').attr('id', 'del_staff'+delStaff[1])
+          $('#del_staff'+delStaff[1]).on('click', function(){
+          var token =$("meta[name='csrf-token']").attr("content");
+          values= {
+            "staffId": delStaff[1],
+            "_token": token,
           }
+
+          // delete staff
+          $.ajax({
+              type: "DELETE",
+              url: "/deschool/delete-staff/"+delStaff[1],
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
+              $('#confirm-delete').modal('hide');
+              $("#view-staffs-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+              setTimeout(function(){
+              location.reload();
+              }, 6000);
+            }else if(result.success=='fail'){
+                $("#view-staffs-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
+              setTimeout(function(){
+              location.reload();
+              }, 6000);                  
+            }
+          });
+          });
         });
+      
+        //toggle student view table
+        $('#viewStudentsToggle').click(function(){
+            $('#view-students-body').toggle();
+        });    
+        
+        //delete student 
+        $('.deleteStudent').on('click', function(){
+          var delStudent = $(this).attr('id');
+          delStudent = delStudent.split(' ');
+          $('.del_student').attr('id', 'del_student'+delStudent[1]);
+          $('#del_student'+delStudent[1]).on('click', function(){
+          var token =$("meta[name='csrf-token']").attr("content");
+          values= {
+            "studentId": delStudent[1],
+            "_token": token
+          }
+          $.ajax({
+              type: "DELETE",
+              url: "/deschool/delete-student/"+delStudent[1],
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
+              $('#confirm-delete').modal('hide');
+              $("#view-students-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+              setTimeout(function(){
+              location.reload();
+              }, 6000);
+            }else if(result.success=='fail'){
+                $('#confirm-delete').modal('hide');
+                $("#view-students-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
+              setTimeout(function(){
+              location.reload();
+              }, 6000);                  
+            }
+          });
+          });
+        });  
+
+        // assign subject
+        $('#assignSubject').on('click', function(){
+          $('.help-block').remove(); 
+          $('.teacher-name-group').removeClass('text-danger');
+          $('.subject-name-group').removeClass('text-danger');            
+            var token =$("meta[name='csrf-token']").attr("content");
+          var teacher = $('#teacher-name').val();
+          var teacher_name = $('#teacher-name option:selected').text();
+          var subject= $('#subject-name').val();
+          var subject_name= $('#subject-name option:selected').text();
+          var values = {
+            "teacher" : teacher,
+            "teacher_name" : teacher_name,
+            "subject" : subject,
+            "subject_name" : subject_name,
+            "_token": token,
+          }
+          
+          $.ajax({
+              type: "POST",
+              url: "/deschool/assign-subject",
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
+              $("#subject-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+              setTimeout(function(){
+              location.reload();
+              }, 6000);
+            }else if(result.teacher=='danger'){
+              $(".teacher-name-group").addClass('text-danger');
+              $('.teacher-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.subject=='danger'){
+                $(".subject-name-group").addClass('text-danger');
+                $('.subject-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.failure=='danger'){
+              $("#subject-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
+              setTimeout(function(){
+              location.reload();
+              }, 6000);               
+            }
+          });
+        });   
+
+        // toggle select subject view table
+        $('#selectSubjectToggle').click(function(){
+          $('#select-subject-body').toggle();
         });
-      });  
-    
-      $('#dataTableStaff').DataTable(); 
 
-      $('#dataTableTeacher').DataTable();
+        $('#selectSubject').on('click', function(){
+          $('.help-block').remove(); 
+          $('.class-name-group').removeClass('text-danger');
+          $('.student-name-group').removeClass('text-danger');
+          $('.subject-name-group').removeClass('text-danger');            
+            var token =$("meta[name='csrf-token']").attr("content");
+            var class_id = $('#class-name option:selected').val();
+            var class_name = $('#class-name option:selected').text();            
+            var student = $('#student-name option:selected').val();
+            var student_name = $('#student-name option:selected').text();
+            var subject= $('#subject-name option:selected').val();
+            var subject_name= $('#subject-name option:selected').text();
+          var values = {
+            "class" : class_id,
+            "class_name" : class_name,            
+            "student" : student,
+            "student_name" : student_name,
+            "subject" : subject,
+            "subject_name" : subject_name,
+            "_token": token,
+          }
+              
+          $.ajax({
+              type: "POST",
+              url: "/deschool/select-subject",
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
+              $("#select-subject-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+              setTimeout(function(){
+              location.reload();
+              }, 6000);
+            }else if(result.class=='danger'){
+              $(".class-name-group").addClass('text-danger');
+              $('.class-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.student=='danger'){
+              $(".student-name-group").addClass('text-danger');
+              $('.student-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.subject=='danger'){
+                $(".subject-name-group").addClass('text-danger');
+                $('.subject-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.failure=='danger'){
+              $("#select-subject-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
+              setTimeout(function(){
+              location.reload();
+              }, 6000);               
+            }
+          });
+        });   
+
+        // toggle add stationeries table
+        $('#stationaryToggle').click(function(){
+          $('#stationary-body').toggle();
+        });
+
+        $('#addStationary').on('click', function(){
+          $('.help-block').remove(); 
+          $('.stationary-group').removeClass('text-danger');
+          $('.status-group').removeClass('text-danger');   
+          $('.quantity-group').removeClass('text-danger');
+          $('.amount-group').removeClass('text-danger'); 
+            var token =$("meta[name='csrf-token']").attr("content");
+            var name = $('#stationary').val();
+            var status = $('#status option:selected').val();
+            var quantity= $('#quantity').val();
+            var amount= $('#amount').val();
+            var values = {
+              "name" : name,
+              "status" : status,
+              "quantity" : quantity,
+              "amount" : amount,
+              "_token": token,
+            }
+            
+          $.ajax({
+              type: "POST",
+              url: "/deschool/stationeries",
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
+              $("#stationary-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+              setTimeout(function(){
+              location.reload();
+              }, 6000);
+            }else if(result.stationary=='danger'){
+              $(".stationary-group").addClass('text-danger');
+              $('.stationary-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.status=='danger'){
+                $(".status-group").addClass('text-danger');
+                $('.status-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.quantity=='danger'){
+                $(".quantity-group").addClass('text-danger');
+                $('.quantity-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.amount=='danger'){
+                $(".amount-group").addClass('text-danger');
+                $('.amount-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.failure=='danger'){
+              $("#stationary-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
+              setTimeout(function(){
+              location.reload();
+              }, 6000);               
+            }
+          });
+        });         
+
+        // toggle assign book 
+        $('#assignBookToggle').click(function(){
+          $('#assign-book-body').toggle();
+        });
+
+        $('#assignBook').on('click', function(){
+          $('.help-block').remove(); 
+          $('.student-name-group').removeClass('text-danger');
+          $('.book-name-group').removeClass('text-danger');     
+          $('.condition-group').removeClass('text-danger');      
+            var token =$("meta[name='csrf-token']").attr("content");
+            var student = $('#student-name').val();
+            var student_name = $('#student-name option:selected').text();
+            var book= $('#book-name').val();
+            var book_condition= $('#book-condition').val();
+            var book_name= $('#book-name option:selected').text();
+          var values = {
+            "student" : student,
+            "student_name" : student_name,
+            "book" : book,
+            "book_condition" : book_condition,
+            "book_name" : book_name,
+            "_token": token,
+          }
+              
+          $.ajax({
+              type: "POST",
+              url: "/deschool/assign-book",
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
+              $("#assign-book-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+              setTimeout(function(){
+              location.reload();
+              }, 6000);
+            }else if(result.student=='danger'){
+              $(".student-name-group").addClass('text-danger');
+              $('.student-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.book=='danger'){
+                $(".book-name-group").addClass('text-danger');
+                $('.book-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.condition=='danger'){
+                $(".condition-group").addClass('text-danger');
+                $('.condition-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.failure=='danger'){
+              $("#assign-book-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
+              setTimeout(function(){
+              location.reload();
+              }, 6000);               
+            }
+          });
+        });  
       
-      $('#dataTableParent').DataTable(); 
+        //change status of the assign book
+        $('.book-status').on('change', function(){
+          var token =$("meta[name='csrf-token']").attr("content");
+          var book_assigned_id = $(this).attr('id');
+          var status = $('#'+book_assigned_id +  ' option:selected').val();
+          values= {
+            "book_id": book_assigned_id,
+            "status": status,
+            "_token": token
+          }
+          $.ajax({
+              type: "POST",
+              url: "/deschool/assign-status",
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
+              setTimeout(function(){
+              location.reload();
+              }, 6000);
+            }else if(result.failure=='danger'){
+                $(".book").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
+              setTimeout(function(){
+              location.reload();
+              }, 6000);                  
+            }
+          });
+        });
 
-      $('#dataTableStaffRegister').DataTable();
-      
-      $('#dataTableStudent').DataTable();
+        //submit book condition
+        $('.book-condition').on('click', function(){
 
-      $('#dataTableStudentRegister').DataTable();
+          var token =$("meta[name='csrf-token']").attr("content");
+          var assign_id = $(this).find('input').attr('id');
+          var condition_id = $(this).find('span').attr('id');
+          var assign_id = $(this).find('input').attr('id');
+          $('#'+condition_id).css('display','none');
+          $('#'+assign_id).css('display','block');
+          $('#'+assign_id).on('keypress', function(event){
+            if (event.key === "Enter") {
+              var book_condition = $('#'+assign_id).val();
+              var book_assigned_id = assign_id.split("-",);
+              book_assigned_id  = book_assigned_id[1];
+              //var book_name = $('#name-'+book_assigned_id).text();
+              values= {
+                "book_id": book_assigned_id,
+                "book_condition": book_condition,
+                //"book_name" : book_name,
+                "_token": token
+              }
+              $.ajax({
+                  type: "POST",
+                  url: "/deschool/book-condition",
+                  data: values,
+              }).done(function(result){
+                if (result.success=='success'){
+                  $('#'+condition_id).css('display','block');
+                  $('#'+assign_id).css('display','none');                  
+                  setTimeout(function(){
+                  location.reload();
+                  }, 6000);
+                }else if(result.failure=='danger'){
+                    $(".book").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
+                  setTimeout(function(){
+                  location.reload();
+                  }, 6000);                  
+                }
+              });
+            }
+          });
+        });
 
-      $('#staffEmail').multiselect({
-        enableHTML: true
-      });
-   }); 
+
+        // toggle assign book 
+        $('#classStatusToggle').click(function(){
+          $('#class-status-body').toggle();
+        }); 
+
+        //onchange of class to select student
+        $('#class-name').on('change', function(){
+          $("#student-name").empty().append('<option value="">Select-Student-Name</option>');
+          var token =$("meta[name='csrf-token']").attr("content");
+          var class_id = $('#class-name option:selected').val();;
+          values= {
+            "class_id": class_id,
+            "_token": token
+          }
+          $.ajax({
+              type: "POST",
+              url: "/deschool/change-class",
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
+                 $("#student-name").append(result.options);
+            }else if(result.failure=='danger'){
+                $(".class-status-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
+              setTimeout(function(){
+              location.reload();
+              }, 6000);                  
+            }
+          });
+        });
+
+        //onchange of class to select student
+        $('#present-class').on('change', function(){
+          $(".promotion").empty();
+          $("#student").empty().append('<option value="">Select-Student-Name</option>');
+          var token =$("meta[name='csrf-token']").attr("content");
+          var class_id = $('#present-class option:selected').val();;
+          values= {
+            "class_id": class_id,
+            "_token": token
+          }
+          $.ajax({
+              type: "POST",
+              url: "/deschool/change-class",
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
+                 $("#student").append(result.options);
+            }else if(result.failure=='danger'){
+                $(".promotion").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
+              setTimeout(function(){
+              location.reload();
+              }, 6000);                  
+            }
+          });
+        });        
+
+        $('#saveStatus').on('click', function(){
+          $('.help-block').remove(); 
+          $('.student-name-group').removeClass('text-danger');
+          $('.class-name-group').removeClass('text-danger');       
+          $('.term-name-group').removeClass('text-danger');
+          $('.year-group').removeClass('text-danger');                
+            var token =$("meta[name='csrf-token']").attr("content");
+            var student = $('#student-name option:selected').val();
+            var student_name = $('#student-name option:selected').text();
+            var class_id = $('#class-name option:selected').val();
+            var class_name = $('#class-name option:selected').text();
+            var term = $('#term-name option:selected').val();
+            var term_name = $('#term-name option:selected').text()
+            var year= $('#year').val();
+          var values = {
+            "student" : student,
+            "student_name" : student_name,
+            "class" : class_id,
+            "class_name" : class_name,
+            "term" : term,
+            "term_name" : term_name,   
+            "year" : year,
+            "_token": token,
+          }
+              
+          $.ajax({
+              type: "POST",
+              url: "/deschool/class-status",
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
+              $("#class-status-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+              setTimeout(function(){
+              location.reload();
+              }, 6000);
+            }else if(result.class=='danger'){
+                $(".class-name-group").addClass('text-danger');
+                $('.class-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.student=='danger'){
+              $(".student-name-group").addClass('text-danger');
+              $('.student-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.term=='danger'){
+              $(".term-name-group").addClass('text-danger');
+              $('.term-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.year=='danger'){
+                $(".year-group").addClass('text-danger');
+                $('.year-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.failure=='danger'){
+              $("#class-status-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
+              setTimeout(function(){
+              location.reload();
+              }, 6000);               
+            }
+          });
+        });     
+
+
+        $('#promoteStudent').on('click', function(){
+          $('.help-block').remove(); 
+          $('.student-group').removeClass('text-danger');
+          $('.present-group').removeClass('text-danger');       
+          $('.promote-group').removeClass('text-danger');                
+            var token =$("meta[name='csrf-token']").attr("content");
+            var student = $('#student option:selected').val();
+            var student_name = $('#student option:selected').text();
+            var class_present_id = $('#present-class option:selected').val();
+            var class_present_name = $('#present-class option:selected').text();
+            var class_promotion_id = $('#promote-class option:selected').val();
+            var class_promotion_name = $('#promote-class option:selected').text();
+          var values = {
+            "student" : student,
+            "student_name" : student_name,
+            "class_present_id" : class_present_id,
+            "class_present_name" : class_present_name,
+            "class_promotion_id" : class_promotion_id,
+            "class_promotion_name" : class_promotion_name,
+            "_token": token,
+          }
+              
+          $.ajax({
+              type: "POST",
+              url: "/deschool/student-promotion",
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
+              $(".promotion").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+              setTimeout(function(){
+              location.reload();
+              }, 6000);
+            }else if(result.class_present=='danger'){
+                $(".present-group").addClass('text-danger');
+                $('.present-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.student=='danger'){
+              $(".student-group").addClass('text-danger');
+              $('.student-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.class_promotion=='danger'){
+              $(".promote-group").addClass('text-danger');
+              $('.promote-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.failure=='danger'){
+              $(".promotion").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
+              setTimeout(function(){
+              location.reload();
+              }, 6000);               
+            }
+          });
+        });                
+
+        // toggle result estimator
+        $('#resultEstimatorToggle').click(function(){
+          $('#result-estimator-body').toggle();
+        });     
+        
+        $('#add-estimator').on('click', function(){
+          $('.help-block').remove(); 
+          $('.estimator-group').removeClass('text-danger');
+          $('.value-group').removeClass('text-danger');   
+            var token =$("meta[name='csrf-token']").attr("content");
+            var estimator_value = $('#estimator-value').val();
+            var estimator_type = $('#estimator-type option:selected').val();
+            var estimator_name = $('#estimator-type option:selected').text();
+            var values = {
+              "estimator_type" : estimator_type,
+              "estimator_name" : estimator_name,
+              "estimator_value" : estimator_value,
+              "_token": token,
+            }
+            
+          $.ajax({
+              type: "POST",
+              url: "/deschool/result-estimator",
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
+              $("#result-estimator-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+              setTimeout(function(){
+              location.reload();
+              }, 6000);
+            }else if(result.estimator=='danger'){
+              $(".estimator-group").addClass('text-danger');
+              $('.estimator-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.value=='danger'){
+                $(".value-group").addClass('text-danger');
+                $('.value-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.failure=='danger'){
+              $("#result-estimator-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
+              setTimeout(function(){
+              location.reload();
+              }, 6000);               
+            }
+          });
+        });  
+        
+        // toggle sales order
+        $('#recordSalesToggle').click(function(){
+          $('#record-sales-body').toggle();
+        });     
+        
+        $('#record-sales').on('click', function(){
+          $('.help-block').remove(); 
+          $('.student-group').removeClass('text-danger');
+          $('.stationary-group').removeClass('text-danger'); 
+          $('.quantity-group').removeClass('text-danger');
+          $('.transaction-group').removeClass('text-danger');            
+            var token =$("meta[name='csrf-token']").attr("content");
+            var student = $('#student option:selected').val();
+            var student_name = $('#student option:selected').text();
+            var stationary = $('#stationary option:selected').val();
+            var stationary_name = $('#stationary option:selected').text();
+            var transaction = $('#transaction-type option:selected').val();
+            var transaction_name = $('#transaction-type option:selected').text();            
+            var quantity = $('#quantity').val();
+            var values = {
+              "student" : student,
+              "student_name" : student_name,
+              "stationary" : stationary,
+              "stationary_name" : stationary_name,
+              "transaction" : transaction,
+              "transaction_name" : transaction_name,                            
+              "quantity" : quantity,
+              "_token": token,
+            }
+            
+          $.ajax({
+              type: "POST",
+              url: "/deschool/record-sales",
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
+              $("#record-sales-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+              setTimeout(function(){
+              location.reload();
+              }, 6000);
+            }else if(result.student=='danger'){
+              $(".student-group").addClass('text-danger');
+              $('.student-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.stationary=='danger'){
+                $(".stationary-group").addClass('text-danger');
+                $('.stationary-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.quantity=='danger'){
+              $(".quantity-group").addClass('text-danger');
+              $('.quantity-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.transaction=='danger'){
+                $(".transaction-group").addClass('text-danger');
+                $('.transaction-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.failure=='danger'){
+              $("#record-sales-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
+              setTimeout(function(){
+              location.reload();
+              }, 6000);               
+            }
+          });
+        });          
+            
+        $('#dataTableStaff').DataTable(); 
+
+        $('#dataTableTeacher').DataTable();
+        
+        $('#dataTableParent').DataTable(); 
+
+        $('#dataTableStaffRegister').DataTable();
+        
+        $('#dataTableStudent').DataTable();
+
+        $('#dataTableStudentRegister').DataTable();
+
+        $('#dataTableSelectSubject').DataTable(); 
+
+        $('#dataTableAssignSubject').DataTable(); 
+
+        $('#dataTableStationary').DataTable(); 
+
+        $('#dataTableAssignBook').DataTable();      
+
+        $('#dataTableResultEstimator').DataTable();    
+        
+        $('#dataTableRecordSales').DataTable();   
+
+        $('#staffEmail').multiselect({
+          enableHTML: true
+        });  
+           
+      }); 
      
    
   </script>
@@ -937,7 +1569,7 @@
               @if(Auth::user()->isAdmin())
                 <a class="collapse-item" href="/deschool/info-settings">Information Update</a>
                 <a class="collapse-item" href="/deschool/profile">Profile</a>                   
-                <a class="collapse-item" href="/deschool/priv-settings">Privilege</a>            
+                <a class="collapse-item" href="/deschool/setting-privilege">Setting Privilege</a>            
                 <a class="collapse-item" href="/deschool/send-memo">Send Memo</a>
              @elseif(Auth::user()->isMember())
               <a class="collapse-item" href="/deschool/profile">Profile</a> 
@@ -991,6 +1623,7 @@
             <a class="collapse-item" href="/deschool/teacher">Teacher Register</a>
             @elseif(Auth::user()->isAdmin())
             <a class="collapse-item" href="/deschool/teacher"> Add Teacher</a>
+            <a class="collapse-item" href="/deschool/assign-subject">Assign Subject</a>
             <div class="collapse-divider"></div>
             <!--<h6 class="collapse-header">Others:</h6>-->
             @endif    
@@ -1039,31 +1672,16 @@
             <h6 class="collapse-header">Students:</h6>
             <a class="collapse-item" href="/deschool/add-student"> Add New Student</a>
             <a class="collapse-item" href="/deschool/view-students">View Students Table</a>
-            <a class="collapse-item" href="/deschool/students-register"> Students Register</a>                                          
+            <a class="collapse-item" href="/deschool/select-subject">Select Subject</a> 
+            <a class="collapse-item" href="/deschool/students-register"> Students Register</a>
+            <a class="collapse-item" href="/deschool/promotion"> Student Promotion</a>
+            <div class="collapse-divider"></div>
+            <h6 class="collapse-header">Class Setup:</h6> 
+            <a class="collapse-item" href="/deschool/class-setup">Class Setup</a>    
+            <a class="collapse-item" href="/deschool/class-status">Student Class Status</a>                    
           </div>
         </div>
       </li> 
-      <!-- Divider -->  
-      <hr class="sidebar-divider">
-
-      <!-- Heading -->
-      <div class="sidebar-heading">
-        Addons
-      </div>      
-      <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collpaseSubject" aria-expanded="true" aria-controls="collapsePages">
-          <i class="fas fa-fw fa-users text-gray-400"></i>
-          <span>Subject</span>
-        </a>
-        <div id="collpaseSubject" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Subject:</h6>
-            <a class="collapse-item" href="/deschool/add-subject"> Add Subject</a>
-            <a class="collapse-item" href="/deschool/select-subject">Select Subject</a> 
-          </div>
-        </div>
-      </li>
       <!-- Divider -->  
       <hr class="sidebar-divider">
 
@@ -1080,9 +1698,9 @@
         <div id="collpaseResult" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Result Aggregator:</h6>
-            <a class="collapse-item" href="/deschool/add-student"> Aggregate Result</a>
-            <a class="collapse-item" href="/deschool/view-students">Result Table</a>  
-            <a class="collapse-item" href="/deschool/view-students">Check Result</a>                       
+            <a class="collapse-item" href="/deschool/result-aggregator">Result Aggregator</a>
+            <a class="collapse-item" href="/deschool/result-estimator">Result Estimator</a>   
+            <a class="collapse-item" href="/deschool/view-students">Result Table</a>                        
           </div>
         </div>
       </li> 
@@ -1117,124 +1735,40 @@
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collpaseLibrary" aria-expanded="true" aria-controls="collapsePages">
-          <i class="fas fa-fw fa-users text-gray-400"></i>
+          <i class="fa fa-book text-gray-400"></i>
           <span>Library</span>
         </a>
         <div id="collpaseLibrary" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Library:</h6>
-            <a class="collapse-item" href="404.html">Books</a>            
-            <a class="collapse-item" href="404.html">Assign Book</a>
-            <a class="collapse-item" href="blank.html">Book Assign To Students</a>              
+            <h6 class="collapse-header">Library:</h6>           
+            <a class="collapse-item" href="assign-book">Assign Book</a>            
           </div>
         </div>
-      </li>       
-      <!-- Divider -->
-      <!--<hr class="sidebar-divider">-->
-
-      <!-- Heading -->
-      <!--<div class="sidebar-heading">
-        Addons
-      </div> -->   
-      <!-- Nav Item - Pages Collapse Menu -->
-      <!--<li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePayment" aria-expanded="true" aria-controls="collapseTwo">
-          <i class="fas fa-fw fa-credit-card text-gray-400"></i>
-          <span>Make Payment</span>
-        </a>
-        <div id="collapsePayment" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Make Payment:</h6>
-            <a class="collapse-item" href="buttons.html"> School Fees</a>
-            <a class="collapse-item" href="cards.html">School Bus</a>
-            <a class="collapse-item" href="cards.html">Stationaries</a>
-            <a class="collapse-item" href="cards.html">Party And Excusion</a>
-            <a class="collapse-item" href="cards.html">View Payment Table</a>            
-          </div>
-        </div>
-      </li>-->
-      <!-- Divider -->
+      </li> 
+      <!-- Divider -->  
       <hr class="sidebar-divider">
 
       <!-- Heading -->
       <div class="sidebar-heading">
         Addons
-      </div>
+      </div>      
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSubject" aria-expanded="true" aria-controls="collapseTwo">
-          <i class="fas fa-fw fa-book text-gray-400"></i>
-          <span>General Settings</span>
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collpaseStationeries" aria-expanded="true" aria-controls="collapsePages">
+          <i class="fa fa-book text-gray-400"></i>
+          <span>Stationeries</span>
         </a>
-        <div id="collapseSubject" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collpaseStationeries" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">General Settings:</h6>
-            <a class="collapse-item" href="/deschool/general-settings">General Settings</a>
-            <a class="collapse-item" href="/deschool/assign-subject">Assign Subject</a>            
+            <h6 class="collapse-header"> Stationeries:</h6>
+            <a class="collapse-item" href="/deschool/stationeries"> Stationeries </a>            
+            <a class="collapse-item" href="/deschool/record-sales">Record Sales</a>             
           </div>
         </div>
-      </li>
-      <!-- Divider -->
-      <!--<hr class="sidebar-divider">-->
-
-      <!-- Heading -->
-      <!--<div class="sidebar-heading">
-        Addons
-      </div>-->      
-      <!-- Nav Item - Pages Collapse Menu -->
-      <!--<li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLibrary" aria-expanded="true" aria-controls="collapseTwo">
-          <i class="fas fa-fw fa-building text-gray-400"></i>
-          <span>Library</span>
-        </a>
-        <div id="collapseLibrary" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Library:</h6>
-            <a class="collapse-item" href="buttons.html">Add New books</a>
-            <a class="collapse-item" href="cards.html">View Books</a>
-            <a class="collapse-item" href="cards.html"> Assign Book</a>            
-          </div>
-        </div>
-      </li>-->
-      <!-- Divider -->
-      <!-- <hr class="sidebar-divider">-->
-
-      <!-- Heading -->
-      <!--<div class="sidebar-heading">
-        Addons
-      </div>-->     
-      <!-- Nav Item - Pages Collapse Menu -->
-      <!--<li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseKitchen" aria-expanded="true" aria-controls="collapseTwo">
-          <i class="fas fa-fw fa-briefcase text-gray-400"></i>
-          <span>Others</span>
-        </a>
-        <div id="collapseKitchen" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Kitchen:</h6>
-            <a class="collapse-item" href="buttons.html">Add Material</a>
-            <a class="collapse-item" href="cards.html">View Material</a>
-            <div class="collapse-divider"></div>
-            <h6 class="collapse-header">Other Equipment:</h6>
-            <a class="collapse-item" href="404.html">Add Equipment</a>
-            <a class="collapse-item" href="blank.html">View Equipment</a>         
-          </div>
-        </div>
-      </li>-->
+      </li>        
+      
     @endif    
-      <!-- Nav Item - Charts -->
-      <!--<li class="nav-item">
-        <a class="nav-link" href="charts.html">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>Charts</span></a>
-      </li>-->
 
-      <!-- Nav Item - Tables -->
-      <!--<li class="nav-item">
-        <a class="nav-link" href="tables.html">
-          <i class="fas fa-fw fa-table"></i>
-          <span>Tables</span></a>
-      </li>-->
       <li class="nav-item">
         <a class="nav-link" href="{{url('/deschool/logout')}}" onclick="event.preventDefault();
        document.getElementById('logout-form').submit()">

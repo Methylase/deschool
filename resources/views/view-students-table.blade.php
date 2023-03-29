@@ -46,9 +46,9 @@
                                    
                                   <tr>
                                     <td>{{$i}}</td>
-                                    <td>{{ucfirst($student->student_firstname).' '.ucfirst($student->student_lastname)}}</td>
-                                    <td>{{ucfirst($student->student_email)}}</td>
-                                    <td>{{ucfirst($student->student_gender)}}</td>
+                                    <td>{{ucfirst($student['student_firstname']).' '.ucfirst($student['student_lastname'])}}</td>
+                                    <td>{{ucfirst($student['student_email'])}}</td>
+                                    <td>{{ucfirst($student['student_gender'])}}</td>
                                         @if($information['parentGender']=='male')
                                           @php $parentFullname = 'Mr '.$information['parentNames'];
                                           @endphp
@@ -61,10 +61,10 @@
                                         @endif                                             
                                     <td>{{$information['className']}}</td>
                                     <td>{{$parentFullname}}</td>
-                                    <td>{{$student->student_phone}}</td>
+                                    <td>{{$student['student_phone']}}</td>
                                     <td>
-                                        <a href="/deschool/edit-student/{{$student->id}}" class="btn btn-sm btn-info" title="Edit"><span class="fa fa-edit"></span></a>                                         
-                                        <a href="" class="btn btn-sm btn-danger deleteStudent"  id='del {{$student->id}}' data-title="Delete" data-toggle="modal" data-target="#confirm-delete"><span class="fa fa-trash" title="Delete"></span></a>
+                                        <a href="/deschool/edit-student/{{$student['id']}}" class="btn btn-sm btn-info" title="Edit"><span class="fa fa-edit"></span></a>                                         
+                                        <a href="" class="btn btn-sm btn-danger deleteStudent"  id='del {{$student["id"]}}' data-title="Delete" data-toggle="modal" data-target="#confirm-delete"><span class="fa fa-trash" title="Delete"></span></a>
                                         
                                     </td>  
                                   </tr>

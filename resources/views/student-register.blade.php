@@ -11,12 +11,10 @@
         </div>
             <!-- Content Column -->
             <div class="col-lg-12 mb-4">
-
-        
               <!-- Approach -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-danger"> Register For The Time Student Clock In </h6>
+                  <h6 class="m-0 font-weight-bold"> Register For The Time Student Clock In </h6>
                   <div class="float-right text-danger " id="studentRegisterToggle"><i class="fas fa-plus" id="close"></i></div>
                 </div>
                 <div class="card-body" id="student-register-body">
@@ -29,7 +27,7 @@
                             <select class="form-control" id="studentName" name="studentName">
                               <option value="none">Select-Student-Name</option>
                               @foreach($studentInformation as $student)
-                                  <option value="{{$student->id}}">{{ucfirst($student->student_firstname).' '.ucfirst($student->student_lastname)}}</option>
+                                  <option value="{{$student['id']}}">{{$student['student_fullname']}}</option>
                               @endforeach                                    
                            </select>
                         </div>
@@ -58,7 +56,8 @@
                      <div class="card-body">
                         <div class="table-responsive">   
                          @if(isset($registerStudentInformation) && $registerStudentInformation !='')
-                            <h6 class="m-4 font-weight-bold text-danger">Table showing the list of students that clock in</h6>        
+                          <hr>
+                          <h6 class="m-4 font-weight-bold text-danger">Table showing the list of students that clock in</h6>        
                           <table class="table table-bordered  border-bottom-info" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                               <tr>

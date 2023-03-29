@@ -78,7 +78,7 @@
                         </form>
                         <hr>
                           <div class="table-responsive">
-                                          
+                          <div class="teacher-update"></div>              
                            @if(isset($teacherInformation) && $teacherInformation !='')
                               <h6 class="m-4  font-weight-bold">Edit Table For Teacher</h6>        
                             <table class="table table-bordered  border-bottom-info display" id="dataTableTeacher" width="100%" cellspacing="0">
@@ -94,54 +94,52 @@
                                 @php$i=1
                                 @endphp
                                 <tbody>
-                                 @foreach($teacherInformation as $teacher)
-                                    
-                                       <tr>
-                                          <td>{{$i}}</td>
-                                          <td id="staffId" val-id="{{$staff->id}}">
-                                            @foreach($staffs as $staff)
-                                              @if($staff->staff_firstname.' '.$staff->staff_lastname == $teacher['staffName'])
-                                               {{ucfirst($staff->staff_firstname).' '.ucfirst($staff->staff_lastname)}}
+                                 @foreach($teacherInformation as $teacher) 
+                                  <tr>
+                                    <td>{{$i}}</td>
+                                    <td id="staffId" val-id="{{$teacher['id']}}">
+                                      @foreach($staffs as $staff)
+                                        @if($staff->staff_firstname.' '.$staff->staff_lastname == $teacher['staffName'])
+                                          {{ucfirst($staff->staff_firstname).' '.ucfirst($staff->staff_lastname)}}
 
+                                        @endif   
+                                      @endforeach
+                                    </td>
+                                    <td>
+                                      <select class="form-control teacherRole"  name="classNameA">
+                                        <option value="none">Select-Class-Name</option>
+                                              @if($teacher['teacherRole'] == 'subjectteacher')
+                                                <option value="{{$teacher['teacherRole']}}" selected>Subject-Teacher</option>
+                                                <option value="classteacher">Class-Teacher</option>  
+                                              @elseif($teacher['teacherRole'] == 'subjectteacher,classteacher')
+                                                @php $teacherRole = explode(',',$teacher['teacherRole']);
+                                                @endphp
+                                                  <option value="{{$teacherRole[0]}}" selected>Subject-Teacher</option>
+                                                  <option value="{{$teacherRole[1]}}" selected>Class-Teacher</option>  
+                                              @elseif($teacher['teacherRole'] == 'classteacher')
+                                                <option value="subjectteacher">Subject-Teacher</option>                                                      
+                                                <option value="{{$teacher['teacherRole']}}" selected>Class-Teacher</option>                                                      
+                                              @endif   
+                                            
+                                        </select>                                           
+                                    </td>
+                                    <td>
+                                      <select class="form-control classNameA" id="classNameA" name="classNameA">
+                                        <option value="none">Select-Class-Name</option>
+                                            @foreach($classes as $class)
+                                              @if($class->class_name == $teacher['className'])
+                                                <option value="{{$class->id}}" selected>{{ucfirst($class->class_name)}}</option>
+                                              @else
+                                                <option value="{{$class->id}}">{{ucfirst($class->class_name)}}</option>
                                               @endif   
                                             @endforeach
-                                          </td>
-                                          <td>
-                                            <select class="form-control teacherRole"  name="classNameA">
-                                             <option value="none">Select-Class-Name</option>
-                                                    @if($teacher['teacherRole'] == 'subjectteacher')
-                                                      <option value="{{$teacher['teacherRole']}}" selected>Subject-Teacher</option>
-                                                      <option value="classteacher">Class-Teacher</option>  
-                                                    @elseif($teacher['teacherRole'] == 'subjectteacher,classteacher')
-                                                      @php $teacherRole = explode(',',$teacher['teacherRole']);
-                                                      @endphp
-                                                        <option value="{{$teacherRole[0]}}" selected>Subject-Teacher</option>
-                                                        <option value="{{$teacherRole[1]}}" selected>Class-Teacher</option>  
-                                                    @elseif($teacher['teacherRole'] == 'classteacher')
-                                                      <option value="subjectteacher">Subject-Teacher</option>                                                      
-                                                      <option value="{{$teacher['teacherRole']}}" selected>Class-Teacher</option>                                                      
-                                                    @endif   
-                                                 
-                                             </select>                                           
-                                          </td>
-                                          <td>
-                                            <select class="form-control classNameA" id="classNameA" name="classNameA">
-                                             <option value="none">Select-Class-Name</option>
-                                                  @foreach($classes as $class)
-                                                    @if($class->class_name == $teacher['className'])
-                                                      <option value="{{$class->id}}" selected>{{ucfirst($class->class_name)}}</option>
-                                                    @else
-                                                      <option value="{{$class->id}}">{{ucfirst($class->class_name)}}</option>
-                                                    @endif   
-                                                  @endforeach
-                                             </select>    
-                                          </td>
-                                          <td>
-                                             <a href=""  class="btn btn-sm btn-info updateTeacher" id="updat {{$teacher["id"]}}" data-title="Update" data-toggle="modal" data-target="#confirm-update" title="update"><span class="fa fa-save"></span></a>                                         
-                                             <a href="" class="btn btn-sm btn-danger deleteTeacher"  id="del {{$teacher["id"]}}" data-title="Delete" data-toggle="modal" data-target="#confirm-delete" title="delete"><span class="fa fa-trash" ></span></a>
-                                          </td>  
-                                       </tr>
-                                   
+                                        </select>    
+                                    </td>
+                                    <td>
+                                        <a href=""  class="btn btn-sm btn-info updateTeacher" id="updat {{$teacher["id"]}}" data-title="Update" data-toggle="modal" data-target="#confirm-update" title="update"><span class="fa fa-save"></span></a>                                         
+                                        <a href="" class="btn btn-sm btn-danger deleteTeacher"  id="del {{$teacher["id"]}}" data-title="Delete" data-toggle="modal" data-target="#confirm-delete" title="delete"><span class="fa fa-trash" ></span></a>
+                                    </td>  
+                                  </tr>
                                  @php$i++
                                  @endphp
                                  @endforeach

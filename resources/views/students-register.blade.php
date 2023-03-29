@@ -16,7 +16,7 @@
               <!-- Approach -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold"> Register For The Time Sudent Clock In </h6>
+                  <h6 class="m-0 font-weight-bold"> Register For The Time Student Clock In </h6>
                   <div class="float-right text-danger " id="studentRegisterToggle"><i class="fas fa-plus" id="close"></i></div>
                 </div>
                 <div class="card-body" id="student-register-body">
@@ -55,58 +55,60 @@
                       </div>
                     </div>  
                   </form>
-                  <hr>
-                     <div class="card-body">
-                        <div class="table-responsive">   
-                         @if(isset($registerStudentInformation) && $registerStudentInformation !='')
-                            <h6 class="m-4 font-weight-bold">Table showing the list of students that clock in</h6>        
-                          <table class="table table-bordered  border-bottom-info table-striped" id="dataTableStudentRegister" width="100%" cellspacing="0">
-                            <thead>
-                              <tr>
-                              <th>S/N</th>
-                                <th>Student Name</th>
-                                <th> Resumption Time</th>
-                                <th>Today's Date</th>
-                                 <th>
-                                   Status
-                                 </th>                               
-                              </tr>
-                            </thead>
-                              @php$i=1
-                              @endphp
-                              <tbody>
-                               @foreach($registerStudentInformation as $registerStudent)
-                                 
-                                <tr>
-                                  <td>{{$i}}</td>
-                                  <td>
-                                    {{$registerStudent['studentName']}}
-                                  </td>
-                                  <td>
-                                    {{$registerStudent['registerTime']}}                   
-                                  </td>
-                                  <td>
-                                    {{date('D d F  Y',strtotime($registerStudent['registerDate']))}}
-                                  </td>
+                  <div class="card-body">
+                    <div class="table-responsive">   
+                      @if(isset($registerStudentInformation) && $registerStudentInformation !='')
+                      <hr>
+                      <h6 class="m-4 font-weight-bold">Table showing the list of students that clock in</h6>        
+                      <table class="table table-bordered  border-bottom-info table-striped" id="dataTableStudentRegister" width="100%" cellspacing="0">
+                        <thead>
+                          <tr>
+                          <th>S/N</th>
+                            <th>Student Name</th>
+                            <th>Class</th>
+                            <th> Resumption Time</th>
+                            <th>Today's Date</th>
+                              <th>
+                                Status
+                              </th>                               
+                          </tr>
+                        </thead>
+                          @php$i=1
+                          @endphp
+                          <tbody>
+                            @foreach($registerStudentInformation as $registerStudent)
+                              
+                            <tr>
+                              <td>{{$i}}</td>
+                              <td>
+                                {{$registerStudent['studentName']}}
+                              </td>
+                              <td>{{$registerStudent['class']}}</td>
+                              <td>
+                                {{$registerStudent['registerTime']}}                   
+                              </td>
+                              <td>
+                                {{date('D d F  Y',strtotime($registerStudent['registerDate']))}}
+                              </td>
 
-                                    <td>
-                                    @if(isset($registerStudent['resumptionStatus']) && $registerStudent['resumptionStatus'] == 'on-time')
-                                        <span class="btn btn-success btn-sm col-sm-8 col-xs-12">{{ucfirst($registerStudent['resumptionStatus'])}}</span>
-                                    @elseif(isset($registerStudent['resumptionStatus']) && $registerStudent['resumptionStatus'] == 'late')
-                                    <span class="btn btn-danger btn-sm col-sm-8 col-xs-12">{{ucfirst($registerStudent['resumptionStatus'])}}</span>
-                                    @endif
-                                    </td>
-                                </tr>
-                            
-                               @php$i++
-                               @endphp
-                               @endforeach
-                            </tbody>  
-                          </table>
+                                <td>
+                                @if(isset($registerStudent['resumptionStatus']) && $registerStudent['resumptionStatus'] == 'on-time')
+                                    <span class="btn btn-success btn-sm col-sm-8 col-xs-12">{{ucfirst($registerStudent['resumptionStatus'])}}</span>
+                                @elseif(isset($registerStudent['resumptionStatus']) && $registerStudent['resumptionStatus'] == 'late')
+                                <span class="btn btn-danger btn-sm col-sm-8 col-xs-12">{{ucfirst($registerStudent['resumptionStatus'])}}</span>
+                                @endif
+                                </td>
+                            </tr>
+                        
+                            @php$i++
+                            @endphp
+                            @endforeach
+                        </tbody>  
+                      </table>
 
-                           @endif
-                        </div>
-                     </div>
+                        @endif
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

@@ -56,6 +56,8 @@ Route::put('/deschool/update-staff', 'CoroxController@registerUpdateStaff');
 
 Route::post('/deschool/privilege', 'CoroxController@registerPrivilege');
 
+Route::post('/deschool/academic_session', 'CoroxController@registerAcademicSession');
+
 Route::post('/deschool/Enable/settings-information', 'CoroxController@registerPrivilegeEnableSettings');
 
 Route::post('/deschool/add-subject', 'CoroxController@registerAddSubject');
@@ -95,6 +97,10 @@ Route::group(['middleware'=>['protectAdmin','auth']], function(){
     
     Route::get('/deschool/send-memo', 'CoroxController@getSendMemo')->name('send-memo')->middleware('protectAdmin');
 
+    Route::get('/deschool/select-subject', 'CoroxController@registerSelectSubject')->name('select-subject')->middleware('protectAdmin');   
+
+    Route::post('/deschool/select-subject', 'CoroxController@registerSelectSubject');    
+
     Route::get('/deschool/info-settings', 'CoroxController@registerInfoSettings')->name('info-settings')->middleware('protectAdmin');
    
     Route::get('/deschool/add-staff', 'CoroxController@registerStaff')->name('add-staff')->middleware('protectAdmin');
@@ -102,18 +108,45 @@ Route::group(['middleware'=>['protectAdmin','auth']], function(){
     Route::get('/add','CoroxController@add_it')->name('add_it')->middleware('protectAdmin');
     
     Route::get('/deschool/edit-staff/{id}', 'CoroxController@registerEditStaff')->name('edit-staff')->middleware('protectAdmin');
+   
+    Route::get('/deschool/view-staffs', 'CoroxController@registerViewStaffs')->name('view-staffs')->middleware('protectAdmin');    
     
+    Route::get('/deschool/stationeries', 'CoroxController@registerStationeries')->name('stationeries')->middleware('protectAdmin');
+
+    Route::post('/deschool/stationeries', 'CoroxController@registerStationeries');   
+
+    Route::get('/deschool/assign-book', 'CoroxController@registerAssignBook')->name('assign-book')->middleware('protectAdmin');    
+
+    Route::post('/deschool/assign-book', 'CoroxController@registerAssignBook');  
+
+    Route::post('/deschool/assign-status', 'CoroxController@registerAssignStatus');   
     
-    Route::get('/deschool/view-staffs', 'CoroxController@registerViewStaffs' )->name('view-staffs')->middleware('protectAdmin');
+    Route::post('/deschool/book-condition', 'CoroxController@registerBookCondition');    
+    
+    Route::get('/deschool/result-aggregator', 'CoroxController@registerResultAggregator')->name('result-aggregator')->middleware('protectAdmin');    
+
+    Route::post('/deschool/result-aggregator', 'CoroxController@registerResultAggregator'); 
+
+    Route::get('/deschool/result-estimator', 'CoroxController@registerResultEstimator')->name('result-estimator')->middleware('protectAdmin');        
+
+    Route::post('/deschool/result-estimator', 'CoroxController@registerResultEstimator');
+
+    Route::post('/deschool/change-class', 'CoroxController@registerChangeClass');   
    
     Route::get('/deschool/view-staff/{id}', 'CoroxController@registerViewStaff')->name('view-staff')->middleware('protectAdmin');
    
-    Route::get('/deschool/priv-settings', 'CoroxController@registerPrivilegeSettings' )->middleware('protectAdmin');
+    Route::get('/deschool/setting-privilege', 'CoroxController@registerPrivilegeSettings' )->name('setting-privilege')->middleware('protectAdmin');
     
-    Route::get('/deschool/general-settings', 'CoroxController@registerGeneralSettings')->name('general-settings')->middleware('protectAdmin');
+    Route::get('/deschool/class-setup', 'CoroxController@registerClassSetup')->name('class-setup')->middleware('protectAdmin');
+
+    Route::get('/deschool/class-status', 'CoroxController@registerClassStatus')->name('class-status')->middleware('protectAdmin');    
     
     Route::get('/deschool/assign-subject', 'CoroxController@registerAssignSubject')->name('assign-subject')->middleware('protectAdmin');
-   
+
+    Route::post('/deschool/assign-subject', 'CoroxController@registerAssignSubject');   
+
+    Route::post('/deschool/class-status', 'CoroxController@registerClassStatus');
+
     Route::get('/deschool/teacher', 'CoroxController@registerTeacher')->name('teacher')->middleware('protectAdmin');
     
     Route::delete('/deschool/delete-teacher/{id}', 'CoroxController@registerDeleteTeacher')->middleware('protectAdmin');
@@ -128,6 +161,11 @@ Route::group(['middleware'=>['protectAdmin','auth']], function(){
     
     Route::get('/deschool/view-parents', 'CoroxController@registerViewParents')->name('view-parents')->middleware('protectAdmin');    
 
+    Route::get('/deschool/record-sales', 'CoroxController@registerRecordSales')->name('record-sales')->middleware('protectAdmin');     
+    
+    Route::post('/deschool/record-sales', 'CoroxController@registerRecordSales');
+    
+    Route::post('/deschool/student-promotion', 'CoroxController@registerStudentPromotion');     
 });    
 
 

@@ -49,6 +49,8 @@ class Handler extends ExceptionHandler
 
                     return redirect()->guest(route('login'));
            }
+
+          //return redirect()->guest(route('login'));
            //return redirect()->guest('/Dregister/');
           return parent::render($request, $exception);
     }
