@@ -47,7 +47,7 @@
                                   <tr>
                                     <td>{{$i}}</td>
                                     <td>{{ucfirst($student['student_firstname']).' '.ucfirst($student['student_lastname'])}}</td>
-                                    <td>{{ucfirst($student['student_email'])}}</td>
+                                    <td>{{$student['student_email']}}</td>
                                     <td>{{ucfirst($student['student_gender'])}}</td>
                                         @if($information['parentGender']=='male')
                                           @php $parentFullname = 'Mr '.$information['parentNames'];
@@ -74,16 +74,6 @@
                                  @endforeach
                               </tbody>   
                             </table>
-                            @else
-                                <div class='offset-md-1 col-md-10 offset-sm-1 col-sm-10 text-center'>
-                                  <td></td>
-                                  <td></td>
-                                  <td></td>
-                                  <td></td>
-                                  <td></td>
-                                  <td></td>
-                                  <td></td>
-                                </div>
                              @endif
                              <!-- modal for delete staff -->
                               <div class="modal col-md-10 offset-md-2  col-sm-10 offset-sm-2 " id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">                  

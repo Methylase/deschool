@@ -46,7 +46,7 @@
                                        <tr>
                                           <td>{{$i}}</td>
                                           <td>{{ucfirst($staff->staff_firstname).' '.ucfirst($staff->staff_lastname)}}</td>
-                                          <td>{{ucfirst($staff->staff_email)}}</td>
+                                          <td>{{$staff->staff_email}}</td>
                                           <td>{{ucfirst($staff->staff_gender)}}</td>
                                           <td>{{ucfirst($staff->staff_marital_status)}}</td>
                                           <td>{{$staff->staff_phone}}</td>
@@ -60,16 +60,6 @@
                                  @php$i++
                                  @endphp
                                  @endforeach
-                             @else
-                                <tr>
-                                  <td></td>
-                                  <td></td>
-                                  <td></td>
-                                  <td></td>
-                                  <td></td>
-                                  <td></td>
-                                  <td></td>
-                                </tr>
                              @endif
                              </tbody>
                              </table>

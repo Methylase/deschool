@@ -45,7 +45,9 @@ use Deschool\Models\RegisterResultEstimator;
 use Deschool\Models\RegisterSalesRecord;
 use Deschool\Models\RegisterClassRegisterStatus;
 use Deschool\Models\RegisterStudentClassStatus;
+use Deschool\Models\RegisterResultAggregator;
 use Deschool\Models\Role;
+use Deschool\Models\RegisterTransaction;
 use Deschool\Models\Permit;
 
 use Validator;
@@ -1273,82 +1275,93 @@ class CoroxController extends Controller
           }
           //create class for register ajax
           public function registerAddClass(Request $request){
-            $userId=Auth::user()->id;
-            if($request->input('class') == ''){
-              return response()->json(['class'=>'danger','message'=>'Class name is required']);
-            }elseif($request->input('date') ==''){
-              return response()->json(['date'=>'danger','message'=>'Date created is required']);
-            }else{
-              $class = protectData($request->input('class'));
-              $date = protectData($request->input('date'));
-              $userCheck= RegisterClasses::where('class_name',$class)->first();
-              if($userCheck !=null){
-                return response()->json(['failure'=>'danger','message'=> ucfirst($class).' has already been created']);
+            if($_SERVER['REQUEST_METHOD'] =='POST'){
+              $userId=Auth::user()->id;
+              if($request->input('class') == ''){
+                return response()->json(['class'=>'danger','message'=>'Class name is required']);
+              }elseif($request->input('date') ==''){
+                return response()->json(['date'=>'danger','message'=>'Date created is required']);
               }else{
-                $class_result= new RegisterClasses;
-                $classs_result->class_name=$class;
-                $class_result->corox_model_id = $userId;
-                $class_result->class_date= $date;
-                if($classes->save()){
-                  return response()->json(['success'=>'success','message'=>'You have successfully created '.$request->class.' class']);      
+                $class = protectData($request->input('class'));
+                $date = protectData($request->input('date'));
+                $userCheck= RegisterClasses::where('class_name',$class)->first();
+                if($userCheck){
+                  return response()->json(['failure'=>'danger','message'=> ucfirst($class).' has already been created']);
                 }else{
-                  return response()->json(['failure'=>'danger','message'=> $request->class.' class not created, contact the administrator']);     
-                }                                                
-              }
-            }            
+                  $class_result= new RegisterClasses;
+                  $class_result->class_name=$class;
+                  $class_result->corox_model_id = $userId;
+                  $class_result->class_date= $date;
+                  if($class_result->save()){
+                    return response()->json(['success'=>'success','message'=>'You have successfully created '.$request->class.' class']);      
+                  }else{
+                    return response()->json(['failure'=>'danger','message'=> $request->class.' class not created, contact the administrator']);     
+                  }                                                
+                }
+              } 
+            }else{
+              return redirect()->route('class-setup');
+            }           
           }
           // create subject for register ajax
           public function registerAddSubject(Request $request){
-            $userId=Auth::user()->id;
-            if($request->input('subject') == ''){
-              return response()->json(['subject'=>'danger','message'=>'Subject name is required']);
-            }elseif($request->input('date') ==''){
-              return response()->json(['date'=>'danger','message'=>'Date created is required']);
-            }else{
-              $subject = protectData($request->input('subject'));
-              $date = protectData($request->input('date'));
-              $userCheck= RegisterSubject::where('subject_name',$subject)->first();
-              if($userCheck !=null){
-                return response()->json(['failure'=>'danger','message'=> ucfirst($subject).' has already been created']);
+            if($_SERVER['REQUEST_METHOD'] =='POST'){
+              $userId=Auth::user()->id;
+              if($request->input('subject') ==''){
+                return response()->json(['subject'=>'danger','message'=>'Subject name is required']);
+              }elseif($request->input('date') ==''){
+                return response()->json(['date'=>'danger','message'=>'Date created is required']);
               }else{
-                $subject_result= new RegisterSubject;
-                $subject_result->subject_name=$subject;
-                $subject_result->corox_model_id = $userId;
-                $subject_result->subject_date= $date;
-                if($subject_result->save()){
-                  return response()->json(['success'=>'success','message'=>'You have successfully created '.$request->subject.' subject']);      
+                $subject = protectData($request->input('subject'));
+                $date = protectData($request->input('date'));
+                $userCheck= RegisterSubject::where('subject_name',$subject)->first();
+                if($userCheck){
+                  return response()->json(['failure'=>'danger','message'=> ucfirst($subject).' has already been created']);
                 }else{
-                  return response()->json(['failure'=>'danger','message'=> $request->subject.' subject not created, contact the administrator']);     
-                }                                                
-              }                    
+                  $subject_result= new RegisterSubject;
+                  $subject_result->subject_name=$subject;
+                  $subject_result->corox_model_id = $userId;
+                  $subject_result->subject_date= $date;
+                  if($subject_result->save()){
+                    return response()->json(['success'=>'success','message'=>'You have successfully created '.$request->subject.' subject']);      
+                  }else{
+                    return response()->json(['failure'=>'danger','message'=> $request->subject.' subject not created, contact the administrator']);     
+                  }                                                
+                }                    
 
+              }
+            }else{
+              return redirect()->route('class-setup');
             }
           }
           // create period for register ajax
           public function registerAddPeriod(Request $request){
-            $userId=Auth::user()->id;
-            if($request->input('period') == ''){
-              return response()->json(['period'=>'danger','message'=>'Period name is required']);
-            }elseif($request->input('date') ==''){
-              return response()->json(['date'=>'danger','message'=>'Date created is required']);
-            }else{
-              $period = protectData($request->input('period'));
-              $date = protectData($request->input('date'));
-              $userCheck= RegisterPeriod::where('period_name',$period)->first();
-              if($userCheck !=null){
-                return response()->json(['failure'=>'danger','message'=> ucfirst($period).' has already been created']);
+            if($_SERVER['REQUEST_METHOD'] =='POST'){
+              $userId=Auth::user()->id;
+              if($request->input('period') == ''){
+                return response()->json(['period'=>'danger','message'=>'Period name is required']);
+              }elseif($request->input('date') ==''){
+                return response()->json(['date'=>'danger','message'=>'Date created is required']);
               }else{
-                $period_result= new RegisterPeriod;
-                $period_result->period_name=$period;
-                $period_result->corox_model_id = $userId;
-                $period_result->period_date= $date;
-                if($period_result->save()){
-                  return response()->json(['success'=>'success','message'=>'You have successfully created '.$request->period.' period']);      
+                $period = protectData($request->input('period'));
+                $date = protectData($request->input('date'));
+                $userCheck= RegisterPeriod::where('period_name',$period)->first();
+                if($userCheck){
+                  return response()->json(['failure'=>'danger','message'=> ucfirst($period).' has already been created']);
                 }else{
-                  return response()->json(['failure'=>'danger','message'=> $request->period.' period not created, contact the administrator']);     
-                }                                                
-              }                    
-
+                  $period_result= new RegisterPeriod;
+                  $period_result->period_name=$period;
+                  $period_result->corox_model_id = $userId;
+                  $period_result->period_date= $date;
+                  if($period_result->save()){
+                    return response()->json(['success'=>'success','message'=>'You have successfully created '.$request->period.' period']);      
+                  }else{
+                    return response()->json(['failure'=>'danger','message'=> $request->period.' period not created, contact the administrator']);     
+                  }                                                
+                }                   
+              }
+            }else{
+              return redirect()->route('class-setup');
             }
           }
           // show page to assign subject
@@ -2655,6 +2668,16 @@ class CoroxController extends Controller
                 $class_name = protectData($request->input('class_name'));                
                 $student_name = protectData($request->input('student_name'));
                 $subject_name= protectData($request->input('subject_name'));
+                if($request->input('condition')=='on'){
+                  if($request->input('department') ==''){
+                    return response()->json(['department'=>'danger','message'=>'Select student department']);
+                  }else{
+                    $department = protectData($request->input('department'));
+                  }
+                  
+                }else{
+                  $department = protectData($request->input('department'));
+                }                
                 $student_result = RegisterStudentClassStatus::where('student_id',$student)->where('class_id',$class)->where('status','present')->first();
                 //$class_result = RegisterClassRegisterStatus::where('student_id',$student)->where('class_id',$class)->first();
                 $student_subject= RegisterStudentSubject::where(array('student_id'=>$student, 'subject_id'=> $subject, 'class_id'=>$class, 'year'=>$student_result->year ))->first();
@@ -2662,14 +2685,19 @@ class CoroxController extends Controller
                   return response()->json(['failure'=>'danger','message'=> $subject_name.' subject has already been selected for '.ucfirst($student_name).' in class '.$class_name]);     
                 }else{
                   $student_result = RegisterStudentClassStatus::where("student_id",$student)->where("status","present")->first();
-                  $class_result = RegisterClassRegisterStatus::where("student_id",$student)->where("class_id",$class)->first();
                   $student_subject= new RegisterStudentSubject;
                   $student_subject->student_id=$student;
                   $student_subject->corox_model_id = $userId;
                   $student_subject->subject_id= $subject;
                   $student_subject->class_id= $class;
+                  $student_subject->department= $department;
                   $student_subject->year= $student_result->year;
-                  $student_subject->term= $class_result->term;
+                  $class_result = RegisterClassRegisterStatus::where("student_id",$student)->where("class_id",$class)->first();
+                  if($class_result){
+                    $student_subject->term= $class_result->term;
+                  }else{
+                    return response()->json(['failure'=>'danger','message'=>'kindly register session term for '.$class_name.' class']);      
+                  }
                   
                   if($student_subject->save()){
                     return response()->json(['success'=>'success','message'=>'You have successfully selected '.$subject_name.' subject for '.ucfirst($student_name).' in class '.$class_name]);      
@@ -2984,22 +3012,63 @@ class CoroxController extends Controller
             }
           }  
           
-           // show page for result computing and estimator of result
+           // show page for saving mark result
            public function registerResultAggregator(Request $request){
             if($_SERVER['REQUEST_METHOD'] =='POST'){
               $userId=Auth::user()->id;
-              if($request->input('estimator-type') == ''){
-                return response()->json(['estimator'=>'danger','message'=>'Select estimator type']);
-              }elseif($request->input('value') ==''){
-                return response()->json(['value'=>'danger','message'=>'Estimator value is required']);
+              if($request->input('class_id') ==''){
+                return response()->json(['class'=>'danger','message'=>'Select student class name']);
+              }elseif($request->input('term') ==''){
+                return response()->json(['term'=>'danger','message'=>'Select term name']);
+              }elseif($request->input('year') ==''){
+                return response()->json(['year'=>'danger','message'=>'Select the academic year']);
+              }elseif($request->input('student_id') == ''){
+                return response()->json(['student'=>'danger','message'=>'Select student name']);
+              }elseif($request->input('subject_id') == ''){
+                return response()->json(['subject'=>'danger','message'=>'Select subject name']);
+              }elseif($request->input('mark_type') ==''){
+                return response()->json(['mark_type'=>'danger','message'=>'Select mark type']);
+              }elseif($request->input('mark') ==''){
+                return response()->json(['mark'=>'danger','message'=>'Enter required mark']);
+              }elseif(!is_numeric($request->input('mark'))){
+                return response()->json(['mark'=>'danger','message'=>'Mark must be a number']);
               }else{
-                $estimator= protectData($request->input('estimator-type'));
-                $value= protectData($request->input('value'));
-                $result_estimator= RegisterResultEstimator::updateOrCreate(array('estimator_type'=>$estimator_type), array( "estimator_value"=> $value));
-                if($result_estimator){
-                  return response()->json(['success'=>'success','message'=> ucfirst($estimator_type).' of value '.$value.' has successfully been recorded']);     
+                $student_id= protectData($request->input('student_id'));
+                $class_id= protectData($request->input('class_id'));
+                $subject_id = protectData($request->input('subject_id'));
+                $term= protectData($request->input('term'));
+                $marks= protectData($request->input('mark'));
+                $mark_type= protectData($request->input('mark_type'));
+                $mark_type_name= protectData($request->input('mark_type_name'));
+                $student_name = protectData($request->input('student_name'));
+                $subject_name = protectData($request->input('subject_name'));
+                $class_name= protectData($request->input('class_name'));
+                $term_name = protectData($request->input('term_name'));
+                $year = protectData($request->input('year'));
+
+                //$result_aggregator= RegisterResultAggregator::updateOrCreate(array('student_id'=>$student_id, 'class_id'=>$class_id, 'subject_id'=>$subject_id, 'mark_type'=>$mark_type, 'corox_model_id'=>$userId, 'term'=>$term, 'year'=>$year, 'register_time'=>date('H:i:s'), 'register_date'=>date('Y-m-d')), array( "mark"=> $marks));
+                $result_aggregator= RegisterResultAggregator::where(array('student_id'=>$student_id, 'class_id'=>$class_id, 'subject_id'=>$subject_id, 'mark_type'=>$mark_type, 'corox_model_id'=>$userId, 'term'=>$term, 'year'=>$year))->first();
+                if($result_aggregator){
+                  return response()->json(['failure'=>'danger','message'=> $subject_name.' '.$mark_type_name.' of '.$marks.' marks for '.ucwords($student_name).' in '.$class_name.' class for '.strtolower($term_name).' of '.$year.' academic session has already been recorded']);     
                 }else{
-                  return response()->json(['failure'=>'danger','message'=> ucfirst($estimator_type).' of value '.$value.' has not been recorded contact the admin']);     
+                  $result_aggregator = new RegisterResultAggregator;
+                  $result_aggregator->student_id=$student_id;
+                  $result_aggregator->class_id = $class_id;
+                  $result_aggregator->subject_id = $subject_id;
+                  $result_aggregator->term = $term;
+                  $result_aggregator->corox_model_id= $userId;
+                  $result_aggregator->year= $year;
+                  $result_aggregator->mark = $marks;
+                  $result_aggregator->status = 'open';
+                  $result_aggregator->mark_type = $mark_type;
+                  $result_aggregator->register_date = date("Y-m-d");
+                  $result_aggregator->register_time = date("H:i:s");
+                  $result_aggregator->save();
+                  if($result_aggregator){
+                    return response()->json(['success'=>'success','message'=> 'You have successfully save '.$subject_name.' '.$mark_type_name.' of '.$marks.' marks for '.ucwords($student_name).' in '.$class_name.' class for '.strtolower($term_name).' of '.$year.' academic session']);     
+                  }else{
+                    return response()->json(['failure'=>'danger','message'=> 'Oops something went wrong contact the admin']);     
+                  }
                 }                                          
               }
             }else{
@@ -3018,23 +3087,121 @@ class CoroxController extends Controller
                 $adminEmail=Auth::user()->email;
               }
 
-              if(RegisterStudentInformation::where("corox_model_id",$userId)->exists()){
-                $students = RegisterStudentInformation::where("corox_model_id",$userId)->get();
+              if(registerAcademicSession::where("corox_model_id",$userId)->exists()){
+                $years = registerAcademicSession::where("corox_model_id",$userId)->get();
               }else{
-                $students= "";     
-              }   
-                          
+                $years= new registerAcademicSession;     
+              }                 
+
+              if(RegisterClasses::where("corox_model_id",$userId)->exists()){
+                $classes = RegisterClasses::where("corox_model_id",$userId)->get();
+              }else{
+                $classes= new RegisterClasses;     
+              }             
   
               if(RegisterSchoolInformation::where("corox_model_id",$userId)->exists()){
                 $schoolInformation = RegisterSchoolInformation::where("corox_model_id",$userId)->first();
               }else{
                 $schoolInformation= new RegisterSchoolInformation;     
               }
-              return  view('result-aggregator',['date'=>$date,'schoolInformation'=> $schoolInformation, 'userEmail'=>$adminEmail, 'userId'=>$userId, 'title'=>'Result Aggregator']);
+              return  view('result-aggregator',['date'=>$date,'schoolInformation'=> $schoolInformation, 'classes'=>$classes, 'years'=>$years, 'userEmail'=>$adminEmail, 'userId'=>$userId, 'title'=>'Result Aggregator']);
             }
           }            
           
+           // show result Table
+           public function registerViewMarks(Request $request){
+              if(Auth::user()->isMember()){
+                $roleId =1;
+                $roleInformation = Permit::where("role_id",$roleId)->first();
+                $userId= $roleInformation->corox_model_id;
+                $date = date('Y');
+                $adminInformation = Corox_model::where("id",$userId)->first();
+                $adminEmail=$adminInformation->email;
+                //return redirect('/Dregister/dashboard');
+              }elseif(Auth::user()->isAdmin()){  
+                $email= Auth::user()->email;
+                $date = date('Y');
+                $userId=Auth::user()->id;
+                $adminEmail=Auth::user()->email;
+              }
 
+              if(registerAcademicSession::where("corox_model_id",$userId)->exists()){
+                $years = registerAcademicSession::where("corox_model_id",$userId)->get();
+              }else{
+                $years= new registerAcademicSession;     
+              }                 
+
+              if(RegisterClasses::where("corox_model_id",$userId)->exists()){
+                $classes = RegisterClasses::where("corox_model_id",$userId)->get();
+              }else{
+                $classes= new RegisterClasses;     
+              }             
+  
+              if(RegisterResultAggregator::where('corox_model_id',$userId)->first()){
+                $result_aggregators = array();
+                $aggregators = RegisterResultAggregator::where(array("corox_model_id"=>$userId))->paginate(10);
+                foreach($aggregators as $aggregator){
+                  $subject = RegisterSubject::where("id",$aggregator->subject_id)->first();
+                  $student = RegisterStudentInformation::where("id", $aggregator->student_id)->first();
+                  $class = RegisterClasses::where("id", $aggregator->class_id)->first();
+                  $result_aggregators[] = array("id"=>$aggregator->id, "fullname"=>$student->student_firstname." ".$student->student_lastname, "subject"=>$subject->subject_name, "class"=>$class->class_name, "mark"=>$aggregator->mark, "mark_type"=>$aggregator->mark_type, "term"=>$aggregator->term, "year"=>$aggregator->year, "status"=>$aggregator->status, "time"=>$aggregator->register_time, "date"=>$aggregator->register_date);         
+                }
+                              
+              }else{
+                $result_aggregators ="";
+              }              
+  
+              if(RegisterSchoolInformation::where("corox_model_id",$userId)->exists()){
+                $schoolInformation = RegisterSchoolInformation::where("corox_model_id",$userId)->first();
+              }else{
+                $schoolInformation= new RegisterSchoolInformation;     
+              }
+              return  view('view-marks',['date'=>$date,'schoolInformation'=> $schoolInformation, 'classes'=>$classes, 'years'=>$years,  'result_aggregators'=>$result_aggregators, 'userEmail'=>$adminEmail, 'userId'=>$userId, 'title'=>'View Result']);
+            
+          }            
+          
+           // change student
+           public function registerChangeStudent(Request $request){
+            if($_SERVER['REQUEST_METHOD'] =='POST'){
+              if($request->input('class_id') ==''){
+                return response()->json(['class'=>'danger','message'=>'Select student class name']);
+              }elseif($request->input('term') ==''){
+                return response()->json(['term'=>'danger','message'=>'Select term name']);
+              }elseif($request->input('year') ==''){
+                return response()->json(['year'=>'danger','message'=>'Select the academic year']);
+              }elseif($request->input('student_id') == ''){
+                return response()->json(['student'=>'danger','message'=>'Select student name']);
+              }else{
+                $options ="";
+                $class_id= protectData($request->input('class_id'));
+                $student_id= protectData($request->input('student_id')); 
+                $student_name= protectData($request->input('student_name')); 
+                $term= protectData($request->input('term')); 
+                $year= protectData($request->input('year')); 
+                $subjects= RegisterStudentSubject::where(array('student_id'=>$student_id, 'class_id'=>$class_id, 'term'=>$term, 'year'=>$year))->get();             
+                if($subjects){
+                  foreach($subjects as $subject){
+                    $subject_result= RegisterSubject::where("id",$subject->subject_id)->get();
+
+                    foreach($subject_result as $result){
+                      $options .="<option value='".$result->id."'>".ucfirst($result->subject_name)."</option>";
+                    }                    
+                  }
+                  if($options ==""){
+                    return response()->json(['subject'=>'danger','message'=>'Kindly select subject(s) name first for '.ucwords($student_name)]);
+                  }else{
+                    return response()->json(['success'=>'success', 'options'=> $options]); 
+                  }
+                      
+                }else{
+                  return response()->json(['failure'=>'danger','message'=> 'Oops Something went wrong']);     
+                  
+                }                                              
+              }
+            }else{
+              return redirect()->route('class-status');
+            }
+          } 
            // change the status of book to returned
           public function registerAssignStatus(Request $request){
             if($_SERVER['REQUEST_METHOD'] =='POST'){
@@ -3059,7 +3226,7 @@ class CoroxController extends Controller
             }
           }              
 
-           // show document the condition of book
+           // update the condition of the book given to the student
            public function registerBookCondition(Request $request){
             if($_SERVER['REQUEST_METHOD'] =='POST'){
               $book_condition= protectData($request->input('book_condition'));
@@ -3070,13 +3237,32 @@ class CoroxController extends Controller
             }else{
               return redirect()->route('assign-book');
             }
-          }              
+          }
+          
+           // update the mark of the student
+           public function registerMark(Request $request){
+            if($_SERVER['REQUEST_METHOD'] =='POST'){
+              if($request->input('mark')==''){
+                return response()->json(['mark'=>'danger','message'=>'empty']);
+              }else if(!is_numeric($request->input('mark'))){
+                return response()->json(['mark'=>'danger','message'=>'not number']);
+              }else{
+                $mark= protectData($request->input('mark'));
+                $aggregator_id= protectData($request->input('aggregator_id'));
+                registerResultAggregator::where("id",$aggregator_id)->update(['mark'=>$mark]);
+                return response()->json(['success'=>'success']); 
+              }                                     
+            }else{
+              return redirect()->route('result-aggregator');
+            }
+          } 
+
            // show page to set class status for student
            public function registerClassStatus(Request $request){
             if($_SERVER['REQUEST_METHOD'] =='POST'){
               $userId=Auth::user()->id;
               if($request->input('class') ==''){
-                return response()->json(['class'=>'danger','message'=>'Select class name']);
+                return response()->json(['class'=>'danger','message'=>'Select student class name']);
               }elseif($request->input('student') == ''){
                 return response()->json(['student'=>'danger','message'=>'Select student name']);
               }elseif($request->input('term') ==''){
@@ -3147,7 +3333,7 @@ class CoroxController extends Controller
             if($_SERVER['REQUEST_METHOD'] =='POST'){
               $userId=Auth::user()->id;
               if($request->input('class_present_id') ==''){
-                return response()->json(['class'=>'danger','message'=>'Select class name']);
+                return response()->json(['class'=>'danger','message'=>'Select student class name']);
               }elseif($request->input('student') == ''){
                 return response()->json(['student'=>'danger','message'=>'Select student name']);
               }elseif($request->input('class_promotion_id') ==''){
@@ -3191,7 +3377,7 @@ class CoroxController extends Controller
            public function registerChangeClass(Request $request){
             if($_SERVER['REQUEST_METHOD'] =='POST'){
               if($request->input('class_id') == ''){
-                return response()->json(['failure'=>'danger','message'=>'Select student class']);
+                return response()->json(['failure'=>'danger','message'=>'Select student class name']);
               }else{
                 $options ="";
                 $class_id= protectData($request->input('class_id')); 
@@ -3200,12 +3386,12 @@ class CoroxController extends Controller
                   foreach($students as $student){
                     $student_result= RegisterStudentInformation::where("id",$student->student_id)->get();
                     foreach($student_result as $result){
-                      $options .="<option value='".$result->id."'>".$result->student_firstname.' '.$result->student_lastname."</option>";
+                      $options .="<option value='".$result->id."'>".ucwords($result->student_firstname.' '.$result->student_lastname)."</option>";
                     }                    
                   }
                   return response()->json(['success'=>'success', 'options'=> $options]);     
                 }else{
-                  return response()->json(['failure'=>'danger','message'=> ' Book status is not successfully updated']);     
+                  return response()->json(['failure'=>'danger','message'=> 'Oops something went wrong']);     
                   
                 }                                              
               }
@@ -3308,6 +3494,380 @@ class CoroxController extends Controller
             }
           }            
           
+           // change student to get parent of student
+           public function registerChangeStudentName(Request $request){
+            if($_SERVER['REQUEST_METHOD'] =='POST'){
+              if($request->input('student_id') == ''){
+                return response()->json(['failure'=>'danger','message'=>'Select student name']);
+              }else{
+                $options ="";
+                $student_id= protectData($request->input('student_id')); 
+                $student= RegisterStudentInformation::where("id",$student_id)->first();
+                if($student){
+                  $parent= RegisterParentInformation::where("id",$student->student_parent_id)->first();
+                  if($parent){
+                    if($parent->parent_gender=='male'){
+                      $gender = 'Mr ';
+                    }else{
+                      $gender = 'Mrs ';
+                    }
+                    return response()->json(['success'=>'success', 'parent_name'=> ucwords($gender.$parent->parent_firstname.' '.$parent->parent_lastname)]);     
+                  }else{
+                    return response()->json(['failure'=>'danger', 'message'=> 'Kindly add student parent']);     
+                  }
+                 
+                }else{
+                  return response()->json(['failure'=>'danger','message'=> 'Oops something went wrong']);     
+                  
+                }                                              
+              }
+            }else{
+              return redirect()->route('view-results');
+            }
+          } 
+
+
+           // get students 
+           public function registerChangeClassName(Request $request){
+            if($_SERVER['REQUEST_METHOD'] =='POST'){
+              $userId=Auth::user()->id;
+              if($request->input('class_id') ==''){
+                return response()->json(['class'=>'danger','message'=>'Select student class name']);
+              }elseif($request->input('duration') == ''){
+                return response()->json(['duration'=>'danger','message'=>'Select class duration']);
+              }elseif($request->input('year') ==''){
+                return response()->json(['year'=>'danger','message'=>'Academic year is required']);
+              }elseif($request->input('term') ==''){
+                return response()->json(['term'=>'danger','message'=>'Select term name']);
+              }else{
+                $class_id= protectData($request->input('class_id'));
+                $term= protectData($request->input('term'));
+                $duration= protectData($request->input('duration'));
+                $year = protectData($request->input('year'));
+                $students= RegisterStudentClassStatus::where(array('class_id'=> $class_id, 'status' => $duration, 'year'=>$year))->get();
+                $options ="";
+                if($students){
+                  foreach($students as $student){
+
+
+                    $student_result = RegisterClassRegisterStatus::where(array('student_id'=> $student->student_id, 'class_id'=> $class_id, 'term'=> $term, 'year'=>$year))->first();
+                    if($student_result){
+                      if($student->student_id == $student_result->student_id){
+                        $student = RegisterStudentInformation::where(array('id'=> $student->student_id))->first();
+                        $options .="<option value='".$student->id."'>".ucfirst($student->student_firstname.' '.$student->student_lastname)."</option>";
+                      }else{
+                        continue;
+                      }
+
+
+                    }else{
+                      continue;
+                    }
+                  }
+                 /* foreach($subject_result as $result){
+                    $options .="<option value='".$result->id."'>".ucfirst($result->subject_name)."</option>";
+                  } */                   
+              
+                  if($options ==""){
+                    return response()->json(['student'=>'danger','message'=>'No available student']);
+                  }else{
+                    return response()->json(['success'=>'success', 'options'=> $options]); 
+                  }
+                }else{
+                  $class_register= new RegisterClassRegisterStatus;
+                  $class_register->student_id=$student;
+                  $class_register->class_id = $class;
+                  $class_register->term = $term;
+                  $class_register->corox_model_id= $userId;
+                  $class_register->year= $year;
+                  $class_register->register_date = date("Y-m-d");
+                  if($class_register->save()){
+                    return response()->json(['success'=>'success','message'=>'You have successfully register '.ucwords($student_name).' of class '.ucfirst($class_name).' to '. strtolower($term_name).' of the academic calender '.$year]);      
+                  }else{
+                    return response()->json(['failure'=>'danger','message'=> ucwords($student_name).' is not successfully  register to the academic calender for '.$year]);     
+                  }  
+                }                                              
+              }
+            }else{
+              return redirect()->route('view-marks');
+            }
+          }
+
+                    
+          //view send result
+          /*public  function registerSendResult(Request $request){ 
+            if($_SERVER['REQUEST_METHOD'] =='POST'){
+              $userId=Auth::user()->id;
+              if($request->input('class') ==''){
+                return response()->json(['class'=>'danger','message'=>'Select student class name']);
+              }elseif($request->input('duration') == ''){
+                return response()->json(['duration'=>'danger','message'=>'Select class duration']);
+              }elseif($request->input('year') ==''){
+                return response()->json(['year'=>'danger','message'=>'Academic year is required']);
+              }elseif($request->input('term') ==''){
+                return response()->json(['term'=>'danger','message'=>'Select term name']);
+              }elseif($request->input('student') ==''){
+                return response()->json(['student'=>'danger','message'=>'Select student name']);
+              }elseif($request->input('result_type') ==''){
+                return response()->json(['result_type'=>'danger','message'=>'Select result type']);
+              }else{  
+                $class= protectData($request->input('class'));
+                $term= protectData($request->input('term'));
+                $duration= protectData($request->input('duration'));
+                $year = protectData($request->input('year'));   
+                $student = protectData($request->input('student'));    
+                $result_type = protectData($request->input('result_type'));    
+                $student_result = array();
+                $marks = RegisterResultAggregator::where(array('student_id'=>$student, 'class'=>$class, 'term'=>$term, 'duration'=>$duration, 'year'=>$year))->get();
+                $tests = 0;
+                $exams =
+                foreach($marks as $mark){
+
+                }
+              }
+            }else{
+              return redirect()->route('view-marks');
+            }
+          } */        
+                    
+         
+           // make payment
+           public function registerPayment(Request $request){
+            if($_SERVER['REQUEST_METHOD'] =='POST'){
+              $userId=Auth::user()->id;
+              if($request->input('class') ==''){
+                return response()->json(['class'=>'danger','message'=>'Select student class']);
+              }elseif($request->input('student') ==''){
+                return response()->json(['student'=>'danger','message'=>'Select student name']);
+              }elseif($request->input('term') ==''){
+                return response()->json(['term'=>'danger','message'=>'Select stationary name']);
+              }elseif($request->input('year') ==''){
+                return response()->json(['year'=>'danger','message'=>'Academic year is required']);
+              }elseif($request->input('transaction') ==''){
+                return response()->json(['transaction'=>'danger','message'=>'Select transaction type']);
+              }elseif($request->input('amount') ==''){
+                return response()->json(['amount'=>'danger','message'=>'Amount is required']);
+              }else{
+                $student_id= protectData($request->input('student'));
+                $student_name= protectData($request->input('student_name'));
+                $class_id= protectData($request->input('class'));
+                $class_name= protectData($request->input('class_name'));
+                $term= protectData($request->input('term'));
+                $term_name= protectData($request->input('term_name'));
+                $year= protectData($request->input('year'));
+                $amount = protectData($request->input('amount'));
+                $transaction_type= protectData($request->input('transaction'));
+                $transaction_name= protectData($request->input('transaction_name'));
+
+                if(RegisterTransaction::where(array("class_id" => $class_id, "student_id" => $student_id, "term"=>$term, "year"=>$year, "transaction_type"=>$transaction_type))->exists()){
+                  RegisterTransaction::where(array("class_id" => $class_id, "student_id" => $student_id, "term"=>$term, "year"=>$year, "transaction_type"=>$transaction_type))->update(['amount'=>$amount]);
+                  return response()->json(['success'=>'success','message'=>'You have successfully updated '.$transaction_name.' payment with an amount '.$amount]);                  
+                  
+                }else{
+                  $transaction_result = new RegisterTransaction;
+                  $transaction_result->class_id = $class_id;
+                  $transaction_result->student_id = $student_id;
+                  $transaction_result->amount = $amount;
+                  $transaction_result->corox_model_id = $userId;
+                  $transaction_result->term = $term;
+                  $transaction_result->year = $year;
+                  $transaction_result->transaction_type = $transaction_type;
+                  $transaction_result->transaction_time = date('H:i:s');
+                  $transaction_result->transaction_date = date('Y-m-d');   
+                  if($transaction_result->save()){
+                    return response()->json(['success'=>'success','message'=> ucfirst($student_name).' has a pending amount '.$amount.' of '.$transaction_name.' for '.$term_name]);     
+                  }else{
+                    return response()->json(['failure'=>'danger','message'=> 'Oops something went wrong']);     
+                  }              
+                }                                          
+              }
+            }else{
+              if(Auth::user()->isMember()){
+                $roleId =1;
+                $roleInformation = Permit::where("role_id",$roleId)->first();
+                $userId= $roleInformation->corox_model_id;
+                $date = date('Y');
+                $adminInformation = Corox_model::where("id",$userId)->first();
+                $adminEmail=$adminInformation->email;
+              }elseif(Auth::user()->isAdmin()){  
+                $email= Auth::user()->email;
+                $date = date('Y');
+                $userId=Auth::user()->id;
+                $adminEmail=Auth::user()->email;
+              }
+
+              if(RegisterClasses::where("corox_model_id",$userId)->exists()){
+                $classes = RegisterClasses::where("corox_model_id",$userId)->get();
+              }else{
+                $classes= new RegisterClasses;     
+              }               
+
+              if(RegisterTransaction::where("corox_model_id",$userId)->exists()){
+                $payments = array();
+                $payment_results = RegisterTransaction::where("corox_model_id",$userId)->get();
+                foreach($payment_results as $payment_result){
+                  $class = RegisterClasses::where("id",$payment_result->class_id)->first();
+
+                  $student = RegisterStudentInformation::where("id",$payment_result->student_id)->first();
+                  $payments[] = array('class_name'=>$class->class_name, 'student_name'=>$student->student_firstname.' '.$student->student_lastname, 'amount'=>$payment_result->amount, 'term'=>$payment_result->term, 'year'=>$payment_result->year, 'transaction_type'=>$payment_result->transaction_type, 'time'=>$payment_result->transaction_time, 'date'=>$payment_result->transaction_date);
+                }
+              }else{
+                $payments='';
+              }
+              if(RegisterSchoolInformation::where("corox_model_id",$userId)->exists()){
+                $schoolInformation = RegisterSchoolInformation::where("corox_model_id",$userId)->first();
+              }else{
+                $schoolInformation= new RegisterSchoolInformation;     
+              }
+              return  view('payment',['date'=>$date, 'schoolInformation'=> $schoolInformation, 'classes'=>$classes, 'payments'=>$payments, 'userEmail'=>$adminEmail, 'userId'=>$userId, 'title'=>'Record Sales']);
+            }
+          }            
+          
+          //monthly earning
+          public  function registerEarningMonthly(){     
+            $userId=Auth::user()->id;
+            $today =date('m');
+            $total = 0;
+            $payments = RegisterTransaction::where("corox_model_id",$userId)->get();
+            foreach($payments as $payment){
+              $date = $payment->transaction_date;
+              $date = explode('-', $date);
+                if((int)$date[1] == (int)$today){
+                  $total += (int)$payment->amount;
+                }else{
+                  $total += 0;
+                }
+            }
+            // add stationary sales to total monthly earning
+            $sales_orders = RegisterSalesRecord::where("corox_model_id",$userId)->get();
+            foreach($sales_orders as $sales_order){
+              $date = $sales_order->date;
+              $date = explode('-', $date);
+                if((int)$date[1] == (int)$today){ 
+                  $stationary = registerStationeries::where( "id",$sales_order->stationary_id)->first();
+                  $total += (int)$stationary->stationary_amount;
+                }else{
+                  $total += 0;
+                }
+            }
+            return '&#8358 '.number_format($total,2, '.', ',');
+
+          }  
+
+          //annual earning
+          public  function registerEarningAnnually(){     
+            $userId=Auth::user()->id;
+            $today =date('Y');
+
+            $total = 0;
+            $payments = RegisterTransaction::where("corox_model_id",$userId)->get();
+            foreach($payments as $payment){
+              $date = $payment->transaction_date;
+              $date = explode('-', $date);
+                if((int)$date[0] == (int)$today){
+                  $total += (int)$payment->amount;
+                }else{
+                  $total += 0;
+                }
+            }
+            // add stationary sales to total annual earning
+            $sales_orders = RegisterSalesRecord::where("corox_model_id",$userId)->get();
+            foreach($sales_orders as $sales_order){
+              $date = $sales_order->date;
+              $date = explode('-', $date);
+                if((int)$date[0] == (int)$today){ 
+                  $stationary = registerStationeries::where( "id",$sales_order->stationary_id)->first();
+                  $total += (int)$stationary->stationary_amount;
+                }else{
+                  $total += 0;
+                }
+            }            
+            return '&#8358 '.number_format($total,2, '.', ',');
+
+          } 
+
+          //yearly stationeries sales
+          public  function registerYearlyStationeries(){     
+            $userId=Auth::user()->id;
+            $today =date('Y');
+            $total = 0;
+            $sales_orders = RegisterSalesRecord::where("corox_model_id",$userId)->get();
+            foreach($sales_orders as $sales_order){
+              $date = $sales_order->date;
+              $date = explode('-', $date);
+                if((int)$date[0] == (int)$today){ 
+                  $stationary = registerStationeries::where( "id",$sales_order->stationary_id)->first();
+                  $total += (int)$stationary->stationary_amount;
+                }else{
+                  $total += 0;
+                }
+            }
+
+            return '&#8358 '.number_format($total,2, '.', ',');
+
+          } 
+          
+          //recovered school fees for the month
+          public  function registerRecoveredFees(){     
+            $userId=Auth::user()->id;
+            $today =date('m');
+            $total = 0;
+            $payments = RegisterTransaction::where(array("corox_model_id"=>$userId, "transaction_type"=>"schoolfees"))->get();
+            foreach($payments as $payment){
+              $date = $payment->transaction_date;
+              $date = explode('-', $date);
+                if((int)$date[1] == (int)$today){
+                  $total += (int)$payment->amount;
+                }else{
+                  $total += 0;
+                }
+            }
+
+            return '&#8358 '.number_format($total,2, '.', ',');
+
+          }           
+
+          //get chart
+          public  function registerGetChart(){     
+            $userId=Auth::user()->id;
+            $today =date('M');
+            //$chart = array();
+            $months = array();
+            $values = array();
+            $jan= 0;
+            $apr = 0;
+            $payments = RegisterTransaction::where("corox_model_id",$userId)->get();
+            foreach($payments as $payment){
+
+              if(in_array(date('M',strtotime($payment->transaction_date)),array('Jan','Feb','Mar','Apr','May'))){
+                //$total +=(int)$payment->amount;
+                //$month =date('M',strtotime($payment->transaction_date));
+                if(date('M',strtotime($payment->transaction_date)) =="Jan"){
+                  $jan +=(int)$payment->amount;
+                  $values[date('M',strtotime($payment->transaction_date))] =$apr;
+                }
+                if(date('M',strtotime($payment->transaction_date)) =="Apr"){
+                  $apr +=(int)$payment->amount;
+                  $values[date('M',strtotime($payment->transaction_date))] =$apr;
+                }
+                
+              }else{
+                $total =(int)$payment->amount;
+                $values[date('M',strtotime($payment->transaction_date))] =$total; 
+                //$month =date('M',strtotime($payment->transaction_date));
+              }
+             
+                  
+            }
+            //$months[]= array("month"=>$month);
+            //$values[] = array("value"=>$total);
+            //$chart=array($month=>$total);
+            return $values;
+            //var_dump($values);
+            //exit();
+
+          } 
+
           //error page here
           public  function registerError404(){                  
             return view('404');

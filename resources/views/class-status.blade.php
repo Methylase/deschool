@@ -50,7 +50,7 @@
                         <div class="form-group term-name-group">
                           <label for="term" class="control-label text-info"> Term Of The Year</label>
                           <select class="form-control" id="term-name" name="term-name">
-                                <option value="">Select-Class</option>
+                                <option value="">Select-Term</option>
                                 <option value="first term">First Term</option>
                                 <option value="second-term">Second Term</option>
                                 <option value="third-term">Third Term</option>                               

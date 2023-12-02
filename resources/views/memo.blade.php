@@ -24,7 +24,7 @@
                   <form class="form"><br><br>
                      {{csrf_field()}}                        
                      <div class="form-group row">
-                      <label for="staticSubject" class="col-sm-2 col-form-label">Sender:</label>
+                      <label for="staticSubject" class="col-sm-2 col-form-label text-info">Sender:</label>
                       <div class="col-sm-8">
                           <input type="text" id="sender" name="sender" class="form-control" placeholder="Enter the sender's email" >
                           <div class="sender-group text-danger"></div>
@@ -32,7 +32,7 @@
                    </div>
 
                    <div class="form-group row">
-                      <label for="staticSubject" class="col-sm-2 col-form-label">Subject:</label>
+                      <label for="staticSubject" class="col-sm-2 col-form-label text-info">Subject:</label>
                       <div class="col-sm-8">
                           <input type="text" id="subject" name="subject" class="form-control" placeholder="Enter Subject Of Your Message" >
                           <div class="subject-group text-danger"></div>
@@ -40,7 +40,7 @@
                    </div>
 
                    <div class="form-group row">
-                     <label for="staticEmail" class="col-sm-2 col-form-label">Select Receiver(s):</label>
+                     <label for="staticEmail" class="col-sm-2 col-form-label text-info">Select Receiver(s):</label>
                       <div class="col-sm-8">
                             <select class="form-control" id="staffEmail" name="staffEmail" multiple="multiple">
                               @foreach($staffInformation as $staff)

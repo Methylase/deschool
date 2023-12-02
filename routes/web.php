@@ -17,8 +17,6 @@ Route::post('/deschool/signup', 'CoroxController@registerSignUp');
 
 Route::post('/deschool/login', 'CoroxController@registerLogin');
 
-
-
 Route::get('/deschool/404', 'CoroxController@registerError404')->name('404');
 
 Route::get('/', 'CoroxController@index')->name('login');
@@ -60,9 +58,15 @@ Route::post('/deschool/academic_session', 'CoroxController@registerAcademicSessi
 
 Route::post('/deschool/Enable/settings-information', 'CoroxController@registerPrivilegeEnableSettings');
 
+Route::get('/deschool/add-subject', 'CoroxController@registerAddSubject');  
+
 Route::post('/deschool/add-subject', 'CoroxController@registerAddSubject');
 
+Route::get('/deschool/add-class', 'CoroxController@registerAddClass'); 
+
 Route::post('/deschool/add-class', 'CoroxController@registerAddClass');
+
+Route::get('/deschool/add-period', 'CoroxController@registerAddPeriod'); 
 
 Route::post('/deschool/add-period', 'CoroxController@registerAddPeriod');
 
@@ -127,6 +131,8 @@ Route::group(['middleware'=>['protectAdmin','auth']], function(){
 
     Route::post('/deschool/result-aggregator', 'CoroxController@registerResultAggregator'); 
 
+    Route::post('/deschool/change-student', 'CoroxController@registerChangeStudent');      
+
     Route::get('/deschool/result-estimator', 'CoroxController@registerResultEstimator')->name('result-estimator')->middleware('protectAdmin');        
 
     Route::post('/deschool/result-estimator', 'CoroxController@registerResultEstimator');
@@ -165,7 +171,27 @@ Route::group(['middleware'=>['protectAdmin','auth']], function(){
     
     Route::post('/deschool/record-sales', 'CoroxController@registerRecordSales');
     
-    Route::post('/deschool/student-promotion', 'CoroxController@registerStudentPromotion');     
+    Route::post('/deschool/mark', 'CoroxController@registerMark');   
+
+    Route::get('/deschool/view-marks', 'CoroxController@registerViewMarks')->name('view-marks');      
+    
+    Route::post('/deschool/change-class-name', 'CoroxController@registerChangeClassName');   
+    
+    Route::post('/deschool/change-student-name', 'CoroxController@registerChangeStudentName');
+
+    Route::get('/deschool/payments', 'CoroxController@registerPayment')->name('payments');      
+    
+    Route::post('/deschool/payments', 'CoroxController@registerPayment'); 
+
+    Route::get('/deschool/earning-monthly', 'CoroxController@registerEarningMonthly');
+
+    Route::get('/deschool/earning-annually', 'CoroxController@registerEarningAnnually');  
+    
+    Route::get('/deschool/stationeries-sales', 'CoroxController@registerYearlyStationeries'); 
+    
+    Route::get('/deschool/recovered-fees', 'CoroxController@registerRecoveredFees');   
+    
+    Route::get('/deschool/get-chart', 'CoroxController@registerGetChart'); 
 });    
 
 

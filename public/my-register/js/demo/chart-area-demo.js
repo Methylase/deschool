@@ -47,7 +47,8 @@ var myLineChart = new Chart(ctx, {
       pointHoverBorderColor: "rgba(78, 115, 223, 1)",
       pointHitRadius: 10,
       pointBorderWidth: 2,
-      data: [0, 500000, 750000, 500000, 950000, 600000, 1500000, 1200000, 800000, 950000, 850000, 1400000],
+      data:[],
+     //data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     }],
   },
   options: {
@@ -117,3 +118,62 @@ var myLineChart = new Chart(ctx, {
     }
   }
 });
+//alert(myLineChart.data.datasets[0].data[3]);
+//myLineChart.data.labels.forEach(myMonths);
+
+  //recovered monthly school fee
+ /*$.get('/deschool/get-chart', function(datas){
+    var output =datas.months;
+    var values = datas.values;
+    for(var j in output){
+      
+      var total = 0;
+
+      labels = myLineChart.data.labels;
+      
+      myvalues =myLineChart.data.datasets[0].data
+      for(var k in labels){
+
+        //for(var i in myvalues){
+          if(labels[k] ==output[j].month){
+            for(var i in values){
+            total = values[i].value;
+            
+            }
+            myLineChart.data.datasets[0].data.push(total); 
+            //myvalues[i] = datas.values[j].value;
+          }else{
+            myLineChart.data.datasets[0].data.push(total);  
+          }
+        
+        //}
+
+      }
+    }
+    
+  }); */ 
+
+ $.get('/deschool/get-chart', function(datas){
+
+    for(var j in datas){
+      
+      var total = 0;
+
+      labels = myLineChart.data.labels;
+      //myvalues =myLineChart.data.datasets[0].data
+      for(var k in labels){
+        //for(var i in myvalues){
+          if(labels[k] ==j){
+            //total = datas[j]
+            myLineChart.data.datasets[0].data.push(datas[j]); 
+            //myvalues[i] = datas.values[j].value;
+          }else{
+            myLineChart.data.datasets[0].data.push(0);  
+          }
+        
+        //}
+
+      }
+    }
+    
+  }); 

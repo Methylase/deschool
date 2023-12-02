@@ -340,6 +340,7 @@
                 <div class="row">
                   <div class="col-md-6 offset-sm-6 col-sm-6">
                     <div class="form-group">
+                      <br><br>
                         <button type="submit"  id="updateInformation"  class="btn btn-success form-control" ><i class="fa fa-save"></i> Save </button>
                     </div>
                   </div>

@@ -199,6 +199,7 @@
         $('#createSubject').on('click', function(){
           $('.help-block').remove(); 
           $('.class-subject-group').removeClass('text-danger');
+          $('.class-department-group').removeClass('text-danger');
           $('.date-group').removeClass('text-danger');            
           var token =$("meta[name='csrf-token']").attr("content");
           var subject = $('#subject').val();
@@ -221,7 +222,8 @@
                 location.reload();
               }, 6000);
               }else if(result.subject=='danger'){
-                
+                $(".class-subject-group").addClass('text-danger');
+                $('.class-subject-group').append("<div class='help-block'>" +result.message+"</div>");
               }else if(result.date=='danger'){
                 $(".date-group").addClass('text-danger');
                 $('.date-group').append("<div class='help-block'>" +result.message+"</div>");
@@ -931,12 +933,23 @@
         $('#selectSubjectToggle').click(function(){
           $('#select-subject-body').toggle();
         });
-
+        $('#condition').click(function(){
+          if($('#condition').prop('checked') ==true){
+            $('.senior').css('display','block');
+            //$('.not-senior').css('display','hidden');
+          }else{
+            //$('.not-senior').css('display','block');
+            $('.senior').css('display','none');
+          }
+        });
+         
         $('#selectSubject').on('click', function(){
           $('.help-block').remove(); 
           $('.class-name-group').removeClass('text-danger');
           $('.student-name-group').removeClass('text-danger');
-          $('.subject-name-group').removeClass('text-danger');            
+          $('.subject-name-group').removeClass('text-danger'); 
+          $('.department-name-group').removeClass('text-danger');  
+            
             var token =$("meta[name='csrf-token']").attr("content");
             var class_id = $('#class-name option:selected').val();
             var class_name = $('#class-name option:selected').text();            
@@ -944,6 +957,17 @@
             var student_name = $('#student-name option:selected').text();
             var subject= $('#subject-name option:selected').val();
             var subject_name= $('#subject-name option:selected').text();
+            var condition = $('#condition').val();
+            if(condition == 'on'){
+              var department = $('#student-name option:selected').val();
+              var department_name = $('#department-name option:selected').text();              
+            }else{
+              condition == '';
+              var department = '';
+              var department_name = ''; 
+            }
+
+
           var values = {
             "class" : class_id,
             "class_name" : class_name,            
@@ -951,6 +975,9 @@
             "student_name" : student_name,
             "subject" : subject,
             "subject_name" : subject_name,
+            "condition" : condition,
+            "department" : department,
+            "department_name" : department_name,
             "_token": token,
           }
               
@@ -973,7 +1000,10 @@
             }else if(result.subject=='danger'){
                 $(".subject-name-group").addClass('text-danger');
                 $('.subject-name-group').append("<div class='help-block'>" +result.message+"</div>");
-            }else if(result.failure=='danger'){
+            }else if(result.department=='danger'){
+                $(".class-department-group").addClass('text-danger');
+                $('.class-department-group').append("<div class='help-block'>" +result.message+"</div>");
+              }else if(result.failure=='danger'){
               $("#select-subject-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
               setTimeout(function(){
               location.reload();
@@ -1370,7 +1400,7 @@
           });
         });  
         
-        // toggle sales order
+        // toggle record sales
         $('#recordSalesToggle').click(function(){
           $('#record-sales-body').toggle();
         });     
@@ -1431,6 +1461,436 @@
           });
         });          
             
+        // toggle sales order
+        $('#resultAggregatorToggle').click(function(){
+          $('#result-aggregator-body').toggle();
+        }); 
+
+        $('#saveResult').on('click', function(){
+          $('.help-block').remove(); 
+          $('.student-name-group').removeClass('text-danger');
+          $('.class-name-group').removeClass('text-danger');       
+          $('.term-name-group').removeClass('text-danger');
+          $('.year-group').removeClass('text-danger');    
+          $('.mark-group').removeClass('text-danger');   
+          $('.subject-name-group').removeClass('text-danger'); 
+          $('.mark-type-group').removeClass('text-danger');  
+            var token =$("meta[name='csrf-token']").attr("content");
+            var student_id = $('#student-name option:selected').val();
+            var subject_id = $('#subject-name option:selected').val();
+            var student_name = $('#student-name option:selected').text();
+            var subject_name = $('#subject-name option:selected').text();
+            var class_id = $('#class-name option:selected').val();
+            var class_name = $('#class-name option:selected').text();
+            var term = $('#term-name option:selected').val();
+            var term_name = $('#term-name option:selected').text();
+            var mark = $('#mark-name').val();
+            var mark_type = $('#mark-type option:selected').val();
+            var mark_type_name = $('#mark-type option:selected').text();
+            var year= $('#year').val();
+          var values = {
+            "student_id" : student_id,
+            "subject_id" : subject_id,
+            "student_id" : student_id,
+            "subject_name" : subject_name,
+            "student_name" : student_name,
+            "class_id" : class_id,
+            "class_name" : class_name,
+            "term" : term,
+            "term_name" : term_name, 
+            "mark" : mark,
+            "mark_type" : mark_type,
+            "mark_type_name" : mark_type_name,
+            "year" : year,
+            "_token": token,
+          }
+              
+          $.ajax({
+              type: "POST",
+              url: "/deschool/result-aggregator",
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
+              $("#result-aggregator-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+              setTimeout(function(){
+              location.redirect('/view-marks');
+              }, 6000);
+            }else if(result.class=='danger'){
+                $(".class-name-group").addClass('text-danger');
+                $('.class-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.term=='danger'){
+              $(".term-name-group").addClass('text-danger');
+              $('.term-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.year=='danger'){
+                $(".year-group").addClass('text-danger');
+                $('.year-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.student=='danger'){
+              $(".student-name-group").addClass('text-danger');
+              $('.student-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.subject=='danger'){
+                $(".subject-name-group").addClass('text-danger');
+                $('.subject-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.mark_type=='danger'){
+                $(".mark-type-group").addClass('text-danger');
+                $('.mark-type-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.mark=='danger'){
+                $(".mark-group").addClass('text-danger');
+                $('.mark-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.failure=='danger'){
+              $("#result-aggregator-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");               
+              setTimeout(function(){
+              location.reload();
+              }, 6000);               
+            }
+          });
+        }); 
+
+        //submit edit and submit mark
+        $('.mark').on('click', function(){
+          
+          $('.message').empty();
+          var token =$("meta[name='csrf-token']").attr("content");
+          var condition_id = $(this).find('span').attr('id');
+          var aggregator_id = $(this).find('input').attr('id');
+          $('#'+condition_id).css('display','none');
+          $('#'+aggregator_id).css('display','block');
+          $('#'+aggregator_id).on('keypress', function(event){
+            if (event.key === "Enter") {
+              $('.message').empty();
+              var aggregator_id = $(this).attr('id');
+              $('#'+condition_id).css('display','block');
+              $('#'+aggregator_id).css('display','none');
+              var mark = $('#'+aggregator_id).val();
+              $('#'+condition_id).text(mark);
+              aggregator_id = aggregator_id.split("-");
+              aggregator_id  = aggregator_id[1];
+              values= {
+                "aggregator_id": aggregator_id,
+                "mark": mark,
+                "_token": token,
+              }
+              $.ajax({
+                  type: "POST",
+                  url: "/deschool/mark",
+                  data: values,
+              }).done(function(result){
+                if (result.success=='success'){
+                  $('#'+condition_id).css('display','block');
+                  $('#'+aggregator_id).css('display','none');                  
+                  setTimeout(function(){
+                  location.reload();
+                  }, 6000);
+                }else if(result.mark=='danger'){
+                  $('#'+condition_id).css('display','none');
+                  $('#mark-'+aggregator_id).css('display','block');
+                  $('.message').empty();
+                  $('.mark').prepend("<span class='text-danger message'>"+result.message+"</span>");
+                }else if(result.failure=='danger'){
+                    $(".mark-result").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
+                  setTimeout(function(){
+                  location.reload();
+                  }, 6000);                  
+                }
+              });
+            }
+          });
+        });
+
+        //onchange of student to select subject
+        $('#student-name').on('change', function(){
+          $('.help-block').remove(); 
+          $('.student-name-group').removeClass('text-danger');
+          $('.class-name-group').removeClass('text-danger');       
+          $('.term-name-group').removeClass('text-danger');  
+          $('.subject-name-group').removeClass('text-danger'); 
+          $("#subject_name").empty().append('<option value="">Select-Subject-Name</option>');
+          var token =$("meta[name='csrf-token']").attr("content");
+          var student_id = $('#student-name option:selected').val();
+          var student_name = $('#student-name option:selected').text();
+          var class_id = $('#class-name option:selected').val();
+          var term = $('#term-name option:selected').val();
+          var year = $('#year').val();
+          values= {
+            "class_id" : class_id,
+            "student_id": student_id,
+            "student_name": student_name,
+            "term" : term,
+            "year" : year,
+            "_token": token
+          }
+          $.ajax({
+              type: "POST",
+              url: "/deschool/change-student",
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
+                 $("#subject-name").append(result.options);
+            }else if(result.class=='danger'){
+                $(".class-name-group").addClass('text-danger');
+                $('.class-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.term=='danger'){
+              $(".term-name-group").addClass('text-danger');
+              $('.term-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.year=='danger'){
+                $(".year-group").addClass('text-danger');
+                $('.year-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.student=='danger'){
+              $(".student-name-group").addClass('text-danger');
+              $('.student-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.subject=='danger'){
+              $(".subject-name-group").addClass('text-danger');
+              $('.subject-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }
+          });
+        });    
+
+
+        //onchange of class to select student
+        $('#student_name').on('change', function(){
+          var token =$("meta[name='csrf-token']").attr("content");
+          var student_id = $('#student_name option:selected').val();;
+          values= {
+            "student_id": student_id,
+            "_token": token
+          }
+          $.ajax({
+              type: "POST",
+              url: "/deschool/change-student-name",
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
+                 $("#parent_name").val(result.parent_name);
+            }else if(result.failure=='danger'){
+                $("#view-results-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
+              setTimeout(function(){
+              location.reload();
+              }, 6000);                  
+            }
+          });
+        });
+
+        //onchange of class to select student
+        $('.class_name').on('change', function(){
+          $('.help-block').remove(); 
+          $('.duration-name-group').removeClass('text-danger');
+          $('.class-name-group').removeClass('text-danger');       
+          $('.term-name-group').removeClass('text-danger');  
+          $('.year-group').removeClass('text-danger');           
+          $("#student_name").empty().append('<option value="">Select-Student-Name</option>');
+          var token =$("meta[name='csrf-token']").attr("content");
+          var class_id = $('#class_name option:selected').val();
+          var duration = $('#duration_name option:selected').val();
+          var year = $('#year').val();
+          var term = $('#term_name option:selected').val();
+          values= {
+            "class_id": class_id,
+            "duration": duration,
+            "year" : year,
+            "term" : term,
+            "_token": token
+          }
+          $.ajax({
+              type: "POST",
+              url: "/deschool/change-class-name",
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
+                 $("#student_name").append(result.options);
+            }else if(result.class=='danger'){
+                $(".class-name-group").addClass('text-danger');
+                $('.class-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.duration=='danger'){
+              $(".duration-name-group").addClass('text-danger');
+              $('.duration-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.year=='danger'){
+                $(".year-group").addClass('text-danger');
+                $('.year-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.term=='danger'){
+              $(".term-name-group").addClass('text-danger');
+              $('.term-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.student=='danger'){
+              $(".student-name-group").addClass('text-danger');
+              $('.student-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.failure=='danger'){
+                $("#view-results-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
+              setTimeout(function(){
+              location.reload();
+              }, 6000);                  
+            }
+          });
+        });
+
+
+        //onclick send result to parent
+        /*$('#sendResult').on('click', function(){
+          $('.help-block').remove(); 
+          $('.duration-name-group').removeClass('text-danger');
+          $('.class-name-group').removeClass('text-danger');       
+          $('.term-name-group').removeClass('text-danger');  
+          $('.student-name-group').removeClass('text-danger');  
+          $('.year-group').removeClass('text-danger');   
+          $('.result-type-group').removeClass('text-danger');    
+          var token =$("meta[name='csrf-token']").attr("content");
+          var class_id = $('#class_name option:selected').val();
+          var class_name = $('#class_name option:selected').text();
+          var duration = $('#duration_name option:selected').val();
+          var year = $('#year').val();
+          var term = $('#term_name option:selected').val();
+          var term_name = $('#term_name option:selected').text();
+          var student = $('#student_name option:selected').val();
+          var student_name = $('#student_name option:selected').text();
+          var result_type = $('#result_type option:selected').val();
+          values= {
+            "class": class_id,
+            "class_name": class_name,
+            "duration": duration,
+            "year" : year,
+            "term" : term,
+            "term_name" : term_name,
+            "student" : student,
+            "student_name" : student_name,            
+            "result_type" : result_type,
+            "_token": token,
+          }
+          $.ajax({
+              type: "POST",
+              url: "/deschool/send-result",
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
+              $("#view-results-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+              setTimeout(function(){
+              location.redirect('/view-marks');
+              }, 6000);
+            }else if(result.class=='danger'){
+                $(".class-name-group").addClass('text-danger');
+                $('.class-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.duration=='danger'){
+              $(".duration-name-group").addClass('text-danger');
+              $('.duration-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.year=='danger'){
+                $(".year-group").addClass('text-danger');
+                $('.year-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.term=='danger'){
+              $(".term-name-group").addClass('text-danger');
+              $('.term-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.student=='danger'){
+              $(".student-name-group").addClass('text-danger');
+              $('.student-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.result_type=='danger'){
+              $(".result-type-group").addClass('text-danger');
+              $('.result-type-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.failure=='danger'){
+                $("#view-results-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
+              setTimeout(function(){
+              location.reload();
+              }, 6000);                  
+            }
+          });
+        });*/
+
+        // toggle sales order
+        $('#paymentToggle').click(function(){
+          $('#payment-body').toggle();
+        });         
+
+        //onclick make payment 
+        $('#savePayment').on('click', function(){
+          $('.help-block').remove(); 
+          $('.amount-group').removeClass('text-danger');
+          $('.class-name-group').removeClass('text-danger');       
+          $('.term-name-group').removeClass('text-danger');  
+          $('.student-name-group').removeClass('text-danger');  
+          $('.year-group').removeClass('text-danger');   
+          $('.transaction-group').removeClass('text-danger');    
+          var token =$("meta[name='csrf-token']").attr("content");
+          var class_id = $('#class-name option:selected').val();
+          var class_name = $('#class-name option:selected').text();
+          var year = $('#year').val();
+          var term = $('#term-name option:selected').val();
+          var term_name = $('#term-name option:selected').text();
+          var student = $('#student-name option:selected').val();
+          var student_name = $('#student-name option:selected').text();
+          var transaction = $('#transaction-name option:selected').val();
+          var transaction_name = $('#transaction-name option:selected').text();
+          var amount = $('#amount').val();
+          values= {
+            "class": class_id,
+            "class_name": class_name,
+            "amount": amount,
+            "year" : year,
+            "term" : term,
+            "term_name" : term_name,
+            "student" : student,
+            "student_name" : student_name,            
+            "transaction" : transaction,
+            "transaction_name" : transaction_name, 
+            "_token": token,
+          }
+          $.ajax({
+              type: "POST",
+              url: "/deschool/payments",
+              data: values,
+          }).done(function(result){
+            if (result.success=='success'){
+              $("#payment-body").prepend("<div class='status alert alert-success text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>"); 
+              setTimeout(function(){
+                location.reload();
+              }, 6000);
+            }else if(result.class=='danger'){
+              $(".class-name-group").addClass('text-danger');
+              $('.class-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.student=='danger'){
+              $(".student-name-group").addClass('text-danger');
+              $('.student-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.year=='danger'){
+                $(".year-group").addClass('text-danger');
+                $('.year-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.term=='danger'){
+              $(".term-name-group").addClass('text-danger');
+              $('.term-name-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.transaction=='danger'){
+              $(".transaction-group").addClass('text-danger');
+              $('.transaction-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.amount=='danger'){
+              $(".amount-group").addClass('text-danger');
+              $('.amount-group').append("<div class='help-block'>" +result.message+"</div>");
+            }else if(result.failure=='danger'){
+                $("#payment-body").prepend("<div class='status alert alert-danger text-center col-sm-9 offset-sm-1'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><strong >" +result.message+"</strong></div>");
+              setTimeout(function(){
+              location.reload();
+              }, 6000);                  
+            }
+          });
+        });          
+        
+        // toggle sales order
+        $('#viewResultsToggle').click(function(){
+          $('#view-results-body').toggle();
+        }); 
+
+        //monthly earnings
+        $.get('/deschool/earning-monthly', function(data){
+          $('.earning-monthly').html(data);
+        });
+
+        // annual earnings
+        $.get('/deschool/earning-annually', function(data){
+          $('.earning-annually').html(data);
+        });   
+        
+        //yearly stationeries sales
+        $.get('/deschool/stationeries-sales', function(data){
+          $('.stationeries-sales').html(data);
+        }); 
+        
+        //recovered monthly school fee
+        $.get('/deschool/recovered-fees', function(data){
+          $('.recovered-fees').html(data);
+        });         
+        
+        
+
         $('#dataTableStaff').DataTable(); 
 
         $('#dataTableTeacher').DataTable();
@@ -1454,6 +1914,8 @@
         $('#dataTableResultEstimator').DataTable();    
         
         $('#dataTableRecordSales').DataTable();   
+
+        $('#dataTableResultAggregator').DataTable(); 
 
         $('#staffEmail').multiselect({
           enableHTML: true
@@ -1531,7 +1993,6 @@
 
     <!-- Sidebar -->
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/deschool/dashboard">
         <div class="sidebar-brand-icon">
@@ -1674,7 +2135,6 @@
             <a class="collapse-item" href="/deschool/view-students">View Students Table</a>
             <a class="collapse-item" href="/deschool/select-subject">Select Subject</a> 
             <a class="collapse-item" href="/deschool/students-register"> Students Register</a>
-            <a class="collapse-item" href="/deschool/promotion"> Student Promotion</a>
             <div class="collapse-divider"></div>
             <h6 class="collapse-header">Class Setup:</h6> 
             <a class="collapse-item" href="/deschool/class-setup">Class Setup</a>    
@@ -1692,15 +2152,15 @@
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collpaseResult" aria-expanded="true" aria-controls="collapsePages">
-          <i class="fas fa-fw fa-users text-gray-400"></i>
+          <i class="fas fa-fw fa-book text-gray-400"></i>
           <span>Result Aggregator</span>
         </a>
         <div id="collpaseResult" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Result Aggregator:</h6>
             <a class="collapse-item" href="/deschool/result-aggregator">Result Aggregator</a>
-            <a class="collapse-item" href="/deschool/result-estimator">Result Estimator</a>   
-            <a class="collapse-item" href="/deschool/view-students">Result Table</a>                        
+            <a class="collapse-item" href="/deschool/result-estimator">Result Estimator</a>       
+            <a class="collapse-item" href="/deschool/view-marks">Student Marks</a>         
           </div>
         </div>
       </li> 
@@ -1721,7 +2181,7 @@
         <div id="collapseFinances" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Payment:</h6>
-            <a class="collapse-item" href="buttons.html">Payment</a>           
+            <a class="collapse-item" href="/deschool/payments">Payment</a>           
           </div>
         </div>
       </li>

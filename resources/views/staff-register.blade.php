@@ -20,7 +20,7 @@
                   <div class="float-right text-danger " id="staffRegisterToggle"><i class="fas fa-plus" id="close"></i></div>
                 </div>
                 <div class="card-body" id="staff-register-body">
-                    <form class="form" action=""  method="">
+                  <form class="form" action=""  method="">
                      {{csrf_field()}}
                     <div class="row">
                       <div class="col-md-4 col-sm-4 ">
@@ -55,56 +55,55 @@
                       </div>
                     </div>  
                   </form>
-                   <hr>
-                     <div class="card-body">
-                        <div class="table-responsive">   
-                         @if(isset($registerStaffInformation) && $registerStaffInformation !='')
-                            <h6 class="m-4 font-weight-bold">Table showing the list of teachers that clock in</h6>        
-                          <table class="table table-bordered  border-bottom-info display" id="dataTableStaffRegister" width="100%" cellspacing="0">
-                            <thead>
-                              <tr>
-                              <th>S/N</th>
-                                <th>Staff Name</th>
-                                <th> Resumption Time</th>
-                                <th>Today's Date</th>
-                                 <th>
-                                   Status
-                                 </th>                               
-                              </tr>
-                            </thead>
-                              @php$i=1
-                              @endphp
-                              <tbody>
-                               @foreach($registerStaffInformation as $registerStaff) 
-                                <tr>
-                                  <td>{{$i}}</td>
-                                  <td>
-                                    {{$registerStaff['staffName']}}
-                                  </td>
-                                  <td>
-                                    {{$registerStaff['registerTime']}}                   
-                                  </td>
-                                  <td>
-                                    {{date('D d F  Y',strtotime($registerStaff['registerDate']))}}
-                                  </td>
+                  <hr>
+                  <div class="table-responsive">   
+                    @if(isset($registerStaffInformation) && $registerStaffInformation !='')
+                      <h6 class="m-4 font-weight-bold">Table showing the list of teachers that clock in</h6>        
+                      <table class="table table-bordered  border-bottom-info display" id="dataTableStaffRegister" width="100%" cellspacing="0">
+                        <thead>
+                          <tr>
+                          <th>S/N</th>
+                            <th>Staff Name</th>
+                            <th> Resumption Time</th>
+                            <th>Today's Date</th>
+                              <th>
+                                Status
+                              </th>                               
+                          </tr>
+                        </thead>
+                        @php$i=1
+                        @endphp
+                        <tbody>
+                          @foreach($registerStaffInformation as $registerStaff) 
+                          <tr>
+                            <td>{{$i}}</td>
+                            <td>
+                              {{$registerStaff['staffName']}}
+                            </td>
+                            <td>
+                              {{$registerStaff['registerTime']}}                   
+                            </td>
+                            <td>
+                              {{date('D d F  Y',strtotime($registerStaff['registerDate']))}}
+                            </td>
 
-                                    <td>
-                                    @if(isset($registerStaff['resumptionStatus']) && $registerStaff['resumptionStatus'] == 'on-time')
-                                        <span class="btn btn-success btn-sm col-sm-8 col-xs-12">{{ucfirst($registerStaff['resumptionStatus'])}}</span>
-                                    @elseif(isset($registerStaff['resumptionStatus']) && $registerStaff['resumptionStatus'] == 'late')
-                                    <span class="btn btn-danger btn-sm col-sm-8 col-xs-12">{{ucfirst($registerStaff['resumptionStatus'])}}</span>
-                                    @endif
-                                    </td>
-                                </tr> 
-                               @php$i++
-                               @endphp
-                               @endforeach
-                               </tbody>
-                          </table>
-                           @endif
-                        </div>
-                     </div>
+                              <td>
+                              @if(isset($registerStaff['resumptionStatus']) && $registerStaff['resumptionStatus'] == 'on-time')
+                                  <span class="btn btn-success btn-sm col-sm-8 col-xs-12">{{ucfirst($registerStaff['resumptionStatus'])}}</span>
+                              @elseif(isset($registerStaff['resumptionStatus']) && $registerStaff['resumptionStatus'] == 'late')
+                              <span class="btn btn-danger btn-sm col-sm-8 col-xs-12">{{ucfirst($registerStaff['resumptionStatus'])}}</span>
+                              @endif
+                              </td>
+                          </tr> 
+                          @php$i++
+                          @endphp
+                          @endforeach
+                        </tbody>
+                      </table>
+                    @endif
+                  </div>
                 </div>
+                
               </div>
             </div>
           </div>

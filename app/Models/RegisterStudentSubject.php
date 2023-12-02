@@ -10,6 +10,7 @@ class RegisterStudentSubject extends Model
         'corox_model_id',
         'student_id',
         'subject_id',
+        'deparment_name',
         'class_id',
         'term',
         'year',

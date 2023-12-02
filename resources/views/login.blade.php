@@ -39,10 +39,9 @@
                         Register With Us Today
                       </h4>                        
                       <ul style="font-size:16px;color:#2F2E41" >
-                        <li><strong>Recording Of Daily School Activities Made Easy.</strong></li>
-                        <li><strong>Result Computing Made Easy.</strong></li>
-                        <li><strong>One Click, Sending Of Result To Parent through Email.</strong></li>
-                        <li><strong>And Many More.</strong></li>
+                        <li><strong>Recording and Computing Result Made Easy.</strong></li>
+                        <li><strong>Recording Of Daily School Transactions e.g School Fees, Sales Books And Other Stationeries.</strong></li>
+                        <li><strong>Monitoring Teachers And Students Clock-In and Clock-Out</strong></li>
                       </ul>                        
                      
                     </div>

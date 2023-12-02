@@ -77,7 +77,6 @@
                           @endphp
                           <tbody>
                             @foreach($registerStudentInformation as $registerStudent)
-                              
                             <tr>
                               <td>{{$i}}</td>
                               <td>

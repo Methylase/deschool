@@ -60,49 +60,47 @@
                 </div>
             </div>  
           </form>
-          <div class="card-body">
-            <div class="table-responsive">   
-              @if(isset($stationeries) && $stationeries !=null)
-               <hr>
-                <h6 class="m-4  font-weight-bold">Table For All The Stationeries In The Store</h6>        
-                <table class="table table-bordered  border-bottom-info display" id="dataTableStationary" width="100%" cellspacing="0">                 
-                  <thead>
+          <div class="table-responsive">   
+            @if(isset($stationeries) && $stationeries !=null)
+              <hr>
+              <h6 class="m-4  font-weight-bold">Table For All The Stationeries In The Store</h6>        
+              <table class="table table-bordered  border-bottom-info display" id="dataTableStationary" width="100%" cellspacing="0">                 
+                <thead>
+                  <tr>
+                    <th>S/N</th>
+                    <th>Stationeries Name</th>
+                    <th>Status</th>
+                    <th>Quantity</th>
+                    <th>Amount</th>                  
+                  </tr>
+                </thead>
+                @php$i=1
+                @endphp
+                <tbody>
+                  @foreach($stationeries as $stationary)
                     <tr>
-                      <th>S/N</th>
-                      <th>Stationeries Name</th>
-                      <th>Status</th>
-                      <th>Quantity</th>
-                      <th>Amount</th>                  
+                        <td>{{$i}}</td>
+                      <td>
+                      {{ucwords($stationary->stationary_name)}}
+                      </td>
+                      <td>   
+                      {{ucwords($stationary->stationary_status)}}                           
+                      </td>
+                      <td>
+                      {{$stationary->stationary_quantity}}
+                      </td>
+                      <td>   
+                      {{$stationary->stationary_amount}}                           
+                      </td>                                                 
                     </tr>
-                  </thead>
-                  @php$i=1
+                  @php$i++
                   @endphp
-                  <tbody>
-                    @foreach($stationeries as $stationary)
-                      <tr>
-                          <td>{{$i}}</td>
-                        <td>
-                        {{ucwords($stationary->stationary_name)}}
-                        </td>
-                        <td>   
-                        {{ucwords($stationary->stationary_status)}}                           
-                        </td>
-                        <td>
-                        {{$stationary->stationary_quantity}}
-                        </td>
-                        <td>   
-                        {{$stationary->stationary_amount}}                           
-                        </td>                                                 
-                      </tr>
-                    @php$i++
-                    @endphp
-                    @endforeach
-                  </tbody>   
-                </table>                        
-              @endif
-         
-            </div>  
-          </div>
+                  @endforeach
+                </tbody>   
+              </table>                        
+            @endif
+        
+          </div>  
         </div>                
       </div>
     </div>

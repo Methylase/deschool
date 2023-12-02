@@ -60,12 +60,33 @@
                         </div>
                       </div> 
                       <div class="col-md-6 col-sm-6">
-                        <div class="form-group">
-                          <br><br>                       
-                           <button type="button"  id="selectSubject"  class="btn btn-success form-control" ><i class="fa fa-save"></i> Save </button>
+                        <div class="checkbox class-department-group">
+                          <br><br>
+                          <label for="condition" class="control-label text-info">If Senior Class Check</label>
+                          <input type="checkbox" id="condition" name="condition" >
                         </div>
-                      </div>                                                 
+                      </div>                                             
                     </div>
+                    <div class="row">
+                      <div class="col-md-6 col-sm-6">
+                        <div class="form-group class-department-group senior" style="display:none">
+                          <label for="department-name" class="control-label text-info"> Department Name</label>
+                          <select id="department" name="department" class="form-control" >
+                            <option value="">Select Department</option>
+                            <option value="science">Science Department</option>
+                            <option value="commercial">Commercial Department</option>
+                            <option value="art">Art Department</option>
+                          </select>
+                        </div>
+                      </div> 
+                      <div class="col-md-6 col-sm-6">
+                        <div class="form-group">
+                          <br><br>                   
+                          <button type="button"  id="selectSubject"  class="btn btn-success form-control" ><i class="fa fa-save"></i> Save </button>
+                        </div>
+                      </div> 
+                    </div>   
+                                      
                   </form>
                   <hr>
                   <div class="table-responsive">      
@@ -110,6 +131,6 @@
                 </div>
               </div>
             </div>
-
+          </div>
       <!-- End of Main Content -->
   @endsection
