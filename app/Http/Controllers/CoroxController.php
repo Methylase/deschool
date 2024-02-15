@@ -7,8 +7,6 @@ namespace Deschool\Http\Controllers;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
-
-
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Pagination\Paginator;
@@ -265,7 +263,9 @@ class CoroxController extends Controller
               if($image ==NULL || $image =='' ){
                       $data['school_profile_image']  = $image; 
               }else{
-                Storage::disk('public')->put($image->getFilename().'.'.$image->getClientOriginalExtension(), File::get($image));
+                //Storage::disk('public')->put($image->getFilename().'.'.$image->getClientOriginalExtension(), File::get($image));
+                $directory = public_path().'/uploads/';
+                $image->move($directory,$image->getFilename().'.'.$image->getClientOriginalExtension());
                 $data['school_profile_image'] =$image->getFilename().'.'.$image->getClientOriginalExtension();
               }
               $data['school_name'] =protectData($name);

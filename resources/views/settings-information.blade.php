@@ -33,14 +33,14 @@
                   <form class="form" action="/deschool/add-info-settings" enctype="multipart/form-data" method="POST">
               @else
               <form class="form" action="/deschool/update-info-settings" enctype="multipart/form-data" method="POST">   
-                    {{method_field('PUT')}}
-                    @if($schoolInformation->school_enable !='' || $schoolInformation->school_enable !=null)
-                      @php $readOnly =$schoolInformation->school_enable; $disabled ="disabled";
-                      @endphp
-                    @else
-                      @php $readOnly =$schoolInformation->school_enable; $disabled ="";
-                      @endphp                           
-                    @endif
+                  {{method_field('PUT')}}
+                  @if($schoolInformation->school_enable !='' || $schoolInformation->school_enable !=null)
+                    @php $readOnly =$schoolInformation->school_enable; $disabled ="disabled";
+                    @endphp
+                  @else
+                    @php $readOnly =$schoolInformation->school_enable; $disabled ="";
+                    @endphp                           
+                  @endif
                 @endif
 
                 {{csrf_field()}}

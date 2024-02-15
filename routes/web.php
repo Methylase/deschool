@@ -20,9 +20,8 @@ Route::post('/deschool/login', 'CoroxController@registerLogin');
 Route::get('/deschool/404', 'CoroxController@registerError404')->name('404');
 
 Route::get('/', 'CoroxController@index')->name('login');
-
+Route::get('/deschool/login', 'CoroxController@index')->name('login');
 Route::get('/deschool', 'CoroxController@index')->name('login');
-
 Route::get('/login', 'CoroxController@index')->name('login');
 }); 
 
@@ -153,21 +152,21 @@ Route::group(['middleware'=>['protectAdmin','auth']], function(){
 
     Route::post('/deschool/class-status', 'CoroxController@registerClassStatus');
 
-    Route::get('/deschool/teacher', 'CoroxController@registerTeacher')->name('teacher')->middleware('protectAdmin');
+    Route::get('/deschool/teacher', 'CoroxController@registerTeacher')->name('teacher');
     
-    Route::delete('/deschool/delete-teacher/{id}', 'CoroxController@registerDeleteTeacher')->middleware('protectAdmin');
+    Route::delete('/deschool/delete-teacher/{id}', 'CoroxController@registerDeleteTeacher');
     
-    Route::get('/deschool/add-student', 'CoroxController@registerStudent')->name('add-student')->middleware('protectAdmin');
+    Route::get('/deschool/add-student', 'CoroxController@registerStudent')->name('add-student');
     
-    Route::get('/deschool/edit-student/{id}', 'CoroxController@registerEditStudent')->name('edit-student')->middleware('protectAdmin');
+    Route::get('/deschool/edit-student/{id}', 'CoroxController@registerEditStudent')->name('edit-student');
 
-    Route::get('/deschool/add-parent', 'CoroxController@registerParent')->name('add-parent')->middleware('protectAdmin');
+    Route::get('/deschool/add-parent', 'CoroxController@registerParent')->name('add-parent');
     
-    Route::get('/deschool/edit-parent/{id}', 'CoroxController@registerEditParent')->name('edit-parent')->middleware('protectAdmin');
+    Route::get('/deschool/edit-parent/{id}', 'CoroxController@registerEditParent')->name('edit-parent');
     
-    Route::get('/deschool/view-parents', 'CoroxController@registerViewParents')->name('view-parents')->middleware('protectAdmin');    
+    Route::get('/deschool/view-parents', 'CoroxController@registerViewParents')->name('view-parents');    
 
-    Route::get('/deschool/record-sales', 'CoroxController@registerRecordSales')->name('record-sales')->middleware('protectAdmin');     
+    Route::get('/deschool/record-sales', 'CoroxController@registerRecordSales')->name('record-sales');     
     
     Route::post('/deschool/record-sales', 'CoroxController@registerRecordSales');
     
