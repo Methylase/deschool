@@ -32,7 +32,7 @@
           <div class="card-body p-0">
             <!-- Nested Row within Card Body -->
             <div class="row justify-content-center align-items-center">
-              <div class="col-lg-6 col-md-5 col-sm-4 col-xs-12 d-none d-lg-block text-left" style="border-right:2px solid #23abf4">
+              <div class="col-lg-6 col-md-5 col-sm-4 mb-5 col-xs-12 d-none d-lg-block text-left" style="border-right:2px solid #23abf4">
       
                     <div class="p-5">
                       <h4 class="h3 text-center" style="color:#23abf4">
