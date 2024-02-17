@@ -3491,8 +3491,8 @@ class CoroxController extends Controller {
               $mail->SMTPAuth = true; // authentication enabled
               $mail->SMTPSecure = 'ssl';
               $mail->Host = "smtp.gmail.com";                    //Set the SMTP server to send through                                  //Enable SMTP authentication
-              $mail->Username = "methyl2007@gmail.com";
-              $mail->Password ="oeyfejwegvgphhua"; //"gseuvcrimchsdpqx";                               //SMTP password
+              $mail->Username = "methyl2007@win.com";
+              $mail->Password ="hey";                                //SMTP password
               $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
               $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
               //Recipients
