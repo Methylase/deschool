@@ -2022,19 +2022,22 @@
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSchool" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-cog fa-spin text-gray-400"></i>
-          <span>School Settings</span>
+          <span>Settings</span>
         </a>
         <div id="collapseSchool" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">School Settings:</h6>
+            <h6 class="collapse-header">Settings:</h6>
+
               @if(Auth::user()->isAdmin())
-                <a class="collapse-item" href="/deschool/info-settings">Information Update</a>
-                <a class="collapse-item" href="/deschool/profile">Profile</a>                   
+                <a class="collapse-item" href="/deschool/profile">Profile</a> 
+                <a class="collapse-item" href="/deschool/info-settings">Information Update</a>                  
                 <a class="collapse-item" href="/deschool/setting-privilege">Setting Privilege</a>            
                 <a class="collapse-item" href="/deschool/send-memo">Send Memo</a>
-             @elseif(Auth::user()->isMember())
-              <a class="collapse-item" href="/deschool/profile">Profile</a> 
-             @endif                
+             @endif  
+
+             @if(Auth::user()->isMember())
+             <a class="collapse-item" href="/deschool/reset-password">Reset Password</a>
+             @endif                           
           </div>
         </div>
       </li>
