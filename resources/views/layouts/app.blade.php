@@ -2042,7 +2042,7 @@
         </div>
       </li>
       <!-- Divider -->
-    @if(Auth::user()->isAdmin())  
+      @if(Auth::user()->isAdmin())      
       <hr class="sidebar-divider">
 
       <!-- Heading -->
@@ -2057,15 +2057,16 @@
         </a>
         <div id="collapseStaff" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Staffs:</h6>
-            <a class="collapse-item" href="/deschool/add-staff">Add New Staff</a>
-            <a class="collapse-item" href="/deschool/view-staffs">View Staffs Table</a>
-            <a class="collapse-item" href="/deschool/staff-register"> Staffs Register</a>       
+            <h6 class="collapse-header">Staffs:</h6> 
+              <a class="collapse-item" href="/deschool/add-staff">Add New Staff</a>
+              <a class="collapse-item" href="/deschool/view-staffs">View Staffs Table</a>
+              <a class="collapse-item" href="/deschool/staff-register"> Staffs Register</a> 
+  
           </div>
         </div>
       </li>
-    @endif    
-  <!-- Divider -->
+
+    <!-- Divider -->
      
       <hr class="sidebar-divider">
 
@@ -2083,19 +2084,16 @@
         <div id="collapseTeachers" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Teachers</h6>
-            @if(Auth::user()->isMember())
-            <a class="collapse-item" href="/deschool/teacher">Teacher Register</a>
-            @elseif(Auth::user()->isAdmin())
             <a class="collapse-item" href="/deschool/teacher"> Add Teacher</a>
             <a class="collapse-item" href="/deschool/assign-subject">Assign Subject</a>
             <div class="collapse-divider"></div>
             <!--<h6 class="collapse-header">Others:</h6>-->
-            @endif    
           </div>
         </div>
       </li>
+       
       <!-- Divider -->
-    @if(Auth::user()->isAdmin())  
+ 
       <hr class="sidebar-divider">
 
       <!-- Heading -->

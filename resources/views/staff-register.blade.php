@@ -26,12 +26,17 @@
                       <div class="col-md-4 col-sm-4 ">
                         <div class="form-group staff-group">
                            <label for="staff-name" class="control-label text-info"> Staff Name</label>
+                           @if(Auth::user()->isAdmin()) 
                             <select class="form-control" id="staffName" name="staffName">
                               <option value="none">Select-Staff-Name</option>
                               @foreach($staffInformation as $staff)
                                   <option value="{{$staff->id}}">{{ucfirst($staff->staff_firstname).' '.ucfirst($staff->staff_lastname)}}</option>
                               @endforeach                                    
                            </select>
+                           @elseif(Auth::user()->isAdmin())
+                           <input type="text" id="staffName" name="staffName" class="form-control" readonly >
+                            @endif    
+
                         </div>
                       </div>
                       <div class="col-md-4 col-sm-4">

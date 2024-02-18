@@ -33,7 +33,7 @@ Route::post('/password', 'CoroxController@registerPassword');
 Route::post('/deschool/logout', 'CoroxController@registerLogout')->name('logout');
 
 Route::group(['middleware'=>'auth'], function(){
-Route::get('/deschool/staff-register', 'CoroxController@registerStaffRegister')->name('staff-register');
+Route::get('/deschool/staff-register', 'CoroxController@registerStaffRegister')->name('staff-register')->middleware('protectAdmin');
 
 Route::post('/deschool/staff-register', 'CoroxController@registerStaffTimeRegister');
 
@@ -153,7 +153,7 @@ Route::post('/deschool/assign-subject', 'CoroxController@registerAssignSubject')
 
 Route::post('/deschool/class-status', 'CoroxController@registerClassStatus');
 
-Route::get('/deschool/teacher', 'CoroxController@registerTeacher')->name('teacher');
+Route::get('/deschool/teacher', 'CoroxController@registerTeacher')->name('teacher')->middleware('protectAdmin');
 
 Route::delete('/deschool/delete-teacher/{id}', 'CoroxController@registerDeleteTeacher');
 
@@ -193,7 +193,7 @@ Route::get('/deschool/recovered-fees', 'CoroxController@registerRecoveredFees');
 
 Route::get('/deschool/get-chart', 'CoroxController@registerGetChart'); 
 
-Route::get('/deschool/reset-password', 'CoroxController@registerResetPassword')->name('reset-password')->middleware('protectMember');
+Route::get('/deschool/reset-password', 'CoroxController@registerResetPassword')->name('reset-password')->middleware('protectAdmin');
      
 Route::post('/deschool/reset-password', 'CoroxController@registerResetPassword');   
 });    

@@ -417,16 +417,10 @@ class CoroxController extends Controller {
   }
   //showing register dashboard here
   public function registerDashboard(){
-    if(Auth::user()->isAdmin()){
-      $userId= Auth::user()->id;
-      $date = date('Y');
-      $adminEmail=Auth::user()->email;
-    }elseif(Auth::user()->isMember()){  
+ 
       $date = date('Y');
       $userId=Auth::user()->id;
       $adminEmail=Auth::user()->email;
-    }
-
     if(RegisterSchoolInformation::where("corox_model_id",$userId)->exists()){
               $schoolInformation = RegisterSchoolInformation::where("corox_model_id",$userId)->first();
     }else{
@@ -1016,24 +1010,29 @@ class CoroxController extends Controller {
   //show edit staff here
   public function registerEditStaff(Request $request, $id){ 
 
+    
     $date = date('Y');
     $userId=Auth::user()->id;
     $adminEmail=Auth::user()->email;
     if(RegisterSchoolInformation::where("corox_model_id",$userId)->exists()){
       $schoolInformation = RegisterSchoolInformation::where("corox_model_id",$userId)->first();
+      
     }else{
       $schoolInformation= new RegisterSchoolInformation;     
     }
-    if( $id == null || $id == '' || !is_numeric($id)){
-      $request->session()->flash('message', 'You are not allowed to edit this staff');
-      return redirect()->route('404'); 
-    }             
-    if(RegisterStaffInformation::where(["corox_model_id"=>$userId, "id"=>protectData($id)])->exists()){
-      $staffInformation = RegisterStaffInformation::where(["corox_model_id"=>$userId, "id"=>protectData($id)])->first();
-    }else{
-      $request->session()->flash('message', 'You are not allowed to edit this staff');                               
-      return redirect()->route('404');    
-    }                    
+      if( $id == null || $id == '' || !is_numeric($id)){
+        $request->session()->flash('message', 'You are not allowed to edit this staff');
+        return redirect()->route('404'); 
+      }           
+  
+      if(RegisterStaffInformation::where(["corox_model_id"=>$userId, "id"=>protectData($id)])->exists()){
+        $staffInformation = RegisterStaffInformation::where(["corox_model_id"=>$userId, "id"=>protectData($id)])->first();
+      }else{
+        $request->session()->flash('message', 'You are not allowed to edit this staff');                               
+        return redirect()->route('404');    
+      } 
+    
+                   
     return  view('edit-staff',['date'=>$date,'schoolInformation'=> $schoolInformation, 'staffInformation'=> $staffInformation, 'userEmail'=>$adminEmail, 'userId'=>$userId, 'title'=>'Eidt Staff']);
   }
   //show delete staff here
@@ -3407,7 +3406,11 @@ class CoroxController extends Controller {
      
           
     }
-    return $values;
+      if(!empty($values)){
+        return $values;
+      }else{
+        return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      }
   } 
 
 

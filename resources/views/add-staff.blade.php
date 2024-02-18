@@ -11,8 +11,6 @@
         </div>
             <!-- Content Column -->
             <div class="col-lg-12 mb-4">
-
-        
               <!-- Approach -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
