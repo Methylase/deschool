@@ -25,7 +25,7 @@ Route::get('/deschool', 'CoroxController@index')->name('login');
 Route::get('/login', 'CoroxController@index')->name('login');
 Route::get('/forgot-password', 'CoroxController@registerForgotPassword')->name('forgot-password'); 
 Route::post('/forgot-password', 'CoroxController@registerForgotPassword');
-Route::get('/change-password/{name}', 'CoroxController@registerChangePassword')->name('change-password')->where('name','.*');
+Route::get('/change-password/{name?}', 'CoroxController@registerChangePassword')->name('change-password')->where('name','.*');
 Route::post('/password', 'CoroxController@registerPassword');
 }); 
 

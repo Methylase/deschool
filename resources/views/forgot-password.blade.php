@@ -91,7 +91,7 @@
                     </div>
                     <div class="form-group">
                         <button type="submit"  class="btn btn-info btn-user btn-block">
-                        Forgot Password
+                        Submit
                         </button>
                     </div>
 
