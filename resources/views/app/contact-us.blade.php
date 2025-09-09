@@ -31,7 +31,26 @@
         <div class="row">
           <div class="col-lg-7 mb-5">
             <div class="contact-form">
-              <div id="success"></div>
+              @if(session()->has('successMessage'))
+                  <div class="col-md-12 col-sm-12 alert
+                  alert-success alert-dismissable text-center text-small" style="margin-top:20px">
+                    <a href='' class='close' data-dismiss='alert' aria-label='close'> &times</a>
+                    <strong>
+                        Success
+                    </strong>
+                    {{session('successMessage')}}
+                  </div>
+              @endif
+              @if(session()->has('errorMessage'))
+                  <div class="offset-md-1 col-md-10 offset-sm-1 col-sm-10 alert
+                  alert-danger alert-dismissable text-center text-small" style="margin-top:20px">
+                    <a href='' class='close' data-dismiss='alert' aria-label='close'> &times</a>
+                    <strong>
+                        Danger
+                    </strong>
+                    {{session('errorMessage')}}
+                  </div>
+              @endif               <div id="success"></div>
               <form method="POST" action="/contact" >
                 {{csrf_field()}}
                 <div class="control-group mb-2">
@@ -134,7 +153,7 @@
               ></i>
               <div class="pl-3">
                 <h5>Address</h5>
-                <p>123 Street, New York, USA</p>
+                <p>Lekki Phase 1—like Adebayo Doherty Road, Admiralty Way</p>
               </div>
             </div>
             <div class="d-flex">
@@ -144,7 +163,7 @@
               ></i>
               <div class="pl-3">
                 <h5>Email</h5>
-                <p>info@example.com</p>
+                <p>mail@theschool.com</p>
               </div>
             </div>
             <div class="d-flex">
@@ -154,7 +173,7 @@
               ></i>
               <div class="pl-3">
                 <h5>Phone</h5>
-                <p>+012 345 67890</p>
+                <p>09036561101</p>
               </div>
             </div>
             <div class="d-flex">
@@ -164,8 +183,8 @@
               ></i>
               <div class="pl-3">
                 <h5>Opening Hours</h5>
-                <strong>Sunday - Friday:</strong>
-                <p class="m-0">08:00 AM - 05:00 PM</p>
+                <strong>Monday - Friday:</strong>
+                <p class="m-0">8:00 AM - 4:00 PM</p>
               </div>
             </div>
           </div>

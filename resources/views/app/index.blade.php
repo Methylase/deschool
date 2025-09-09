@@ -204,7 +204,6 @@
                 <div class="col-6 py-1">{{'&#8358;'.number_format(2500000,2)}} <br> Per Term</div>
               </div>
             </div>
-            <a href="" class="btn btn-primary px-4 mx-auto mb-4">Join Now</a>
           </div>
         </div>
         <div class="col-lg-4 mb-5">
@@ -243,7 +242,6 @@
                 <div class="col-6 py-1">{{'&#8358;'.number_format(4500000,2)}} <br> Per Term</div>
               </div>
             </div>
-            <a href="" class="btn btn-primary px-4 mx-auto mb-4">Join Now</a>
           </div>
         </div>
         <div class="col-lg-4 mb-5">
@@ -282,7 +280,6 @@
                 <div class="col-6 py-1">{{'&#8358;'.number_format(600000,2)}} <br> Per Term</div>
               </div>
             </div>
-            <a href="" class="btn btn-primary px-4 mx-auto mb-4">Join Now</a>
           </div>
         </div>
       </div>

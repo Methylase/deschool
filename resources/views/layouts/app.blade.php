@@ -41,7 +41,7 @@
         class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0 px-lg-5"
       >
         <a
-          href=""
+          href="{{route('home')}}"
           class="navbar-brand font-weight-bold text-secondary"
           style="font-size: 50px"
         >
@@ -172,8 +172,29 @@
           </div>
         </div>
         <div class="col-lg-3 col-md-6 mb-5">
+          @if(session()->has('successMessage'))
+              <div class="col-md-12 col-sm-12 alert
+              alert-success alert-dismissable text-center text-small" style="margin-top:20px">
+                <a href='' class='close' data-dismiss='alert' aria-label='close'> &times</a>
+                <strong>
+                    Success
+                </strong>
+                {{session('successMessage')}}
+              </div>
+          @endif
+          @if(session()->has('errorMessage'))
+              <div class="offset-md-1 col-md-10 offset-sm-1 col-sm-10 alert
+              alert-danger alert-dismissable text-center text-small" style="margin-top:20px">
+                <a href='' class='close' data-dismiss='alert' aria-label='close'> &times</a>
+                <strong>
+                    Danger
+                </strong>
+                {{session('errorMessage')}}
+              </div>
+            @endif            
           <h3 class="text-primary mb-4">Newsletter</h3>
           <form action="/newsletter" method="POST">
+            {{csrf_field()}}
             <div class="form-group">
               <input
                 type="text"

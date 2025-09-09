@@ -50,6 +50,8 @@ use Deschool\Models\Permit;
 use Deschool\Models\Blog;
 use Deschool\Models\Comment;
 use Deschool\Models\Booked;
+use Deschool\Models\Contact;
+use Deschool\Models\Newsletter;
 
 use Validator;
 class CoroxController extends Controller {
@@ -124,9 +126,9 @@ class CoroxController extends Controller {
             $data['email'] = protectData($email);
             $data['class_id'] = protectData($class);
             
-            $contact= Booked::create($data);
+            $booked= Booked::create($data);
 
-            if($contact){
+            if($booked){
               $request->session()->flash('successMessage', 'Seat successfully booked');
             }else{
               $request->session()->flash('errorMessage', 'Oop something went wrong'); 
@@ -143,8 +145,10 @@ class CoroxController extends Controller {
   //showing contact us
   public function contactUs(Request $request){
 
+
       if($_SERVER['REQUEST_METHOD'] =='POST'){
         
+
         $data = array();
       
         $name = $request->input('name');
@@ -163,7 +167,6 @@ class CoroxController extends Controller {
         if($validator->fails()){
           return redirect()->route('contact')->withErrors($validator);
         }else{
-
 
             $data['name'] = protectData($name);
             $data['email'] = protectData($email);
@@ -220,7 +223,7 @@ class CoroxController extends Controller {
               $request->session()->flash('errorMessage', 'Oop something went wrong'); 
             }
 
-            return redirect()->route('contact');
+            return redirect()->route('home');
 
         }          
 

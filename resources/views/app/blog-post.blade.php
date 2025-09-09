@@ -76,7 +76,7 @@
               <div class="form-group">
                 <label for="email">Email *</label>
                 <input type="email" name="email" class="form-control" id="email" />
-                  @if($errors->has('emaik'))
+                  @if($errors->has('email'))
                      <p class="help-block text-danger">
                           {{ $email= $errors->first('email')}}
                       </p>

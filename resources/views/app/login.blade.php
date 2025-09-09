@@ -13,7 +13,7 @@
       @if(session()->has('message'))
           <div class="col-md-12 col-sm-12 alert
           alert-danger alert-dismissable text-center" style="margin-top:20px">
-            <a href='' class='close' data-dismiss='alert' aria-label='close'> &times</a>
+            <a href='' class='close' data-dismiss='alert' aria-label='close'> &times;</a>
             <strong>
                 Danger
             </strong>
